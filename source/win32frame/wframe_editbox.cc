@@ -51,9 +51,9 @@ int CxFrameEditbox::GetLimitText()
 void CxFrameEditbox::GetRect(LPRECT rcPtr)
 {
 	// EM_GETRECT
-	// wParam = 未使用
-	// lParam = 要輸出的 RECT 結構資料位址
-	this->SendMessage(EM_GETRECT, 0, reinterpret_cast<LPARAM>(rcPtr));
+	WPARAM wParam = 0;									// 未使用
+	LPARAM lParam = reinterpret_cast<LPARAM>(rcPtr);	// 要輸出的 RECT 結構資料位址
+	this->SendMessage(EM_GETRECT, wParam, lParam);
 }
 
 /**
@@ -70,9 +70,9 @@ void CxFrameEditbox::GetRect(LPRECT rcPtr)
 DWORD CxFrameEditbox::GetSelect(DWORD * dwPtr, DWORD * ddPtr)
 {
 	// EM_GETSEL
-	// wParam = 存放被選取的第一個字元位置
-	// lParam = 存放被選後的第一個自原位置
-	return static_cast<DWORD>(this->SendMessage(EM_GETSEL, reinterpret_cast<WPARAM>(dwPtr), reinterpret_cast<LPARAM>(ddPtr)));
+	WPARAM wParam = reinterpret_cast<WPARAM>(dwPtr);	// 存放被選取的第一個字元位置
+	LPARAM lParam = reinterpret_cast<LPARAM>(ddPtr);	// 存放被選後的第一個自原位置
+	return static_cast<DWORD>(this->SendMessage(EM_GETSEL, wParam, lParam));
 }
 
 
@@ -85,9 +85,9 @@ DWORD CxFrameEditbox::GetSelect(DWORD * dwPtr, DWORD * ddPtr)
 void CxFrameEditbox::SetLimitText(int ccMax)
 {
 	// EM_SETLIMITTEXT
-	// wParam = 字數限制
-	// lParam = 未使用
-	this->SendMessage(EM_SETLIMITTEXT, static_cast<WPARAM>(ccMax), 0);
+	WPARAM wParam = static_cast<WPARAM>(ccMax);	// 字數限制
+	LPARAM lParam = 0;							// 未使用
+	this->SendMessage(EM_SETLIMITTEXT, wParam, lParam);
 }
 
 
@@ -100,8 +100,8 @@ void CxFrameEditbox::SetLimitText(int ccMax)
 BOOL CxFrameEditbox::SetReadonly(BOOL bEnable)
 {
 	// EM_SETREADONLY 
-	// wParam = 啟用 or 停用
-	// lParam = 未使用
+	WPARAM wParam = static_cast<WPARAM>(bEnable);	// 啟用 or 停用
+	LPARAM lParam = 0;								// lParam = 未使用
 	return this->SendMessage(EM_SETREADONLY, bEnable, 0) != 0;
 }
 
@@ -125,9 +125,9 @@ void CxFrameEditbox::SetRect(LPRECT rcPtr)
 void CxFrameEditbox::SetSelect(DWORD starting, DWORD ending)
 {
 	// EM_SETSEL 
-	// wParam = 開始位置
-	// lParam = 結束位置
-	this->SendMessage(EM_SETSEL, static_cast<DWORD>(starting), static_cast<DWORD>(ending));
+	WPARAM wParam = static_cast<DWORD>(starting);	// 開始位置
+	LPARAM lParam = static_cast<DWORD>(ending);		// 結束位置
+	this->SendMessage(EM_SETSEL, wParam, lParam);
 }
 
 
@@ -162,8 +162,8 @@ BOOL CxFrameEditbox::Undo()
  */
 BOOL CxFrameEditbox::CreateEditBox(LPCTSTR szCaptionPtr, int x, int y, int wd, int ht, HWND hParent, int idItem, HINSTANCE hInst, WNDPROC fnWndProc)
 {
-	BOOL err = FALSE;
-	SSCTRL ctrl;
+	auto	err = BOOL(FALSE);
+	SSCTRL	ctrl;
 
 	for (;;) {
 		if (hInst == NULL) {
@@ -196,7 +196,6 @@ BOOL CxFrameEditbox::CreateEditBox(LPCTSTR szCaptionPtr, int x, int y, int wd, i
 		ctrl.iHeight	= ht;
 		ctrl.idItem		= idItem;
 		ctrl.fnWndProc	= fnWndProc;
-		ctrl.vUnknowPtr = NULL;
 
 		err = this->CreateController(&ctrl);
 		break;

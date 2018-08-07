@@ -25,24 +25,21 @@ CxFrameDialog::~CxFrameDialog() { }
 */
 INT_PTR CxFrameDialog::DialogProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
-	SSDIALOGPARAM*	ddPtr = NULL;	// user parameter
 	CxFrameDialog*	ddObj = NULL;	// dialog object
 
-									// is dialog initialized message?
 	if (uMessage == WM_INITDIALOG) {
 		// save user data using "GWLP_USERDATA" mode
-		ddPtr = reinterpret_cast<SSDIALOGPARAM*>(lParam);
-		ddObj = reinterpret_cast<CxFrameDialog*>(ddPtr->vDialogPtr);
-
-		::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)ddObj);
-		ddObj->m_hWnd = hWnd;
-		lParam = reinterpret_cast<LPARAM>(ddPtr->vParamPtr);
+		ddObj = (CxFrameDialog*)lParam;
+		if (ddObj != NULL) {
+			ddObj->m_hWnd = hWnd;
+			::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)ddObj);
+		}
 	}
 
 	// get user saved data form "GWLP_USERDATA" mode
-	ddObj = reinterpret_cast<CxFrameDialog*>(::GetWindowLongPtr(hWnd, GWLP_USERDATA));
-	if (ddObj == NULL)
+	if ((ddObj = (CxFrameDialog*)::GetWindowLongPtr(hWnd, GWLP_USERDATA)) == NULL) {
 		return 0;
+	}
 
 	// transfer window message
 	return ddObj->MessageDispose(uMessage, wParam, lParam);
@@ -80,7 +77,6 @@ INT_PTR CxFrameDialog::MessageDispose(UINT uMessage, WPARAM wParam, LPARAM lPara
  * @brief	建立 Dialog 控制項
  * @param	[in] hParent	父視窗 Handle
  * @param	[in] idItem		控制項 ID
- * @param	[in] vUnknowPtr	額外參數指標 (使用者可利用)
  * @param	[in] bModule	是否建立 Module Dialog
  *			- 預設為 FALSE 建立 Child Dialog
  *			- 設定為 TRUE 建立 Module Dialog
@@ -88,12 +84,11 @@ INT_PTR CxFrameDialog::MessageDispose(UINT uMessage, WPARAM wParam, LPARAM lPara
  *			若 Dialog 被建立返回非零值(non-zero), 建立失敗返回零值(zero) 
  * @remark	使用資源檔(Resource)定義的 Dialog
  */
-BOOL CxFrameDialog::CreateDialog(HWND hParent, int idItem, void* vUnknowPtr, BOOL bModule)
+BOOL CxFrameDialog::CreateDialog(HWND hParent, int idItem, BOOL bModule)
 {
-	HINSTANCE hInst = ::GetModuleHandle(NULL);	// 取得程序模組 Handle
+	HINSTANCE hInst	= ::GetModuleHandle(NULL);	// 取得程序模組 Handle
 	HWND hWnd = m_hWnd;
 	LPTSTR szTemplatePtr;
-	SSDIALOGPARAM ddPtr;
 	BOOL err = FALSE;
 
 	for (;;) {
@@ -121,25 +116,14 @@ BOOL CxFrameDialog::CreateDialog(HWND hParent, int idItem, void* vUnknowPtr, BOO
 		m_hModule = hInst;
 		m_hWndParent = hParent;
 
-		// 設定額外參數
-		ddPtr.vDialogPtr = (void*)this;
-		ddPtr.vParamPtr = vUnknowPtr;
-
 		if (bModule) {
 			// DialogBoxParam 若運作失敗將傳回 0 or -1
-			auto result = ::DialogBoxParam(hInst, szTemplatePtr, hParent, (DLGPROC)CxFrameDialog::DialogProc, (LPARAM)&ddPtr);
-
-			/*
-			if (result == 0) {
-				// 若沒有父視窗, 返回值必定為 0, 那麼這裡做錯誤處理就沒意義.
-				this->SetError(ERROR_INVALID_HANDLE);
-				break;
-			}
-			else if (result == -1) {
-				this->SetError(::GetLastError());
-				break;
-			}
-			*/
+			auto result = ::DialogBoxParam(
+				hInst,
+				szTemplatePtr,
+				hParent,
+				CxFrameDialog::DialogProc,
+				reinterpret_cast<LPARAM>(this));
 
 			if (result == -1) {
 				this->SetError(::GetLastError());
@@ -151,7 +135,12 @@ BOOL CxFrameDialog::CreateDialog(HWND hParent, int idItem, void* vUnknowPtr, BOO
 		}
 		else {
 			// 若運作失敗將傳回 NULL，若運作成功返回 Dialog Handle
-			auto result = ::CreateDialogParam(hInst, szTemplatePtr, hParent, (DLGPROC)CxFrameDialog::DialogProc, (LPARAM)&ddPtr);
+			auto result = ::CreateDialogParam(
+				hInst,
+				szTemplatePtr,
+				hParent,
+				CxFrameDialog::DialogProc,
+				reinterpret_cast<LPARAM>(this));
 
 			if (result == NULL) {
 				this->SetError(::GetLastError());

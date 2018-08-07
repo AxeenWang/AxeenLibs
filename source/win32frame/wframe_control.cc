@@ -101,9 +101,8 @@ BOOL CxFrameControl::CreateController(LPSSCTRL ctrlPtr)
 
 		dwExStyle = ctrlPtr->dwExStyle;
 
-		// hMenu = reinterpret_cast<HMENU>(ctrlPtr->idItem);	// 64-bits 檢測會有，警告 C4312
-		QINT uTemp = ctrlPtr->idItem;
-		hMenu = reinterpret_cast<HMENU>(uTemp);
+		LONG_PTR nTemp = static_cast<LONG_PTR>(ctrlPtr->idItem);
+		hMenu = reinterpret_cast<HMENU>(nTemp);
 
 		// 建立控制項
 		hCtrl = CreateWindowEx(
@@ -117,7 +116,7 @@ BOOL CxFrameControl::CreateController(LPSSCTRL ctrlPtr)
 			ctrlPtr->iHeight,
 			ctrlPtr->hParent,
 			hMenu, hInst,
-			(LPVOID)ctrlPtr->vUnknowPtr);
+			(LPVOID)this);
 		if (hCtrl == NULL) {
 			this->SetError(::GetLastError());
 			break;

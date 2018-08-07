@@ -17,29 +17,29 @@ CxFrameCombo::~CxFrameCombo() { }
  * @brief	新增項目、字串項目
  * @details	使用 AddItem 新增一個項目，所新增項目會被自動排序
  * @param	[in] szPtr	字串緩衝區位址
- * @return	@c int 型別 \N
+ * @return	@c int 型別 \n
  *			函數操作成功返回值為新增索引, 若操作失敗返回 CB_ERR
  */
 int CxFrameCombo::AddItem(LPCTSTR szPtr)
 {
 	// CB_ADDSTRING
-	// wParam 未使用，建議設為 0
-	// lParam 字串指標
-	return (int)this->SendMessage(CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(szPtr));
+	WPARAM wParam = 0;									// 未使用，建議設為 0
+	LPARAM lParam = reinterpret_cast<LPARAM>(szPtr);	// 字串存放位址
+	return static_cast<int>(this->SendMessage(CB_ADDSTRING, wParam, lParam));
 }
 
 /**
  * @brief	刪除一個 Item
- * @param	[in] index	欲刪除的索引碼 (zero-base)
+ * @param	[in] nIndex	欲刪除的索引碼 (zero-base)
  * @return	@c int 型別 \n
  *			函數操作成功返回值為目前 Item 數量, 操作失敗返回 CB_ERR
  */
-int CxFrameCombo::DeleteItem(int index)
+int CxFrameCombo::DeleteItem(int nIndex)
 {
 	// CB_DELETESTRING
-	// wParam = 項目索引
-	// lParam = 未使用，必須為零
-	return (int)this->SendMessage(CB_DELETESTRING, static_cast<WPARAM>(index), 0);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);	// 項目索引
+	WPARAM lParam = 0;								// 未使用，必須為零
+	return static_cast<int>(this->SendMessage(CB_DELETESTRING, wParam, lParam));
 }
 
 /**
@@ -52,7 +52,7 @@ int CxFrameCombo::GetCount()
 	// CB_GETCOUNT
 	// wParam 未使用，必須為零
 	// lParam 未使用，必須為零
-	return (int)this->SendMessage(CB_GETCOUNT, 0, 0);
+	return static_cast<int>(this->SendMessage(CB_GETCOUNT, 0, 0));
 }
 
 /**
@@ -65,55 +65,55 @@ int CxFrameCombo::GetCursel()
 	// CB_GETCURSEL
 	// wParam 未使用，必須為零
 	// lParam 未使用，必須為零
-	return (int)this->SendMessage(CB_GETCURSEL, 0, 0);
+	return static_cast<int>(this->SendMessage(CB_GETCURSEL, 0, 0));
 }
 
 /**
  * @brief	取得項目字串
- * @param	[in]  index	項目索引 (zero-base)
+ * @param	[in]  nIndex	項目索引 (zero-base)
  * @param	[out] szPtr	字串緩衝區位址
  * @return	@c int 型別 \n
  *			函數操作成功返回值為指定 Item 的字串長度，單位 TCHAR (不含 NULL 結尾) \n
  *			若操作失敗則返回 CB_ERR
  */
-int CxFrameCombo::GetItemText(int index, LPTSTR szPtr)
+int CxFrameCombo::GetItemText(int nIndex, LPTSTR szPtr)
 {
 	// CB_GETLBTEXT
-	// wParam 項目索引
-	// lParam 字串緩衝區位址
-	return (int)this->SendMessage(CB_GETLBTEXT, static_cast<WPARAM>(index), reinterpret_cast<LPARAM>(szPtr));
+	WPARAM wParam = static_cast<WPARAM>(nIndex);		// 項目索引
+	LPARAM lParam = reinterpret_cast<LPARAM>(szPtr);	// 字串緩衝區位址
+	return static_cast<int>(this->SendMessage(CB_GETLBTEXT, wParam, lParam));
 }
 
 /**
  * @brief	取得 Item 字串長度
- * @param	[in] index	要取得字串長度的索引碼 (zero-base)
+ * @param	[in] nIndex	要取得字串長度的索引碼 (zero-base)
  * @return	@c int 型別 \n
  *			函數操作成功返回值為所指 Item 字串長度，單位 TCHAR (不含 Null 結尾) \n
  *			若操作失敗返回 CB_ERR
  */
-int CxFrameCombo::GetItemTextLength(int index)
+int CxFrameCombo::GetItemTextLength(int nIndex)
 {
 	// CB_GETLBTEXTLEN
-	// wParam 項目索引
-	// lParam 未使用，必須為零
-	return (int)this->SendMessage(CB_GETLBTEXTLEN, static_cast<WPARAM>(index), 0);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);	// 項目索引
+	LPARAM lParam = 0;								// 未使用，必須為零
+	return static_cast<int>(this->SendMessage(CB_GETLBTEXTLEN, wParam, lParam));
 }
 
 /**
  * @brief	新增項目、
  * @details	使用 InsertItem 新增一個項目 \n
  *			新增項為會依據指定位置插入，安插後原有項目 index 將往後遞增
- * @param	[in] index	項目索引 (zero-base)
+ * @param	[in] nIndex	項目索引 (zero-base)
  * @param	[in] szPtr	字串緩衝區位址
  * @return	@c int 型別 \n
  *			函數操作成功返回值為新增索引, 若操作失敗返回 CB_ERR
  */
-int CxFrameCombo::InsertItem(int index, LPCTSTR szPtr)
+int CxFrameCombo::InsertItem(int nIndex, LPCTSTR szPtr)
 {
 	// CB_INSERTSTRING
-	// wParam = 項目索引
-	// lParam = 字串緩衝區位址
-	return (int)this->SendMessage(CB_INSERTSTRING, static_cast<WPARAM>(index), reinterpret_cast<LPARAM>(szPtr));
+	WPARAM wParam = static_cast<WPARAM>(nIndex);		// 項目索引
+	LPARAM lParam = reinterpret_cast<LPARAM>(szPtr);	// 字串緩衝區位址
+	return static_cast<int>(this->SendMessage(CB_INSERTSTRING, wParam, lParam));
 }
 
 /**
@@ -144,16 +144,16 @@ void CxFrameCombo::RemoveAllItem()
 
 /**
  * @brief	設定目前清單上 Cursel (光標? 反白?) 位置
- * @param	[in] index	欲設定 cursel 位置索引碼 (zero-base)
+ * @param	[in] nIndex	欲設定 cursel 位置索引碼 (zero-base)
  * @return	@c int 型別 \n
  *			函數操作成功返回值為當前 cursel 位置 (zero-base), 操作失敗則返回 CB_ERR
  */
-int CxFrameCombo::SetCursel(int index)
+int CxFrameCombo::SetCursel(int nIndex)
 {
 	// CB_SETCURSEL
-	// wParam = 項目索引
-	// lParam = 未使用，必須為零
-	return (int)this->SendMessage(CB_SETCURSEL, static_cast<WPARAM>(index), 0);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);	// 項目索引
+	LPARAM lParam = 0;								// 未使用，必須為零
+	return static_cast<int>(this->SendMessage(CB_SETCURSEL, wParam, lParam));
 }
 
 
@@ -174,8 +174,8 @@ int CxFrameCombo::SetCursel(int index)
  */
 BOOL CxFrameCombo::CreateCombo(LPCTSTR szCaptionPtr, int x, int y, int wd, int ht, HWND hParent, int idItem, HINSTANCE hInst, WNDPROC fnWndProc)
 {
-	BOOL		err = FALSE;
-	SSCTRL		ctrl;
+	auto	err = BOOL(FALSE);
+	SSCTRL	ctrl;
 
 	for (;;) {
 		if ((hInst = ::GetModuleHandle(NULL)) == NULL) {
@@ -205,7 +205,6 @@ BOOL CxFrameCombo::CreateCombo(LPCTSTR szCaptionPtr, int x, int y, int wd, int h
 		ctrl.iHeight	= ht;
 		ctrl.idItem		= idItem;
 		ctrl.fnWndProc	= fnWndProc;
-		ctrl.vUnknowPtr	= NULL;	// pointer of user data
 		err = this->CreateController(&ctrl);
 		break;
 	}

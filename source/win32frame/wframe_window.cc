@@ -23,28 +23,17 @@ LRESULT CALLBACK CxFrameWindow::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam,
 
 	// Is Window create message?
 	if (uMessage == WM_CREATE) {
-		// fmObj = (CxFrameWindow*)((LPCREATESTRUCT)lParam)->lpCreateParams;
-		fmObj = reinterpret_cast<CxFrameWindow*>(reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams);
+		fmObj = (CxFrameWindow*)((LPCREATESTRUCT)lParam)->lpCreateParams;
 		if (fmObj != NULL) {
-			// Save the CxFrameWindow object
-			::SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(fmObj));
 			fmObj->m_hWnd = hWnd;
+			::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)fmObj);			
 		}
 	}
     
 	// get user saved data form "GWLP_USERDATA" mode
 	if ((fmObj = (CxFrameWindow*)::GetWindowLongPtr(hWnd, GWLP_USERDATA)) == NULL) {
-		// transfer window message in system default callback function
 		return ::DefWindowProc(hWnd, uMessage, wParam, lParam);
 	}
-
-	/*
-	// 事先處理視窗結束動作
-	if (uMessage == WM_CLOSE)
-		fmObj->SysCloseWindow();
-	else if (uMessage == WM_DESTROY)
-		fmObj->SysDestroyWindow();
-	*/
 
 	// transfer window message in user callback function
 	return fmObj->MessageDispose(uMessage, wParam, lParam);
@@ -74,9 +63,23 @@ LRESULT CxFrameWindow::MessageDispose(UINT uMessage, WPARAM wParam, LPARAM lPara
 		this->SysCloseWindow();
 		break;
 	default:
-		return ::DefWindowProc(m_hWnd, uMessage, wParam, lParam);
+		return this->DefaultWindowProc(uMessage, wParam, lParam);
 	}
 	return 0;
+}
+
+
+/**
+ * @brief	預設的視窗訊息處理函數
+ * @param	[in] uMessage	視窗訊息
+ * @param	[in] wParam		參數 1
+ * @param	[in] lParam		參數 2
+ * @return	@c LRESULT		視窗訊息處理後結果
+ * @remark	若使用者不處理的訊息，就扔到系統預設處理函數。
+ */
+LRESULT CxFrameWindow::DefaultWindowProc(UINT uMessage, WPARAM wParam, LPARAM lParam)
+{
+	return ::DefWindowProc(m_hWnd, uMessage, wParam, lParam);
 }
 
 
@@ -155,7 +158,7 @@ int CxFrameWindow::Run(BOOL bPeek)
  */
 BOOL CxFrameWindow::CreateWindow(LPSSFRAMEWINDOW swndPtr)
 {
-	BOOL err = FALSE;
+	auto err = BOOL(FALSE);
 
 	for (;;) {
 		if (!this->SysRegisterWindow(swndPtr))
@@ -177,10 +180,19 @@ BOOL CxFrameWindow::CreateWindow(LPSSFRAMEWINDOW swndPtr)
  */
 BOOL CxFrameWindow::CreateSample(HINSTANCE hInstance)
 {
+	auto err = BOOL(FALSE);
 	SSFRAMEWINDOW swnd;
 
-	if (hInstance != NULL) {
-		// 填寫 SWINDOW 結構內容
+	for (;;) {
+		// has handle of module?
+		if (hInstance == NULL) {
+			if ((hInstance = ::GetModuleHandle(NULL)) == NULL) {
+				this->SetError(::GetLastError());
+				break;
+			}
+		}
+
+		// 填寫 SSFRAMEWINDOW 結構內容
 		::memset((void*)&swnd, 0, sizeof(SSFRAMEWINDOW));
 		swnd.hInstance = hInstance;
 		swnd.hWndParent = NULL;
@@ -209,7 +221,7 @@ BOOL CxFrameWindow::CreateSample(HINSTANCE hInstance)
 				this->SetCenterPosition();
 				this->Show();
 				this->Update();
-				return TRUE;
+				break;
 			}
 		}
 		*/
@@ -219,10 +231,11 @@ BOOL CxFrameWindow::CreateSample(HINSTANCE hInstance)
 			this->SetCenterPosition();
 			this->Show();
 			this->Update();
-			return TRUE;
+			err += TRUE;
 		}
+		break;
 	}
-	return FALSE;
+	return err;
 }
 
 

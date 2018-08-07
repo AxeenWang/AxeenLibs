@@ -18,7 +18,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR tCmdPtr, i
 			break;
 		}
 
-		frmObj->CreateDialog(NULL, IDD_MAINFRAME, NULL, TRUE);
+		frmObj->CreateDialog(NULL, IDD_MAINFRAME, TRUE);
 		break;
 	}
 

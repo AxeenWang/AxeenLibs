@@ -261,7 +261,6 @@ int CxFrameListbox::SetSelectionState(int index, BOOL bState)
 	return (int)this->SendMessage(LB_SETSEL, (LPARAM)bState, (LPARAM)index);
 }
 
-
 /**
  * @brief	建立 List Box (資源檔建立或其他已建立的 List Box)
  * @param	[in] hInst		Handle of module. 若為 NULL 將視為使用現行程序模組
@@ -289,8 +288,6 @@ BOOL CxFrameListbox::CreateListboxEx(HINSTANCE hInst, HWND hParent, int idItem, 
 {
 	return this->CreateControllerEx(hInst, hParent, idItem, fnWndProc);
 }
-
-
 
 /**
  * 結束類別物件處理 (釋放配置記憶體與成員物件)

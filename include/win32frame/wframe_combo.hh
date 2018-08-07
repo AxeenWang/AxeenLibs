@@ -24,7 +24,7 @@ public:
 	// --- 標示為尚未實作
 
 	int  AddItem(LPCTSTR szPtr);								// CB_ADDSTRING
-	int  DeleteItem(int index);									// CB_DELETESTRING
+	int  DeleteItem(int nIndex);								// CB_DELETESTRING
 	// --- CB_DIR
 	// --- CB_FINDSTRING
 	// --- CB_FINDSTRINGEXACT
@@ -40,8 +40,8 @@ public:
 	// --- CB_GETHORIZONTALEXTENT
 	// --- CB_GETITEMDATA
 	// --- CB_GETITEMHEIGHT
-	int GetItemText(int index, LPTSTR szPtr);					// CB_GETLBTEXT
-	int GetItemTextLength(int index);							// CB_GETLBTEXTLEN
+	int GetItemText(int nIndex, LPTSTR szPtr);					// CB_GETLBTEXT
+	int GetItemTextLength(int nIndex);							// CB_GETLBTEXTLEN
 	// --- CB_GETLOCALE
 	// --- CB_GETMINVISIBLE
 	// --- CB_GETTOPINDEX
@@ -52,7 +52,7 @@ public:
 	void RemoveAllItem();
 	// --- CB_SELECTSTRING
 	// --- CB_SETCUEBANNER
-	int  SetCursel(int index);									// CB_SETCURSEL
+	int  SetCursel(int nIndex);									// CB_SETCURSEL
 	// --- CB_SETDROPPEDWIDTH
 	// --- CB_SETEDITSEL
 	// --- CB_SETEXTENDEDUI

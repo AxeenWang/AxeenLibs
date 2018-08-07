@@ -19,7 +19,8 @@
 #endif
 
 // 導入 Windows Library
-#if defined(__WINDOWS__) && !defined(_LIB) || defined(_CONSOLE)
+// #if defined(__WINDOWS__) && !defined(_LIB) || defined(_CONSOLE)
+#if defined(__WINDOWS__) && !defined(_LIB)
 	// 作業系統 library
 	#pragma comment(lib, "comctl32.lib")
 	#pragma comment(lib, "winmm.lib")

@@ -21,6 +21,7 @@ class CxFrameWindow : public CxFrameObject
 protected:
 	static	LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 	virtual	LRESULT MessageDispose(UINT uMessage, WPARAM wParam, LPARAM lParam);
+	LRESULT	DefaultWindowProc(UINT uMessage, WPARAM wParam, LPARAM lParam);
 	int	RunPeekMessage();
 	int	RunStayMessage();
 
@@ -36,7 +37,6 @@ protected:
 	virtual void WindowInTheEnd() override;
 	BOOL SysRegisterWindow(LPSSFRAMEWINDOW swndPtr);
 	BOOL SysCreateWindow(LPSSFRAMEWINDOW swndPtr);
-
 };
 
 #endif	// !__AXEEN_WIN32FRAME_WINDOW_HH__

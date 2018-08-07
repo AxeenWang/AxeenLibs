@@ -85,47 +85,11 @@ struct SSCTRL {
 	int				iWidth;		//!< the window width
 	int				iHeight;	//!< the window height
 	int				idItem;		//!< conctrller item id
-	void*			vUnknowPtr;	//!< pointer of user data
 };
 typedef SSCTRL*		LPSSCTRL;		//!< SSCTRL 結構指標型別
 #define SSCTRL_ITEMID_NIL	0		//!< Controller 子控制項代碼 (無效值)
 #define SSCTRL_ITEMID_MIN	1		//!< Controller 子控制項代碼 (最小值)
 #define SSCTRL_ITEMID_MAX	65535	//!< Controller 子控制項代碼 (最大值)
-
-
-/**
- * @struct	SSCTRLPARAM
- * @brief	建立控制項額外資料
- * @note	使用 SetWindowLongPtr (GWLP_WNDPROC) 建立新訊息處理函式時 \n
- *			可先利用 SetWindowLongPtr (GWLP_USERDATA) 設定為此額外資料
- */
-struct SSCTRLPARAM {
-	void*	vObjPtr;	//!< 控制項類別物件指標
-	void*	vParamPtr;	//!< 額外資料指標
-	void*	Reserved1;	//!< 保留未來擴充，亦可任意使用資料。
-	void*	Reserved2;	//!< 保留未來擴充，亦可任意使用資料。
-};
-typedef SSCTRLPARAM*	LPSSCTRLPARAM;	//!< SSCTRLPARAM 結構指標型別
-
-
-/**
- * @struct	SSDIALOGPARAM
- * @brief	建立 Dialog 額外參數結構
- * @details	Dialog 被建立時會發出 WM_INITDIALOG 訊息
- *
- *	WM_INITDIALOG
- *	- wParam =	控制項接收默認鍵盤焦點的 HWND
- *	- lParam =	附加初始化數據。\n
- *				使用 CreateDialogIndirectParam、CreateDialogParam、DialogBoxIndirectParam、DialogBoxParam 功能建立 Dialog box \n
- *				該數據將作為 lParam 參數傳遞給系統 。\n
- *				對於屬性表，該參數是指向用於創建頁面的 PROPSHEETPAGE 結構的指標。\n
- *				如果使用其他對話框功能建立，則此參數為零。
- */
-struct SSDIALOGPARAM {
-	void* vDialogPtr;	//!< 存放物件指標 (this)
-	void* vParamPtr;	//!< 存放其他資訊
-};
-typedef SSDIALOGPARAM*	LPSSDIALOGPARAM;	//!< SSDIALOGPARAM 結構指標型別
 
 
 /**

@@ -24,7 +24,7 @@ public:
 	// --- 尚未實作功能之標示
 
 	BOOL	GetIdealSize(SIZE* sizePtr);				// BCM_GETIDEALSIZE
-	BOOL	GetImageList(BUTTON_IMAGELIST* imlPtr);		// BCM_GETIMAGELIST
+	BOOL	GetImageList(BUTTON_IMAGELIST* imePtr);		// BCM_GETIMAGELIST
 	BOOL	GetNote(LPTSTR szNotePtr, DWORD* ccNotePtr);// BCM_GETNOTE
 	DWORD	GetNoteLength();							// BCM_GETNOTELENGTH
 	// --- BCM_GETSPLITINFO
@@ -37,13 +37,13 @@ public:
 	// --- BCM_SETTEXTMARGIN
 	void	Click();									// BM_CLICK
 	LRESULT	GetCheck();									// BM_GETCHECK
-	LRESULT	GetImage(int iType);						// BM_GETIMAGE
+	LRESULT	GetImage(int nType);						// BM_GETIMAGE
 	HBITMAP	GetImageBitmap();
 	HICON	GetImageIcon();
 	LRESULT GetState();									// BM_GETSTATE
-	LRESULT SetCheck(int iCheck);						// BM_SETCHECK
+	LRESULT SetCheck(int nCheck);						// BM_SETCHECK
 	void	SetRadioClick(BOOL bState);					// BM_SETDONTCLICK
-	LRESULT	SetImage(int iType, void* vPtr);			// BM_SETIMAGE
+	LRESULT	SetImage(int nType, void* vPtr);			// BM_SETIMAGE
 	LRESULT	SetImageBitmap(HBITMAP hBitmap);
 	LRESULT	SetImageIcon(HICON hIcon);
 	LRESULT SetState(BOOL bState);						// BM_SETSTATE

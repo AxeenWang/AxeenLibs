@@ -24,7 +24,7 @@ protected:
 public:
 	CxFrameDialog();
 	virtual ~CxFrameDialog();
-	BOOL CreateDialog(HWND hParent, int idItem, void* vUnknowPtr, BOOL bModule=FALSE);
+	BOOL CreateDialog(HWND hParent, int idItem, BOOL bModule = FALSE);
 
 protected:
 	virtual void WindowInTheEnd() override;

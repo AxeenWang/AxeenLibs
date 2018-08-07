@@ -228,9 +228,9 @@ BOOL CxFrameObject::GetClientRect(LPRECT rcPtr)
  */
 int CxFrameObject::GetBorderSize()
 {
-	HWND hWnd = m_hWnd;
+	auto hWnd = m_hWnd;
+	auto result = int(-1);
 	RECT rcw, rcc;
-	int	 result = -1;
 
 	this->SetError(ERROR_SUCCESS);
 	
@@ -505,6 +505,7 @@ HICON CxFrameObject::GetIcon(int nType)
 	return icon;
 }
 
+
 /**
  * @brief	設定 ICON 圖示到視窗或控制項
  * @param	[in] hIcon	圖示的 Handle
@@ -585,7 +586,7 @@ HFONT CxFrameObject::CreateFont(LPCTSTR fontFace, int nSize, BOOL bBlod, int nCh
  */
 BOOL CxFrameObject::DeleteFont(HFONT* hFontPtr)
 {
-	BOOL err = FALSE;
+	auto err = BOOL(FALSE);
 
 	for (;;) {
 		if (hFontPtr == NULL) {
@@ -616,7 +617,7 @@ BOOL CxFrameObject::DeleteFont(HFONT* hFontPtr)
  */
 BOOL CxFrameObject::DeleteFont()
 {
-	BOOL err = this->DeleteFont(&m_hFontUser);
+	auto err = this->DeleteFont(&m_hFontUser);
 
 	if (err == ERROR_INVALID_HANDLE) {
 		// 類別視窗沒有自己建立字型, 所以不算錯誤.
@@ -672,8 +673,10 @@ void CxFrameObject::SetFont(HFONT hFont, BOOL bRedraw)
  */
 void CxFrameObject::SetFont(LPCTSTR fontFace, int nSize, BOOL bBlod, int nCharset, BOOL bRedraw)
 {
+	auto font = HFONT(NULL);
+
 	this->DeleteFont();
-	auto font = this->CreateFont(fontFace, nSize, bBlod, nCharset);
+	font = this->CreateFont(fontFace, nSize, bBlod, nCharset);
 
 	if (font != NULL) {
 		this->SetFont(font);
@@ -776,9 +779,9 @@ DWORD CxFrameObject::SetExStyle(DWORD dwExStyle)
  **/
 UINT_PTR CxFrameObject::SetTimer(UINT_PTR nIDEvent, UINT uElapse, TIMERPROC fnTimerFunc)
 {
-	HWND		hCtrl = m_hWnd;
-	UINT_PTR	uTimer = m_idEventTimer;
-	UINT_PTR	err = EVENT_IDTIMER_NIL;
+	auto hCtrl	= m_hWnd;
+	auto uTimer	= m_idEventTimer;
+	auto err	= UINT_PTR(EVENT_IDTIMER_NIL);
 
 	for (;;) {
 		if (hCtrl == NULL) {
@@ -812,9 +815,9 @@ UINT_PTR CxFrameObject::SetTimer(UINT_PTR nIDEvent, UINT uElapse, TIMERPROC fnTi
  *****************************************************/
 BOOL CxFrameObject::KillTimer()
 {
-	auto	hCtrl = m_hWnd;
-	auto	uTimer = m_idEventTimer;
-	BOOL	err = FALSE;
+	auto	hCtrl	= m_hWnd;
+	auto	uTimer	= m_idEventTimer;
+	auto	err		= BOOL(FALSE);
 
 	for (;;) {
 		if (hCtrl == NULL) {
@@ -859,9 +862,9 @@ HINSTANCE CxFrameObject::GetModule() { return m_hModule; }
  */
 HWND CxFrameObject::GetParent()
 {
-	auto hCtrl = m_hWnd;
-	auto hParent = m_hWndParent;
-	BOOL err = FALSE;
+	auto hCtrl		= m_hWnd;
+	auto hParent	= m_hWndParent;
+	auto err		= BOOL(FALSE);
 
 	for (;;) {
 		if (hCtrl == NULL) {
@@ -970,9 +973,10 @@ void CxFrameObject::SysDestroyWindow(int nExitCode)
  */
 BOOL CxFrameObject::SysSetWindowProcess(WNDPROC fnWndProc)
 {
-	auto hCtrl = m_hWnd;
-	auto fnProc = m_fnOldWndProc;
-	auto result = LONG_PTR(0);
+	auto hCtrl	= m_hWnd;
+	auto fnProc	= m_fnOldWndProc;
+	auto result	= LONG_PTR(0);
+	auto param	= LONG_PTR(0);
 
 	for (;;)  {
 		if (hCtrl == NULL) {
@@ -986,9 +990,10 @@ BOOL CxFrameObject::SysSetWindowProcess(WNDPROC fnWndProc)
 		}
 
 		if (fnProc != NULL) {
-			// 若類別物件中以保有使用者指定 WndProc, 則進行移除恢復系統預設
+			// 保存資料中有使用者 WndProc 紀錄, 進行恢復改變前的 WndProc
+			param = reinterpret_cast<LONG_PTR>(fnProc);
 			::SetLastError(0);
-			result = ::SetWindowLongPtr(hCtrl, GWLP_WNDPROC, (LONG_PTR)fnProc);
+			result = ::SetWindowLongPtr(hCtrl, GWLP_WNDPROC, param);
 			if (!result) {
 				this->SetError(::GetLastError());
 				break;
@@ -996,9 +1001,9 @@ BOOL CxFrameObject::SysSetWindowProcess(WNDPROC fnWndProc)
 			m_fnOldWndProc = fnProc = NULL;
 		}
 
+		param = reinterpret_cast<LONG_PTR>(fnWndProc);
 		::SetLastError(0);
-		result = ::SetWindowLongPtr(hCtrl, GWLP_WNDPROC, (LONG_PTR)fnWndProc);
-
+		result = ::SetWindowLongPtr(hCtrl, GWLP_WNDPROC, param);
 		if (!result) {
 			this->SetError(::GetLastError());
 			break;
@@ -1007,7 +1012,6 @@ BOOL CxFrameObject::SysSetWindowProcess(WNDPROC fnWndProc)
 		m_fnOldWndProc = fnProc = reinterpret_cast<WNDPROC>(result);
 		break;
 	}
-
 	return fnProc != NULL;
 }
 
@@ -1021,7 +1025,7 @@ BOOL CxFrameObject::SysSetWindowProcess(WNDPROC fnWndProc)
 void CxFrameObject::InitCommCtrl()
 {
 	// 在此設定一個靜態識別旗標，令所有繼承者，不會重複指定通用控制項
-	static BOOL bCommctrl = FALSE;
+	static auto bCommctrl = BOOL(FALSE);
 	INITCOMMONCONTROLSEX icce;
 
 	if (!bCommctrl) {

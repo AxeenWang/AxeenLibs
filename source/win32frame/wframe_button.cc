@@ -25,24 +25,24 @@ CxFrameButton::~CxFrameButton() { }
 BOOL CxFrameButton::GetIdealSize(SIZE * sizePtr)
 {
 	// BCM_GETIDEALSIZE
-	// wParam = 未使用，必須為零
-	// lParam = SIZE 結構資料位址
-	return (BOOL)this->SendMessage(BCM_GETIDEALSIZE, 0, reinterpret_cast<LPARAM>(sizePtr));
+	WPARAM wParam = 0;									// 未使用，必須為零
+	LPARAM lParam = reinterpret_cast<LPARAM>(sizePtr);	// SIZE 結構資料位址
+	return static_cast<BOOL>(this->SendMessage(BCM_GETIDEALSIZE, wParam, lParam));
 }
 
 
 /**
  * @brief	取得按鈕的圖像列表
- * @param	[in,out] imlPtr BUTTON_IMAGELIST 結構資料位址
+ * @param	[in,out] imePtr BUTTON_IMAGELIST 結構資料位址
  * @return	@c BOOL \n
  *			函數操作成功返回非零值(non-zero), 操作失敗返回零(zero)\n
  */
-BOOL CxFrameButton::GetImageList(BUTTON_IMAGELIST * imlPtr)
+BOOL CxFrameButton::GetImageList(BUTTON_IMAGELIST * imePtr)
 {
 	// BCM_GETIDEALSIZE
-	// wParam = 未使用，必須為零
-	// lParam = BUTTON_IMAGELIST 結構資料位址
-	return (BOOL)this->SendMessage(BCM_GETIMAGELIST, 0, reinterpret_cast<LPARAM>(imlPtr));
+	WPARAM wParam = 0;									// wParam = 未使用，必須為零
+	LPARAM lParam = reinterpret_cast<LPARAM>(imePtr);	// lParam = BUTTON_IMAGELIST 結構資料位址
+	return static_cast<BOOL>(this->SendMessage(BCM_GETIMAGELIST, wParam, lParam));
 }
 
 
@@ -57,27 +57,23 @@ BOOL CxFrameButton::GetImageList(BUTTON_IMAGELIST * imlPtr)
 BOOL CxFrameButton::GetNote(LPTSTR szNotePtr, DWORD* ccNotePtr)
 {
 	// BCM_GETNOTE
-	// wParam = [in ] 描述緩衝區大小 [out] 實際緩衝區大小
-	// lParam = [out] 用於接收文本的字串緩衝區，緩衝區必須足夠大，大到可以容納 NULL 結尾符號。
-	return (BOOL)this->SendMessage(
-		BCM_GETNOTE,
-		reinterpret_cast<WPARAM>(ccNotePtr),
-		reinterpret_cast<LPARAM>(szNotePtr)
-	);
+	WPARAM wParam = reinterpret_cast<WPARAM>(ccNotePtr);	// wParam = [in ] 描述緩衝區大小 [out] 實際緩衝區大小
+	LPARAM lParam = reinterpret_cast<LPARAM>(szNotePtr);	// lParam = [out] 用於接收文本的字串緩衝區，緩衝區必須足夠大，大到可以容納 NULL 結尾符號。
+	return static_cast<BOOL>(this->SendMessage(BCM_GETNOTE, wParam, lParam));
 }
 
 
 /**
  * @brief	取得聯經控制項註解說明文本的大小
  * @return	@c DWORD \n
- *			單位 TCHAR 的文本長度，不包含 NULL 結尾符號。
+ *			文本的長度(in TCHAR)，不包含 NULL 結尾符號。
  */
 DWORD CxFrameButton::GetNoteLength()
 {
 	// BCM_GETNOTELENGTH
 	// wParam = 未使用，必須為零
 	// lParam = 未使用，必須為零
-	return (DWORD)this->SendMessage(BCM_GETNOTELENGTH, 0, 0);
+	return static_cast<DWORD>(this->SendMessage(BCM_GETNOTELENGTH, 0, 0));
 }
 
 
@@ -93,7 +89,7 @@ void CxFrameButton::Click()
 	// BM_CLICK
 	// wParam = 未使用，必須為零
 	// lParam = 未使用，必須為零
-	this->PostMessage(BM_CLICK, 0, 0);
+	this->SendMessage(BM_CLICK, 0, 0);
 }
 
 
@@ -115,18 +111,18 @@ LRESULT CxFrameButton::GetCheck()
 
 /**
  * @brief	取得按鈕的圖像 Handle
- * @param	[in] iType 圖像類型
+ * @param	[in] nType 圖像類型
  *			- IMAGE_BITMAP	取得 Bitmap
  *			- IMAGE_ICON	取得 Icon
  * @return	@c LRESULT \n
  *			函數操作成功返回圖像 Handle, 若操作失敗返回 NULL
  */
-LRESULT CxFrameButton::GetImage(int iType)
+LRESULT CxFrameButton::GetImage(int nType)
 {
 	// BM_GETIMAGE
-	// wParam = 圖像種類
-	// lParam = 未使用，必須為零
-	return this->SendMessage(BM_GETIMAGE, (WPARAM)iType, 0);
+	WPARAM wParam = static_cast<WPARAM>(nType);	// 圖像種類
+	LPARAM lParam = 0;							// lParam = 未使用，必須為零
+	return this->SendMessage(BM_GETIMAGE, wParam, lParam);
 }
 
 
@@ -173,18 +169,18 @@ LRESULT CxFrameButton::GetState()
 
 /**
  * @brief	設置單選按鈕或複選框的檢查狀態
- * @param	[in] iCheck	設定按鈕 Cechk 狀態值
+ * @param	[in] nCheck	設定按鈕 Cechk 狀態值
  *			- BST_CHECKED		將按鈕狀態設置為選中(選取中)
  *			- BST_INDETERMINATE	將按鈕狀態設置為灰色，表示不確定狀態。僅當按鈕具有BS_3STATE或BS_AUTO3STATE樣式時才使用此值。
  *			- BST_UNCHECKED		將按鈕狀態設置為清除(未選取)
  * @return	@c LRESULT	傳回值始終為零
  */
-LRESULT CxFrameButton::SetCheck(int iCheck)
+LRESULT CxFrameButton::SetCheck(int nCheck)
 {
 	// BM_SETCHECK
-	// wParam = iCheck
-	// lParam = 未使用，必須為零
-	return this->SendMessage(BM_SETCHECK, (WPARAM)iCheck, 0);
+	WPARAM wParam = static_cast<WPARAM>(nCheck);	// wParam = iCheck
+	LPARAM lParam = 0;								// lParam = 未使用，必須為零
+	return this->SendMessage(BM_SETCHECK, wParam, lParam);
 }
 
 /**
@@ -196,30 +192,29 @@ LRESULT CxFrameButton::SetCheck(int iCheck)
 void CxFrameButton::SetRadioClick(BOOL bState)
 {
 	// BM_SETDONTCLICK 傳回值始終為 0
-	// wParam = 狀態值
-	// lParam = 未使用，必須為零
-	// this->SendMessage(BM_SETDONTCLICK, (WPARAM)bState, 0);
-	this->PostMessage(BM_SETDONTCLICK, (WPARAM)bState, 0);
+	WPARAM wParam = static_cast<WPARAM>(bState);	// 狀態值
+	LPARAM lParam = 0;								// lParam = 未使用，必須為零
+	this->SendMessage(BM_SETDONTCLICK, wParam, lParam);
 }
 
 /**
  * @brief	設定按鈕的圖像
- * @param	[in] iType 圖像類型
+ * @param	[in] nType 圖像類型
  *			- IMAGE_BITMAP	取得 Bitmap
  *			- IMAGE_ICON	取得 Icon
  * @param	[in] vPtr	圖像 HANDLE
  * @return	@c LRESULT \n
  *			若先前有圖像返回值為圖像 HANDLE, 若先前無圖像則返回 NULL
  */
-LRESULT CxFrameButton::SetImage(int iType, void * vPtr)
+LRESULT CxFrameButton::SetImage(int nType, void * vPtr)
 {
-	if (iType != IMAGE_BITMAP && iType != IMAGE_ICON)
+	if (nType != IMAGE_BITMAP && nType != IMAGE_ICON)
 		return NULL;
 
 	// BM_SETIMAGE
-	// wParam = 圖像種類
-	// lParam = 圖像 HANDLE
-	return this->SendMessage(BM_SETIMAGE, iType, reinterpret_cast<LPARAM>(vPtr));
+	WPARAM wParam = static_cast<WPARAM>(nType);	// 圖像種類
+	LPARAM lParam = reinterpret_cast<LPARAM>(vPtr);// lParam = 圖像 HANDLE
+	return this->SendMessage(BM_SETIMAGE, wParam, lParam);
 }
 
 
@@ -232,9 +227,9 @@ LRESULT CxFrameButton::SetImage(int iType, void * vPtr)
 LRESULT CxFrameButton::SetImageBitmap(HBITMAP hBitmap)
 {
 	// BM_SETIMAGE
-	// wParam = 圖像種類
-	// lParam = 圖像 HANDLE
-	return this->SendMessage(BM_SETIMAGE, IMAGE_BITMAP, reinterpret_cast<LPARAM>(hBitmap));
+	WPARAM wParam = IMAGE_BITMAP;						// wParam = 圖像種類
+	LPARAM lParam = reinterpret_cast<LPARAM>(hBitmap);	// lParam = 圖像 HANDLE
+	return this->SendMessage(BM_SETIMAGE, wParam, lParam);
 }
 
 
@@ -247,9 +242,9 @@ LRESULT CxFrameButton::SetImageBitmap(HBITMAP hBitmap)
 LRESULT CxFrameButton::SetImageIcon(HICON hIcon)
 {
 	// BM_SETIMAGE
-	// wParam = 圖像種類
-	// lParam = 圖像 HANDLE
-	return this->SendMessage(BM_SETIMAGE, IMAGE_ICON, reinterpret_cast<LPARAM>(hIcon));
+	WPARAM wParam = IMAGE_ICON;							// wParam = 圖像種類
+	LPARAM lParam = reinterpret_cast<LPARAM>(hIcon);	// lParam = 圖像 HANDLE
+	return this->SendMessage(BM_SETIMAGE, wParam, lParam);
 }
 
 
@@ -263,9 +258,9 @@ LRESULT CxFrameButton::SetImageIcon(HICON hIcon)
 LRESULT CxFrameButton::SetState(BOOL bState)
 {
 	// BM_SETSTATE
-	// wParam = 指定按鈕狀態
-	// lParam = 未使用，必須為 0
-	return this->SendMessage(BM_SETSTATE, (WPARAM)bState, 0);
+	WPARAM wParam = static_cast<WPARAM>(bState);	// 指定按鈕狀態
+	LPARAM lParam = 0;								// 未使用，必須為 0
+	return this->SendMessage(BM_SETSTATE, wParam, lParam);
 }
 
 /**
@@ -277,9 +272,9 @@ LRESULT CxFrameButton::SetState(BOOL bState)
 void CxFrameButton::SetStyle(DWORD dwStyle, BOOL bRepaint)
 {
 	// BM_SETSTYLE
-	// wParam = Style (樣式)
-	// lParam = 是否重繪 (存於 LOWORD)
-	this->PostMessage(BM_SETSTYLE, static_cast<WPARAM>(dwStyle), static_cast<LPARAM>(bRepaint));
+	WPARAM wParam = static_cast<WPARAM>(dwStyle);	// Style (樣式)
+	LPARAM lParam = static_cast<LPARAM>(bRepaint);	// lParam = 是否重繪 (存於 LOWORD)
+	this->PostMessage(BM_SETSTYLE, wParam, lParam);
 }
 
 
@@ -300,8 +295,8 @@ void CxFrameButton::SetStyle(DWORD dwStyle, BOOL bRepaint)
  */
 BOOL CxFrameButton::CreateButton(LPCTSTR szCaptionPtr, int x, int y, int wd, int ht, HWND hParent, int idItem, HINSTANCE hInst, WNDPROC fnWndProc)
 {
-	BOOL		err = FALSE;
-	SSCTRL		ctrl;
+	auto	err = BOOL(FALSE);
+	SSCTRL	ctrl;
 
 	for (;;) {
 		if ((hInst = ::GetModuleHandle(NULL)) == NULL) {
@@ -331,7 +326,6 @@ BOOL CxFrameButton::CreateButton(LPCTSTR szCaptionPtr, int x, int y, int wd, int
 		ctrl.iHeight = ht;
 		ctrl.idItem = idItem;
 		ctrl.fnWndProc = fnWndProc;
-		ctrl.vUnknowPtr = NULL;	// pointer of user data
 		err = this->CreateController(&ctrl);
 		break;
 	}
