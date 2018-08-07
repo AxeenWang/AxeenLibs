@@ -1,0 +1,19 @@
+
+1.
+The "vsvars32.bar" 
+	
+	--> Visual Studio 2013 and before
+	call "$(VS120COMNTOOLS)\vsvars32.bat"
+	editbin /largeaddressaware $(TargetPath)
+
+	--> Visual Studio 2015 and 2017
+	call "$(DevEnvDir)..\tools\vsdevcmd.bat"
+	editbin /largeaddressaware "$(TargetPath)"
+	
+	
+2.
+error LNK2019: unresolved external symbol _fprintf
+error LNK2001: unresolved external symbol ___iob_func
+
+	(1) #pragma comment(lib,"legacy_stdio_definitions.lib")
+	(2) extern "C" { FILE __iob_func[3] = { *stdin,*stdout,*stderr }; }
