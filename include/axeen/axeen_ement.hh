@@ -206,6 +206,7 @@
 // Include C++ CRT header
 // ---------------------------------------
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -219,6 +220,7 @@
 #include <tchar.h>
 #include <commctrl.h>
 #include "axeen_undef.hh"
+#include "axeen_inline.hh"
 
 // ---------------------------------------
 // User type define

@@ -27,18 +27,18 @@ public:
 	// --- LVM_ARRANGE
 	// --- LVM_CREATEDRAGIMAGE
 	BOOL DeleteItemAll();												// LVM_DELETEALLITEMS
-	BOOL DeleteColumn(int index);										// LVM_DELETECOLUMN
+	BOOL DeleteColumn(int nIndex);										// LVM_DELETECOLUMN
 	void DeleteColumnAll();
-	BOOL DeleteItem(int index);											// LVM_DELETEITEM
+	BOOL DeleteItem(int nIndex);										// LVM_DELETEITEM
 	// --- LVM_EDITLABEL
 	// --- LVM_ENSUREVISIBLE
 	// --- LVM_FINDITEM
 	// --- LVM_GETBKCOLOR
 	// --- LVM_GETCALLBACKMASK
-	BOOL GetColumn(int index, LPTSTR psz, int cch);						// LVM_GETCOLUMN
+	BOOL GetColumn(int nIndex, LPTSTR szColumnPtr, int ccMax);			// LVM_GETCOLUMN
 	int  GetColumnCount();
 	// --- LVM_GETCOLUMNORDERARRAY
-	int  GetColumnWidth(int index);										// LVM_GETCOLUMNWIDTH
+	int  GetColumnWidth(int nIndex);									// LVM_GETCOLUMNWIDTH
 	int  GetCountPerPage();												// LVM_GETCOUNTPERPAGE
 	// --- LVM_GETEDITCONTROL
 	DWORD GetExListViewStyle();											// LVM_GETEXTENDEDLISTVIEWSTYLE
@@ -47,11 +47,11 @@ public:
 	// --- LVM_GETISEARCHSTRING
 	// --- LVM_GETITEM
 	int  GetItemCount();												// LVM_GETITEMCOUNT
-	BOOL GetItemPosition(int index, LPPOINT aPtr);						// LVM_GETITEMPOSITION
+	BOOL GetItemPosition(int nIndex, LPPOINT stPtr);					// LVM_GETITEMPOSITION
 	// --- LVM_GETITEMRECT
 	// --- LVM_GETITEMSPACING
 	// --- LVM_GETITEMSTATE
-	BOOL GetItemText(int index, int isubs, LPTSTR psz, int cch);		// LVM_GETITEMTEXT
+	BOOL GetItemText(int nIndex, int nSub, LPTSTR szTextPtr, int ccLen);// LVM_GETITEMTEXT
 	int  GetNextSelectItem();											// LVM_GETNEXTITEM
 	int	 GetFirstSelectItem();
 	int  GetSelectItem();
@@ -67,15 +67,15 @@ public:
 	// --- LVM_GETVIEWRECT
 	// --- LVM_GETWORKAREAS
 	// --- LVM_HITTEST
-	BOOL InsertColumn(int index, int wd, int align, LPTSTR psz);		// LVM_INSERTCOLUMN
-	BOOL InsertItem(int index, int isubs, LPTSTR psz);					// LVM_INSERTITEM
+	BOOL InsertColumn(int nIndex, int wd, int nAlign, LPTSTR szTextPtr);// LVM_INSERTCOLUMN
+	BOOL InsertItem(int nIndex, int nSub, LPTSTR szTextPtr);			// LVM_INSERTITEM
 	// --- LVM_REDRAWITEMS
 	// --- LVM_SCROLL
 	BOOL SetBkColor(COLORREF dwColor);									// LVM_SETBKCOLOR
 	// --- LVM_SETCALLBACKMASK
-	BOOL SetColumn(int index, LPTSTR psz);								// LVM_SETCOLUMN
+	BOOL SetColumn(int nIndex, LPTSTR szTextPtr);						// LVM_SETCOLUMN
 	// --- LVM_SETCOLUMNORDERARRAY
-	BOOL SetColumnWidth(int index, int pixel);							// LVM_SETCOLUMNWIDTH
+	BOOL SetColumnWidth(int nIndex, int nPixel);						// LVM_SETCOLUMNWIDTH
 	void SetExListViewStyle(DWORD dwExStyle);							// LVM_SETEXTENDEDLISTVIEWSTYLE
 	// --- LVM_SETICONSPACING
 	// --- LVM_SETIMAGELIST
@@ -83,9 +83,9 @@ public:
 	// --- LVM_SETITEMCOUNT
 	// --- LVM_SETITEMPOSITION
 	// --- LVM_SETITEMPOSITION32
-	BOOL SetItemState(int index, LPLVITEM plvi);						// LVM_SETITEMSTATE
-	BOOL SetItemState(int index, BOOL bState);
-	BOOL SetItemText(int index, int isubs, LPTSTR psz);					// LVM_SETITEMTEXT
+	BOOL SetItemState(int nIndex, LPLVITEM lvitemPtr);					// LVM_SETITEMSTATE
+	BOOL SetItemState(int nIndex, BOOL bState);
+	BOOL SetItemText(int nIndex, int nSub, LPTSTR szTextPtr);			// LVM_SETITEMTEXT
 	// --- LVM_SETSELECTIONMARK
 	BOOL SetTextBkColor(COLORREF dwColor);								// LVM_SETTEXTBKCOLOR
 	BOOL SetTextColor(COLORREF dwColor);								// LVM_SETTEXTCOLOR

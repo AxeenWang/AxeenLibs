@@ -40,6 +40,9 @@ INT_PTR CxExamaleDialog::MessageDispose(UINT uMessage, WPARAM wParam, LPARAM lPa
 	case WM_CLOSE:
 		this->SysCloseWindow();
 		break;
+	case WM_COMMAND:
+		this->OnCommand(wParam, lParam);
+		break;
 	default:
 		return FALSE;
 	}
@@ -88,6 +91,37 @@ void CxExamaleDialog::OnInitDialog(WPARAM wParam, LPARAM lParam)
 		m_cButton->SetFont(this->GetFont());
 
 		break;
+	}
+}
+
+/**
+* @brief	WM_COMMAND 訊息處理
+* @return	沒有返回值
+* @remark	子控制項命令觸發, LOWORD wParam 為子項目的 ID
+*/
+void CxExamaleDialog::OnCommand(WPARAM wParam, LPARAM lParam)
+{
+	const static TCHAR* aam[] = {
+		TEXT("哈哈哈"),
+		TEXT("呵呵呵"),
+		TEXT("啦啦啦"),
+		TEXT("嘎嘎嘎"),
+		TEXT("嗚嗚嗚")
+	};
+	const static auto len = sizeof(aam) / sizeof(aam[0]);
+	static size_t i = 0;
+
+	auto btn = m_cButton;
+	auto edt = m_cEdit;
+
+	if (btn != NULL && edt != NULL) {
+		int nCmd = static_cast<int>(LoWord(wParam));
+
+		if (nCmd == btn->GetControlID()) {
+			edt->SetText(aam[i]);
+			
+			if (++i >= len) i = 0;
+		}
 	}
 }
 

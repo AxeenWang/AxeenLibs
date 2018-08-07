@@ -50,9 +50,9 @@ public:
 	HWND	SetFocus();
 	HWND	GetTopWindow();
 
-	int		GetText(LPTSTR szPtr, size_t ccLen);
+	int		GetText(LPTSTR szTextPtr, size_t ccLen);
 	int		GetTextLength();
-	BOOL	SetText(LPCTSTR szPtr);
+	BOOL	SetText(LPCTSTR szTextPtr);
 
 	HICON	GetIcon(int nType);
 	HICON	SetIcon(HICON hIcon, int nType);

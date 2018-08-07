@@ -26,11 +26,9 @@ int _tmain(int argc, TCHAR* argv[])
 {
 	auto res = int(-1);
 
-	std::wcout << res << TEXT("\n");
 	system("pause");
-
 	res = create_a_window();
-	std::wcout << res << TEXT("\n");
+	std::wcout << TEXT("Exit Code = ") << res << std::endl;
 	system("pause");
 	return 0;
 }

@@ -47,7 +47,7 @@ CxFrameObject::~CxFrameObject() {  }
 
 /**
  * @brief	取得錯誤碼
- * @return	@c DWORD \n
+ * @return	@c 型別: DWORD \n
  *			回傳一個錯誤碼, 若傳回值為零(zero)則無錯誤紀錄.
  */
 DWORD CxFrameObject::GetError() { return m_dwError; }
@@ -89,7 +89,8 @@ void CxFrameObject::ShowError()
  * @param	[in] uMessage	訊息碼
  * @param	[in] wParam		參數 1
  * @param	[in] lParam		參數 2
- * @return	@c LRESULT		訊息處理結果，依據指定的訊息結果而定
+ * @return	@c 型別: LRESULT \n
+ *			訊息處理結果，依據指定的訊息結果而定
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-postmessagea
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-postmessagew
  *
@@ -106,7 +107,8 @@ LRESULT CxFrameObject::SendMessage(UINT uMessage, WPARAM wParam, LPARAM lParam)
 * @param	[in] uMessage	訊息碼
 * @param	[in] wParam		參數 1
 * @param	[in] lParam		參數 2
-* @return	@c LRESULT		訊息處理結果，依據指定的訊息結果而定
+* @return	@c 型別: LRESULT \n
+*			訊息處理結果，依據指定的訊息結果而定
 * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-sendmessagea
 * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-sendmessagew
 *
@@ -125,7 +127,7 @@ void CxFrameObject::LeaveWindow() { this->PostMessage(WM_CLOSE, 0, 0); }
 
 /**
  * @brief	更新視窗
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			若視窗更新成功將返回非零值(non-zero), 若更新失敗將返回零值(zero).
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-updatewindow
  */
@@ -135,7 +137,7 @@ BOOL CxFrameObject::Update() { return ::UpdateWindow(m_hWnd); }
 /**
  * @brief	啟用、禁用視窗或控制項操作
  * @param	[in] bEnable	啟用參數為 TEUE、禁用參數為 FALSE
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			若視窗先前被禁用返回 TRUE, 若視窗先前非禁用返回 FALSE.
  */
 BOOL CxFrameObject::Enable(BOOL bEnable) { return ::EnableWindow(m_hWnd, bEnable); }
@@ -143,7 +145,7 @@ BOOL CxFrameObject::Enable(BOOL bEnable) { return ::EnableWindow(m_hWnd, bEnable
 
 /**
  * @brief	啟用、禁用視窗或控制項操作
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			若視窗先前被禁用返回 TRUE, 若視窗先前非禁用返回 FALSE.
  */
 BOOL CxFrameObject::Disable() { return ::EnableWindow(m_hWnd, FALSE); }
@@ -152,9 +154,9 @@ BOOL CxFrameObject::Disable() { return ::EnableWindow(m_hWnd, FALSE); }
 /**
  * @brief	顯示視窗或控制項
  * @param	[in] nCmdShow	顯示視窗命令參數
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			若視窗先前為顯示中返回值為 TRUE, 若視窗先前為隱藏中返回值為 FALSE.
- * @remark	@c 顯示視窗命令參數 iShow
+ * @remark	顯示視窗命令參數 nCmdShow
  *			- SW_HIDE               隱藏視窗
  *			- SW_SHOWNORMAL         顯示視窗，如果視窗被最小化或最大化，系統將其恢復到原來的尺寸和大小 (初始建立時的大小)
  *			- SW_SHOWMINIMIZED      顯示視窗並以最小化顯示
@@ -175,7 +177,7 @@ BOOL CxFrameObject::Show(int nCmdShow) { return ::ShowWindow(m_hWnd, nCmdShow); 
 
 /**
  * @brief	隱藏視窗或控制項
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			若視窗先前為顯示中返回值為 TRUE, 若視窗先前為隱藏中返回值為 FALSE.
  * @see		CxFrameObject::Show()
  */
@@ -185,7 +187,7 @@ BOOL CxFrameObject::Hide() { return ::ShowWindow(m_hWnd, SW_HIDE); }
 /**
  * @brief	取得視窗, 控制項矩形邊界尺寸
  * @param	[out] rcPtr	RECT 結構資料位址
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			操作成功返回非零值(non-zero), 操作失敗返回零值(zero) \n
  *			失敗可由 CxFrameObject::GetError 或衍生類別取得錯誤碼
  */
@@ -203,7 +205,7 @@ BOOL CxFrameObject::GetWindowRect(LPRECT rcPtr)
 /**
  * @brief	取得視窗, 控制項工作區, 矩形邊界尺寸
  * @param	[out] rcPtr	RECT 結構指標
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			操作成功返回非零值(non-zero), 操作失敗返回零值(zero) \n
  *			失敗可由 CxFrameObject::GetError 或衍生類別取得錯誤碼
  */
@@ -220,7 +222,7 @@ BOOL CxFrameObject::GetClientRect(LPRECT rcPtr)
 
 /**
  * @brief	取得視窗工作區邊框尺寸
- * @return	@c int \n
+ * @return	@c 型別: int \n
  *			邊界尺寸 (in pixel), 若失敗返回 -1.
  * @remark	取得視窗與工作區的邊界尺寸, 藉以計算出兩者相差值. 視窗尺寸必定大於等於工作區尺寸.
  * @see		CxFrameObject::GetRect
@@ -262,7 +264,7 @@ int CxFrameObject::GetBorderSize()
  * @brief	設定(變更)視窗位置
  * @param	[in] x	視窗左上座標 X
  * @param	[in] y	視窗左上座標 Y
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			操作成功返回非零值(non-zero), 操作失敗返回零值(zero) \n
  *			失敗可由 CxFrameObject::GetError 或衍生類別取得錯誤碼
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-setwindowpos
@@ -281,7 +283,7 @@ BOOL CxFrameObject::SetPosition(int x, int y)
  * @brief	設定(變更)視窗控制項矩形尺寸
  * @param	[in] wd	視窗寬度
  * @param	[in] ht	視窗高度
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			操作成功返回非零值(non-zero), 操作失敗返回零值(zero) \n
  *			失敗可由 CxFrameObject::GetError 或衍生類別取得錯誤碼
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-setwindowposs
@@ -300,7 +302,7 @@ BOOL CxFrameObject::SetSize(int wd, int ht)
  * @brief	設定視窗工作區矩形邊界尺寸
  * @param	[in] wd	視窗寬度
  * @param	[in] ht	視窗高度
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			操作成功返回非零值, 操作失敗返回零值(zero)\n
  *			失敗可由 CxFrameObject::GetError 或衍生類別取得錯誤碼
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-setwindowposs
@@ -340,7 +342,8 @@ BOOL CxFrameObject::SetClientSize(int wd, int ht)
 
 /**
  * @brief	設定視窗、控制項居中顯示
- * @remark	若發現有父視窗存在, 將會以父視窗為基準.
+ * @return	此函數沒有返回值
+ * @remark	若發現有父視窗存在, 將會以父視窗為基準. \n
  *			若無父視窗存在, 將以桌面左為基準.
  * @see		CxFrameObject::SetPosition
  * @see		CxFrameObject::SetSize
@@ -387,7 +390,7 @@ void CxFrameObject::SetCenterPosition()
 
 /**
  * @brief	取得當前輸入焦點視窗
- * @return	@c HWND \n
+ * @return	@c 型別: HWND \n
  *			操作成功返回非零值, 目前焦點的視窗 HANDLE \n
  *			若沒有任何視窗焦點則返回 NULL.
  */
@@ -396,7 +399,7 @@ HWND CxFrameObject::GetFocus() { return ::GetFocus(); }
 
 /**
  * @brief	設定視窗為輸入焦點
- * @return	@c HWND \n
+ * @return	@c 型別: HWND \n
  *			先前擁有輸入焦點的視窗物件的指標, 如果沒有此視窗, 則傳回 NULL
  * @remark	傳回的 HANDLE 指標是暫時的, 所以不應被儲存或轉給給其他函式使用.
  */
@@ -405,7 +408,7 @@ HWND CxFrameObject::SetFocus() { return ::SetFocus(m_hWnd); }
 
 /**
  * @brief	取得目前位於最上層的子控制項 Handle
- * @return	@c HWND \n
+ * @return	@c 型別: HWND \n
  *			操作成功返回, 最上層子控制項 HWND \n
  *			操作失敗返回, NULL，調用 CxFrameObject::GetError 或衍生類別取得錯誤訊息
  * @remark	識別在子視窗連結清單的最上層子視窗，如果子視窗不存在，這個值是 NULL。\n
@@ -425,23 +428,25 @@ HWND CxFrameObject::GetTopWindow()
 
 /**
  * @brief	取得視窗或控制項的文字
- * @param	szPtr	要接收存放文字字串的緩衝區位址
- * @param	ccLen	要接收多少文字, (in TCHAR)
+ * @param	szTextPtr	要接收存放文字字串的緩衝區位址
+ * @param	ccLen		要接收多少文字, (in TCHAR)
+ * @return	@c 型別: int \n
+ *			返回值為實際取得文字數量 (in TCHAR)
  * @see		https://docs.microsoft.com/en-us/windows/desktop/winmsg/wm-gettext
  */
-int CxFrameObject::GetText(LPTSTR szPtr, size_t ccLen)
+int CxFrameObject::GetText(LPTSTR szTextPtr, size_t ccLen)
 {
 	// WM_GETTEXT
-	WPARAM wParam = static_cast<WPARAM>(ccLen);			// 要接收多少文字 (in TCHAR)
-	LPARAM lParam = reinterpret_cast<LPARAM>(szPtr);	// 字串的緩衝區位址
+	WPARAM wParam = static_cast<WPARAM>(ccLen);				// 要接收多少文字 (in TCHAR)
+	LPARAM lParam = reinterpret_cast<LPARAM>(szTextPtr);	// 字串的緩衝區位址
 	return static_cast<int>(::SendMessage(m_hWnd, WM_GETTEXT, wParam, lParam));
 }
 
 
 /**
  * @brief	取得視窗或控制項的文字長度
- * @return	@c int \n
- *			返回視窗或控制項文字字串之長度 (不包含字串結尾 NULL), 單位 TCHAR. \n
+ * @return	@c 型別: int \n
+ *			返回視窗或控制項文字字串之長度 (不包含字串結尾 NULL), (in TCHAR). \n
  *			若執行失敗將返回 0
  * @see		https://docs.microsoft.com/en-us/windows/desktop/winmsg/wm-gettextlength
  */
@@ -456,17 +461,17 @@ int CxFrameObject::GetTextLength()
 
 /**
  * @brief	設定文字到視窗或控制項
- * @param	[in] szPtr 文字字串存放位址
- * @return	@c BOOL \n
+ * @param	[in] szTextPtr 文字字串存放位址
+ * @return	@c 型別: BOOL \n
  *			如果文字設定成功, 返回值為 TRUE.\n
  *			設定失敗返回值 FALSE
  * @see		https://docs.microsoft.com/en-us/windows/desktop/winmsg/wm-settext
   */
-BOOL CxFrameObject::SetText(LPCTSTR szPtr)
+BOOL CxFrameObject::SetText(LPCTSTR szTextPtr)
 {
 	// WM_SETTEXT
-	WPARAM wParam = 0;									// 未使用，建議為零
-	LPARAM lParam = reinterpret_cast<LPARAM>(szPtr);	// 字串位址
+	WPARAM wParam = 0;										// 未使用，建議為零
+	LPARAM lParam = reinterpret_cast<LPARAM>(szTextPtr);	// 字串位址
 	return static_cast<BOOL>(::SendMessage(m_hWnd, WM_SETTEXT, wParam, lParam));
 }
 
@@ -477,7 +482,7 @@ BOOL CxFrameObject::SetText(LPCTSTR szPtr)
  *						- ICON_BIG		大圖示
  *						- ICON_SMALL	小圖示
  *						- ICON_SMALL2	小圖示2
- * @return	@c HICON \n
+ * @return	@c 型別: HICON \n
  *			返回指定模式的圖示 Handle, \n
  *			若沒有設定過圖示，將自動取得系統預設指派的圖示 Handle
  * @see		https://docs.microsoft.com/en-us/windows/desktop/winmsg/wm-geticon
@@ -512,7 +517,7 @@ HICON CxFrameObject::GetIcon(int nType)
  * @param	[in] nType	要變更的圖示模式
  *						- ICON_BIG,		大圖示
  *						- ICON_SMALL,	小圖示
- * @return	@c HICON \n
+ * @return	@c 型別: HICON \n
  *			返回上一個所設定的圖示 Handle, 若先前沒有圖示設定, 將返回 NULL.
  * @see		https://docs.microsoft.com/en-us/windows/desktop/winmsg/wm-seticon
  */
@@ -531,7 +536,7 @@ HICON CxFrameObject::SetIcon(HICON hIcon, int nType)
  * @param	[in] nSize		字型尺寸
  * @param	[in] bBlod		是否要粗體
  * @param	[in] nCharset	指定字符集
- * @return	@c HFONT \n
+ * @return	@c 型別: HFONT \n
  *			如果字型建立成功，返回值是建立字型的 HANDLE \n
  *			如果字型建立失敗，將返回 NULL
  * @remark	利用 Win32 API CreateFontIndirect 函數以 LOGFONT 結構與所述所指定的特徵的邏輯字型 。\n
@@ -576,7 +581,7 @@ HFONT CxFrameObject::CreateFont(LPCTSTR fontFace, int nSize, BOOL bBlod, int nCh
 /**
  * @brief	刪除字型
  * @param	[in] hFontPtr 存放字型 HANDLE 位址
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			如果函數執行成功, 則返回為非零值.\n
  *			如果指定的字型 (handle of font) 無效或被選入DC選用中, 則返回值為零.
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/wingdi/nf-wingdi-deleteobject
@@ -613,7 +618,7 @@ BOOL CxFrameObject::DeleteFont(HFONT* hFontPtr)
 
 /**
  * @brief	刪除字型 (刪除類別內建立的使用者字型)
- * @return	@c BOOL 如果函數執行成功, 則返回為非零值.
+ * @return	@c 型別: BOOL 如果函數執行成功, 則返回為非零值.
  */
 BOOL CxFrameObject::DeleteFont()
 {
@@ -628,7 +633,7 @@ BOOL CxFrameObject::DeleteFont()
 
 /**
  * @brief	取得字型 (類別內建立的使用者字型)
- * @return	@c HFONT 如果函數操作成功返回值為 HFONT, 則返回為非零值.
+ * @return	@c 型別: HFONT 如果函數操作成功返回值為 HFONT, 則返回為非零值.
  */
  HFONT CxFrameObject::GetFont()
  {
@@ -687,7 +692,7 @@ void CxFrameObject::SetFont(LPCTSTR fontFace, int nSize, BOOL bBlod, int nCharse
 
 /**
  * @brief	取得視窗、控制項樣式 (Style)
- * @return	@c DWORD \n
+ * @return	@c 型別: DWORD \n
  *			操作成功返回 Sytle 值, 操作失敗返回零(zero) \n
  *			失敗調用 CxFrameObject::GetError 或衍生類別取得錯誤訊息
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-getwindowlongptra
@@ -707,7 +712,7 @@ DWORD CxFrameObject::GetStyle()
 /**************************************************//**
  * @brief	設定視窗、控制項樣式 (Style)
  * @param	[in] dwStyle 視窗樣式
- * @return	@c DWORD \n
+ * @return	@c 型別: DWORD \n
  *			操作成功返回設定前的 Style 值, 操作失敗返回零(zero). \n
  *			失敗調用 CxFrameObject::GetError 或衍生類別取得錯誤訊息
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-setwindowlongptra
@@ -726,7 +731,7 @@ DWORD CxFrameObject::SetStyle(DWORD dwStyle)
 
 /**
  * @brief	取得視窗、控制項擴展樣式 (ExStyle)
- * @return	@c DWORD \n
+ * @return	@c 型別: DWORD \n
  *			操作成功返回 Sytle 擴展值, 操作失敗返回零(zero) \n
  *			失敗調用 CxFrameObject::GetError 或衍生類別取得錯誤訊息
  * @see		CxFrameObject::GetStyle
@@ -745,7 +750,7 @@ DWORD CxFrameObject::GetExStyle()
 /**
  * @brief	設定視窗、控制項擴展樣式 (ExStyle)
  * @param	[in] dwExStyle	視窗擴展樣式
- * @return	@c DWORD \n
+ * @return	@c 型別: DWORD \n
  *			操作成功返回設定前的 Sytle 擴展值, 操作失敗返回零(zero) \n
  *			失敗調用 CxFrameObject::GetError 或衍生類別取得錯誤訊息
  * @see		CxFrameObject::SetStyle
@@ -769,7 +774,7 @@ DWORD CxFrameObject::SetExStyle(DWORD dwExStyle)
  * @param	[in] fnTimerFunc	Timer Callback
  *			- 定時觸發時間是件至指定 Callback
  *			- 若此值為 NULL 計時器會對對視窗發出 WM_TIMER 訊息
- * @return	@c UINT_PTR
+ * @return	@c 型別: UINT_PTR
  *			- 如果函數成功並且 hWnd 參數為 NULL，則返回值是標識新計時器的整數。\n
  *			  應用程序可以將此值傳遞給 KillTimer 函數以銷毀計時器。
  *			- 如果函數成功且 hWnd 參數不為 NULL，則返回值為非零整數。\n
@@ -809,7 +814,7 @@ UINT_PTR CxFrameObject::SetTimer(UINT_PTR nIDEvent, UINT uElapse, TIMERPROC fnTi
 
 /**************************************************//**
  * @brief	刪除計時器
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			函數操作成功返回非零值(non-zero), 若操作失敗返回零(zero) \n
  *			若失敗可使用 CxFrameObject::GetError 或衍生類別取得錯誤碼
  *****************************************************/
@@ -849,7 +854,7 @@ BOOL CxFrameObject::KillTimer()
 
 /**
  * @brief	取得程序模組 Handle
- * @return	@c HINSTANCE \n
+ * @return	@c 型別: HINSTANCE \n
  *			返回程序模組 hanlde，若視窗尚未建立將傳回 NULL
  */
 HINSTANCE CxFrameObject::GetModule() { return m_hModule; }
@@ -857,7 +862,7 @@ HINSTANCE CxFrameObject::GetModule() { return m_hModule; }
 
 /**
  * @brief	取得父視窗操作 Handle
- * @return	@c HWND	\n
+ * @return	@c 型別: HWND \n
  *			返回父視窗操作 handle，若非子項目將傳回 NULL
  */
 HWND CxFrameObject::GetParent()
@@ -888,7 +893,7 @@ HWND CxFrameObject::GetParent()
 
 /**
  * @brief	取得視窗或控制項操作 Handle
- * @return	@c HWND	\n
+ * @return	@c 型別: HWND \n
  *			返回視窗操作 handle，若視窗尚未建立將傳回 NULL
  */
 HWND CxFrameObject::GetHandle() { return m_hWnd; }
@@ -896,7 +901,8 @@ HWND CxFrameObject::GetHandle() { return m_hWnd; }
 
 /**
  * @brief	取得視窗或控制項操作 ID
- * @return	@c inc	視窗或控制項 ID \n
+ * @return	@c 型別: inc	\n 
+ *			返回值為視窗或控制項 ID \n
  *			若控制項已建立將返回控制項ID, 若控制項尚未建立將返回零值(zero)
  */
 int  CxFrameObject::GetControlID() { return m_idItem; }
@@ -904,7 +910,7 @@ int  CxFrameObject::GetControlID() { return m_idItem; }
 
 /**
  * @brief	驗證是否建立視窗或控制項
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			視窗或控制項已存在將返回非零值(non-zero), 尚未建立視窗或控制項將返回零值(zero)
  */
 BOOL CxFrameObject::IsExist() { return m_hWnd != NULL; }
@@ -914,7 +920,7 @@ BOOL CxFrameObject::IsExist() { return m_hWnd != NULL; }
  * 視窗結束處理 (釋放配置記憶體與成員物件)
  *
  * 此為虛擬函數, 由衍生類別繼承 \n
- * 視窗進入關閉階段時進行運作此一函數, 確保類別內所配置的物件與記憶體都被釋放.
+ * 視窗進入關閉階段時進行運作此一函數, 確保類別內所配置的物件與記憶體都被釋放. \n
  * 壁面物件或記憶體未釋放造成 memory leek.
  */
 void CxFrameObject::WindowInTheEnd()
@@ -940,7 +946,7 @@ void CxFrameObject::WindowInTheEnd()
 
 /**
 * @brief	關閉視窗處理
-* @return	@c 此函數沒有返回值
+* @return	@c 型別: 此函數沒有返回值
 * @remark	使用者處理視窗終結前動作 \n
 *			完畢後呼叫 Win32 API - DestroyWindow 摧毀視窗或控制項
 */
@@ -954,7 +960,7 @@ void CxFrameObject::SysCloseWindow()
 /**
 * @brief	視窗被摧毀處理
 * @param	[in] nExitCode 結束視窗返回碼
-* @return	@c 此函數沒有返回值
+* @return	此函數沒有返回值
 * @remark	使用者摧毀處理, 完畢後呼叫 Win32API PostQuitMessage 結束訊息迴圈
 */
 void CxFrameObject::SysDestroyWindow(int nExitCode)
@@ -967,7 +973,7 @@ void CxFrameObject::SysDestroyWindow(int nExitCode)
 /**
  * @brief	設定 WndProc callback 呼叫位址
  * @param	[in] fnWndProc 新的 callback function 位址
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			函數操作成功返回非零值(non-zero), 失敗返回零值(zero) \n
  *			失敗調用 CxFrameObject::GetError 或衍生類別取得錯誤碼
  */

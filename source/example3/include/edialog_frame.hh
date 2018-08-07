@@ -18,6 +18,8 @@ public:
 protected:
 	virtual	INT_PTR MessageDispose(UINT uMessage, WPARAM wParam, LPARAM lParam) override;
 	void OnInitDialog(WPARAM wParam, LPARAM lParam);
+	void OnCommand(WPARAM wParam, LPARAM lParam);
+
 	virtual void WindowInTheEnd() override;
 
 protected:

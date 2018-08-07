@@ -15,250 +15,248 @@ CxFrameListbox::~CxFrameListbox() { }
 
 /**
  * @brief	新增檔案項目
- * @param	[in] szName	檔案名稱字串緩衝區位址
- * @return	@c int \n
+ * @param	[in] szFilePtr	檔案名稱字串緩衝區位址
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為新增項目項目的索引 (zero-base), 操作失敗返回 LB_ERR
  **/
-int CxFrameListbox::AddFile(TCHAR * szName)
+int CxFrameListbox::AddFile(LPTSTR szFilePtr)
 {
 	// LB_ADDFILE
-	// wParam = 沒有使用，必須為零
-	// lParam = 檔案名稱存放位址
-	return (int)this->SendMessage(LB_ADDFILE, 0, (LPARAM)szName);
+	WPARAM wParam = 0;										// 未使用，必須為零
+	LPARAM lParam = reinterpret_cast<LPARAM>(szFilePtr);	// 檔案名稱存放位址
+	return static_cast<int>(this->SendMessage(LB_ADDFILE, wParam, lParam));
 }
 
 /**
  * @brief	新增項目
- * @param	[in] szText	字串緩衝區位址
- * @return	@c int 型別 \n
+ * @param	[in] szTextPtr	字串緩衝區位址
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為新增項目項目的索引 (zero-base), 操作失敗返回 LB_ERR
  */
-int CxFrameListbox::AddItem(TCHAR * szText)
+int CxFrameListbox::AddItem(TCHAR * szTextPtr)
 {
 	// LB_ADDSTRING
-	// wParam = 沒使用，必須為零
-	// lParam = 字串反衝區位址
-	return (int)this->SendMessage(LB_ADDSTRING, 0, (LPARAM)szText);
+	WPARAM wParam = 0;										// 未使用，必須為零
+	LPARAM lParam = reinterpret_cast<LPARAM>(szTextPtr);	// 字串反衝區位址
+	return static_cast<int>(this->SendMessage(LB_ADDSTRING, wParam, lParam));
 }
 
 /**
  * @brief	刪除一個項目
- * @param	[in] index	項目索引 (zero-base)
- * @return	@c int 型別 \n
+ * @param	[in] nIndex	項目索引 (zero-base)
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為現存項目數量, 操作失敗返回 LB_ERR
  */
-int CxFrameListbox::DeleateItem(int index)
+int CxFrameListbox::DeleateItem(int nIndex)
 {
 	// LB_DELETESTRING
-	// wParam = 索引 (zero-base)
-	// lParam = 沒有使用，必須為零
-	return (int)this->SendMessage(LB_DELETESTRING, (WPARAM)index, 0);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);		// 項目索引 (zero-base)
+	LPARAM lParam = 0;									// 未使用，必須為零
+	return static_cast<int>(this->SendMessage(LB_DELETESTRING, wParam, lParam));
 }
 
 /**
  * @brief	增加一個目錄下指定內容至列表
- * @param	[in] iAttrib 屬性
- *			- DDL_ARCHIVE	包括存檔文件
- *			- DDL_DIRECTORY	包括子目錄。子目錄名稱括在方括號（[]）中。
- *			- DDL_DRIVES	所有映射的驅動器都將添加到列表中。驅動器以[ - x - ] 的形式列出，其中x是驅動器號。
- *			- DDL_EXCLUSIVE	僅包含具有指定屬性的文件。默認情況下，即使未指定 DDL_READWRITE，也會列出讀/寫文件。
- *			- DDL_HIDDEN	包含隱藏文件。
- *			- DDL_READONLY	包括唯讀文件
- *			- DDL_READWRITE	包括沒有其他屬性的讀/寫文件。這是預設設置。
- *			- DDL_SYSTEM	包括系統文件。
- * @param	[in] szPath	目錄路徑名稱或萬用檔案名稱
- *			- 路徑名稱 "c:\\folder\\"
- *			- 萬用名稱 "c:\\folder\\*.exe"
- * @return	@c int 型別 \n
+ * @param	[in] nAttrib	屬性
+ *				- DDL_ARCHIVE	包括存檔文件
+ *				- DDL_DIRECTORY	包括子目錄。子目錄名稱括在方括號（[]）中。
+ *				- DDL_DRIVES	所有映射的驅動器都將添加到列表中。驅動器以[ - x - ] 的形式列出，其中x是驅動器號。
+ *				- DDL_EXCLUSIVE	僅包含具有指定屬性的文件。默認情況下，即使未指定 DDL_READWRITE，也會列出讀/寫文件。
+ *				- DDL_HIDDEN	包含隱藏文件。
+ *				- DDL_READONLY	包括唯讀文件
+ *				- DDL_READWRITE	包括沒有其他屬性的讀/寫文件。這是預設設置。
+ *				- DDL_SYSTEM	包括系統文件。
+ * @param	[in] szPathPtr	目錄路徑名稱或萬用檔案名稱
+ *				- 例如, 路徑名稱 "c:\\folder\\"
+ *				- 例如, 萬用名稱 "c:\\folder\\*.exe"
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為新增項目項目的索引(zero-base), 若操作失敗返回 LB_ERR
  */
-int CxFrameListbox::AddDir(int iAttrib, TCHAR * szPath)
+int CxFrameListbox::AddDir(int nAttrib, LPTSTR szPathPtr)
 {
 	// LB_DIR
-	// wParam = 屬性
-	// lParam = 目錄的路徑名稱字串位址
-	return (int)this->SendMessage(LB_DIR, (WPARAM)iAttrib, (LPARAM)szPath);
+	WPARAM wParam = static_cast<WPARAM>(nAttrib);			// 屬性
+	LPARAM lParam = reinterpret_cast<LPARAM>(szPathPtr);	// 目錄的路徑名稱字串位址
+	return static_cast<int>(this->SendMessage(LB_DIR, wParam, lParam));
 }
 
 /**
  * @brief	於列表中找尋第一個與輸入字串相符的項目
- * @param	[in] index	指定起始項目索引 (zero-base)
- * @param	[in] szText	字串存放位址
- * @return	@c int 型別 \n
+ * @param	[in] nIndex		指定起始項目索引 (zero-base)
+ * @param	[in] szTextPtr	字串存放位址
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為第一個吻合項目的索引(zero-base), 若操作失敗傳回: LB_ERR
  */
-int CxFrameListbox::FindItem(int index, TCHAR * szText)
+int CxFrameListbox::FindItem(int nIndex, LPTSTR szTextPtr)
 {
 	// LB_FINDSTRING
-	// wParam = 指定起始項目索引 (zero-base)
-	// lParam = 要找尋的字串位址
-	return (int)this->SendMessage(LB_FINDSTRING, (WPARAM)index, (LPARAM)szText);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);			// 起始項目索引 (zero-base)
+	LPARAM lParam = reinterpret_cast<LPARAM>(szTextPtr);	// 要找尋的字串位址
+	return static_cast<int>(this->SendMessage(LB_FINDSTRING, wParam, lParam));
 }
 
 /**
  * @brief	於列表中找尋第一個與輸入字串完全相符的項目 (不區分大小寫)
- * @param	[in] index	指定起始項目索引 (zero-base)
- * @param	[in] szText	字串存放位址
- * @return	@c int 型別 \n
+ * @param	[in] nIndex	指定起始項目索引 (zero-base)
+ * @param	[in] szTextPtr	字串存放位址
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為第一個完全相符項目的索引(zero-base), 操作失敗返回 LB_ERR
  */
-int CxFrameListbox::FindItemEx(int index, TCHAR * szText)
+int CxFrameListbox::FindItemEx(int nIndex, LPTSTR szTextPtr)
 {
 	// LB_FINDSTRINGEXACT
-	// wParam = 指定起始項目索引 (zero-base)
-	// lParam = 要找尋的字串位址
-	return (int)this->SendMessage(LB_FINDSTRINGEXACT, (WPARAM)index, (LPARAM)szText);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);			// 起始項目索引 (zero-base)
+	LPARAM lParam = reinterpret_cast<LPARAM>(szTextPtr);	// 要找尋的字串位址
+	return static_cast<int>(this->SendMessage(LB_FINDSTRINGEXACT, wParam, lParam));
 }
 
 /**
  * @brief	取得目前列表中項目數量
- * @return	@c int 型別 \n
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為現存項目數量, 若操作失敗返回 LB_ERR
  */
 int CxFrameListbox::GetCount()
 {
 	// LB_GETCOUNT
-	// wParam = 沒有使用，必須為零
-	// lParam = 沒有使用，必須為零
-	return (int)this->SendMessage(LB_GETCOUNT, 0, 0);
+	// wParam = 未使用，必須為零
+	// lParam = 未使用，必須為零
+	return static_cast<int>(this->SendMessage(LB_GETCOUNT, 0, 0));
 }
 
 /**
  * @brief	取得列表選擇光棒索引 (當前被選取的項目索引)
- * @return	@c int 型別 \n
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為目前列表光棒索引 (當前被選取項目索引) (zero-base) \n
  *			若操作失敗傳回: LB_ERR
  */
 int CxFrameListbox::GetCursel()
 {
 	// LB_GETCURSEL
-	// wParam = 沒有使用，必須為零
-	// lParam = 沒有使用，必須為零
-	return (int)this->SendMessage(LB_GETCURSEL, 0, 0);
+	// wParam = 未使用，必須為零
+	// lParam = 未使用，必須為零
+	return static_cast<int>(this->SendMessage(LB_GETCURSEL, 0, 0));
 }
 
 /**
  * @brief	取得指定項目的矩形資料 (此項目必須於列表顯示中)
- * @param	[in]		index	指定項目索引 (zero-base)
+ * @param	[in]		nIndex	指定項目索引 (zero-base)
  * @param	[in,out]	rcPtr	RECT 結構指標
- * @return	@c int 型別 \n
+ * @return	@c 型別: int \n
  *			函數操作成功返回不為 LB_ERR 的任意值, 若操作失敗傳回 LB_ERR
  */
-int CxFrameListbox::GetItemRect(int index, RECT * rcPtr)
+int CxFrameListbox::GetItemRect(int nIndex, LPRECT rcPtr)
 {
 	// LB_GETITEMRECT
-	// wParam = 指定項目索引 (zero-base)
-	// lParam = RECT 結構指標
-	return (int)this->SendMessage(LB_GETITEMRECT, (WPARAM)index, (LPARAM)rcPtr);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);			// 項目索引 (zero-base)
+	LPARAM lParam = reinterpret_cast<LPARAM>(rcPtr);		// RECT 結構資料存放位址
+	return static_cast<int>(this->SendMessage(LB_GETITEMRECT, wParam, lParam));
 }
 
 /**
  * @brief	取得指定項目的被選用狀態
- * @param	[in]	index	指定項目索引 (zero-base)
- * @return	@c int 型別 \n
+ * @param	[in]	nIndex	指定項目索引 (zero-base)
+ * @return	@c 型別: int \n
  *			函數操作成功返回非零值 = 項目被選用中, (零 = 項目沒有被選用) \n
  *			若操作失敗傳回: LB_ERR
  */
-int CxFrameListbox::GetSelectionState(int index)
+int CxFrameListbox::GetSelectionState(int nIndex)
 {
 	// LB_GETSEL
-	// wParam = 指定項目索引 (zero-base)
-	// lParam = 沒有使用，必須為零
-	return (int)this->SendMessage(LB_GETSEL, (WPARAM)index, 0);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);			// 項目索引 (zero-base)
+	LPARAM lParam = 0;										// 未使用，必須為零
+	return static_cast<int>(this->SendMessage(LB_GETSEL, wParam, lParam));
 }
 
 /**
  * @brief	取得被選取項目數量 (若列表風格被設定為 single-selection, 必定傳回 LB_ERR)
- * @return	@c int 型別 \n
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為被選取項目的數量, 操作失敗返回 LB_ERR
  **/
 int CxFrameListbox::GetSelectionCount()
 {
 	// LB_GETSELCOUNT
-	// wParam = 沒有使用，必須為零
-	// lParam = 沒有使用，必須為零
-	return (int)this->SendMessage(LB_GETSELCOUNT, 0, 0);
+	// wParam = 未使用，必須為零
+	// lParam = 未使用，必須為零
+	return static_cast<int>(this->SendMessage(LB_GETSELCOUNT, 0, 0));
 }
 
 /**
  * @brief	取得指定項目的文字內容
- * @param	[in]		index	項目索引 (zero-base)
- * @param	[in,out]	szBuff	存放項目字串位址
- * @return	@c int 型別 \n
+ * @param	[in]		nIndex		項目索引 (zero-base)
+ * @param	[in,out]	szTextPtr	存放項目字串位址
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為指定項目文字長度, 單位 TCHAR (不含結尾 null) \n
  *			若操作失敗返回 LB_ERR
  */
-int CxFrameListbox::GetItemText(int index, TCHAR* szBuff)
+int CxFrameListbox::GetItemText(int nIndex, LPTSTR szTextPtr)
 {
 	// LB_GETTEXT
-	// wParam = 指定項目索引
-	// lParam = 欲存放項目字串的位址
-	return (int)this->SendMessage(LB_GETTEXT, (WPARAM)index, (LPARAM)szBuff);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);			// 項目索引 (zero-base)
+	LPARAM lParam = reinterpret_cast<LPARAM>(szTextPtr);	// 欲存放項目字串的位址
+	return static_cast<int>(this->SendMessage(LB_GETTEXT, wParam, lParam));
 }
 
 /**
  * @brief	取得指定項目的文字長度
- * @param	[in] index	項目索引 (zero-base)
- * @return	@c int 型別 \n
+ * @param	[in] nIndex	項目索引 (zero-base)
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為指定項目文字長度, 單位 TCHAR (不含結尾 null) \n
  *			若操作失敗返回 LB_ERR
  */
-int CxFrameListbox::GetItemTextLength(int index)
+int CxFrameListbox::GetItemTextLength(int nIndex)
 {
 	// LB_GETTEXTLEN
-	// wParam = 指定項目索引
-	// lParam = 沒有使用，必須為零
-	return (int)this->SendMessage(LB_GETTEXTLEN, (WPARAM)index, 0);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);			// 項目索引 (zero-base)
+	LPARAM lParam = 0;										// 未使用，必須為零
+	return static_cast<int>(this->SendMessage(LB_GETTEXTLEN, wParam, lParam));
 }
 
 /**
  * @brief	插入一個項目
- * @param	[in] index	指定項目索引 (zero-base)
- *			- 若此參數被設定為 -1, 則插入到列表最後
- * @param	[in] szText	欲插入字串的位址
- * @return	@c int 型別 \n
+ * @param	[in] nIndex		指定項目索引 (zero-base), 若此參數被設定為 -1, 則插入到列表最後
+ * @param	[in] szTextPtr	欲插入字串的位址
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為新增項目索引 (zero-base), 若操作失敗返回 LB_ERR
  */
-int CxFrameListbox::InsertItem(int index, TCHAR * szText)
+int CxFrameListbox::InsertItem(int nIndex, LPTSTR szTextPtr)
 {
 	// LB_INSERTSTRING
-	// wParam = 指定項目索引
-	// lParam = 要新增的字串位址
-	return (int)this->SendMessage(LB_INSERTSTRING, (WPARAM)index, (LPARAM)szText);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);			// 項目索引
+	LPARAM lParam = reinterpret_cast<LPARAM>(szTextPtr);	// 要新增的字串位址
+	return static_cast<int>(this->SendMessage(LB_INSERTSTRING, wParam, lParam));
 }
 
 /**
  * @brief	設定選取光標位置
- * @param	[in] index	指定項目索引 (zero-base)
- *			- 若此參數被設定為 -1, 則取消選擇光棒
- * @return	@c int 型別 \n
+ * @param	[in] nIndex	指定項目索引 (zero-base), 若此參數被設定為 -1, 則取消選擇光棒
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為目前列表光棒索引 (當前被選取項目索引) (zero-base) \n
  *			若操作失敗返回 LB_ERR
  */
-int CxFrameListbox::SetCursel(int index)
+int CxFrameListbox::SetCursel(int nIndex)
 {
 	// LB_SETCURSEL
-	// wParam = 指定項目索引 (zero-base)
-	// lParam = 沒有使用，必須為零
-	return (int)this->SendMessage(LB_SETCURSEL, (WPARAM)index, 0);
+	WPARAM wParam = static_cast<WPARAM>(nIndex);	// 項目索引 (zero-base)
+	LPARAM lParam = 0;								// lParam = 未使用，必須為零
+	return static_cast<int>(this->SendMessage(LB_SETCURSEL, wParam, lParam));
 }
 
 /**
  * @brief	設定被選取狀態
- * @param	[in] index	項目索引 (zero-base)
+ * @param	[in] nIndex	項目索引 (zero-base)
  * @param	[in] bState	被選取狀態
  *			- TRUE	= 設定被選取 (加入 multiple-selection 群)
  *			- FALSE	= 取消被選取
- * @return	@c int 型別
+ * @return	@c 型別: int \n
  *			函數操作成功返回值為非 LB_ERR 的任意值 \n
  *			若操作失敗傳回: LB_ERR
  */
-int CxFrameListbox::SetSelectionState(int index, BOOL bState)
+int CxFrameListbox::SetSelectionState(int nIndex, BOOL bState)
 {
 	// LB_SETSEL
-	// wParam = 被選取狀態，(TRUE 被選取)、(FALSE 取消選取)
-	// lParam = 項目索引 zero-base
-	return (int)this->SendMessage(LB_SETSEL, (LPARAM)bState, (LPARAM)index);
+	WPARAM wParam = static_cast<WPARAM>(bState);	// 被選取狀態，(TRUE 被選取)、(FALSE 取消選取)
+	LPARAM lParam = static_cast<LPARAM>(nIndex);	// 項目索引 (zero-base)
+	return static_cast<int>(this->SendMessage(LB_SETSEL, wParam, lParam));
 }
 
 /**
@@ -267,7 +265,7 @@ int CxFrameListbox::SetSelectionState(int index, BOOL bState)
  * @param	[in] hList		控制項 Handle
  * @param	[in] idItem		控制項 ID
  * @param	[in] fnWndProc	使用者自訂 Callback function 位址
- * @return	@c BOOL \n
+ * @return	@c 型別: BOOL \n
  *			若函數操作成功返回非零值(non-zero), 失敗將返回零值(zero)
  */
 BOOL CxFrameListbox::CreateListbox(HINSTANCE hInst, HWND hList, int idItem, WNDPROC fnWndProc)
@@ -281,7 +279,7 @@ BOOL CxFrameListbox::CreateListbox(HINSTANCE hInst, HWND hList, int idItem, WNDP
 * @param	[in] hParent	父視窗 Handle
 * @param	[in] idItem		控制項 ID
 * @param	[in] fnWndProc	User defined callback function address
-* @return	@c BOOL \n
+* @return	@c 型別: BOOL \n
 *			若函數操作成功返回非零值(non-zero), 失敗將返回零值(zero)
 */
 BOOL CxFrameListbox::CreateListboxEx(HINSTANCE hInst, HWND hParent, int idItem, WNDPROC fnWndProc)

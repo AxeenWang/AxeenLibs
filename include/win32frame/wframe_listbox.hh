@@ -23,12 +23,12 @@ public:
 
 	// --- 標示為尚未實作
 
-	int AddFile(TCHAR* szName);										// LB_ADDFILE
-	int	AddItem(TCHAR* szText);										// LB_ADDSTRING
-	int DeleateItem(int index);										// LB_DELETESTRING
-	int AddDir(int iAttrib, TCHAR* szPath);							// LB_DIR
-	int FindItem(int index, TCHAR* szText);							// LB_FINDSTRING
-	int FindItemEx(int index, TCHAR* szText);						// LB_FINDSTRINGEXACT
+	int AddFile(LPTSTR szFilePtr);									// LB_ADDFILE
+	int	AddItem(TCHAR* szTextPtr);									// LB_ADDSTRING
+	int DeleateItem(int nIndex);									// LB_DELETESTRING
+	int AddDir(int nAttrib, LPTSTR szPathPtr);						// LB_DIR
+	int FindItem(int nIndex, LPTSTR szTextPtr);						// LB_FINDSTRING
+	int FindItemEx(int nIndex, LPTSTR szTextPtr);					// LB_FINDSTRINGEXACT
 	// --- LB_GETANCHORINDEX
 	// --- LB_GETCARETINDEX
 	int GetCount();													// LB_GETCOUNT
@@ -36,17 +36,17 @@ public:
 	// --- LB_GETHORIZONTALEXTENT
 	// --- LB_GETITEMDATA
 	// --- LB_GETITEMHEIGHT
-	int GetItemRect(int index, RECT* rcPtr);						// LB_GETITEMRECT
+	int GetItemRect(int nIndex, LPRECT rcPtr);						// LB_GETITEMRECT
 	// --- LB_GETLISTBOXINFO
 	// --- LB_GETLOCALE
-	int GetSelectionState(int index);								// LB_GETSEL
+	int GetSelectionState(int nIndex);								// LB_GETSEL
 	int GetSelectionCount();										// LB_GETSELCOUNT
 	// --- LB_GETSELITEMS
-	int GetItemText(int index, TCHAR* szBuff);						// LB_GETTEXT
-	int GetItemTextLength(int index);								// LB_GETTEXTLEN
+	int GetItemText(int nIndex, LPTSTR szTextPtr);					// LB_GETTEXT
+	int GetItemTextLength(int nIndex);								// LB_GETTEXTLEN
 	// --- LB_GETTOPINDEX
 	// --- LB_INITSTORAGE
-	int InsertItem(int index, TCHAR* szText);						// LB_INSERTSTRING
+	int InsertItem(int nIndex, LPTSTR szTextPtr);					// LB_INSERTSTRING
 	// --- LB_ITEMFROMPOINT
 	// --- LB_RESETCONTENT
 	// --- LB_SELECTSTRING
@@ -61,7 +61,7 @@ public:
 	// --- LB_SETITEMDATA
 	// --- LB_SETITEMHEIGHT
 	// --- LB_SETLOCALE
-	int SetSelectionState(int index, BOOL bState);					// LB_SETSEL
+	int SetSelectionState(int nIndex, BOOL bState);					// LB_SETSEL
 	// --- LB_SETTABSTOPS
 	// --- LB_SETTOPINDEX
 
