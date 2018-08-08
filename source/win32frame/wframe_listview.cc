@@ -588,7 +588,7 @@ void CxFrameListview::WindowInTheEnd()
  * @brief	範例程式 - 如何取得 ListView 行與列的訊息
  * @param	[in] wParam	參數 1 (仿視窗訊息處理函式)
  * @param	[in] lParam 參數 2 (仿視窗訊息處理函式)
- * @note	如何獲取 ListView 控制項行與列被滑鼠點擊出發事件 \n
+ * @remark	如何獲取 ListView 控制項行與列被滑鼠點擊出發事件 \n
  *			假設父視窗 A 中有一個 ListView 控制項 B，B 的 style 為 report \n
  *			使用者點擊了 B 的內部，我們如何知道用戶點擊了哪一個單元格呢？ \n
  *			使用者點擊 B 的內部時，B 會向父視窗 A 發送 WM_NOTIFY 訊息。 \n

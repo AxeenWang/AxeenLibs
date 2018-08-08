@@ -18,5 +18,13 @@
     <ClCompile Include="..\..\..\source\example1\console_main.cc">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\example1\console_func.cc">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\source\example1\include\console_func.hh">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

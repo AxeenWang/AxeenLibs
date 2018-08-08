@@ -1,10 +1,9 @@
 ﻿/**************************************************************************//**
  * @file	wframe.hh
  * @brief	Win32.Frame lbrary header
- * @author	Swang
  * @date	2018-04-20
  * @date	2018-07-25
- * @note	none
+ * @author	Swang
  *****************************************************************************/
 #ifndef __AXEEN_WIN32FRAME_FRAME_HH__
 #define __AXEEN_WIN32FRAME_FRAME_HH__
