@@ -116,6 +116,21 @@ int CxFrameCombo::InsertItem(int nIndex, LPCTSTR szPtr)
 	return static_cast<int>(this->SendMessage(CB_INSERTSTRING, wParam, lParam));
 }
 
+
+/** 
+ * @brief	設定 ComboBox 的 EditBox 文本輸入字數限制 (in TCHAR)
+ * @param	[in] ccLimit 限制可輸入字數 (in TCHAR)
+ * @return	這個函數沒有返回值 (這訊息處理，返回值始終維 TRUE)
+ * @remark	如果 ComboBox 沒有具備 CBS_AUTOHSCROLL 樣式，則將文本字數限制設置為大於 EditBox 控制項的大小則無效。
+ */
+void CxFrameCombo::SetLimitText(int ccLimit)
+{
+	// CB_LIMITTEXT
+	WPARAM wParam = static_cast<WPARAM>(ccLimit);	// 字數限制 (in TCHAR)
+	LPARAM lParam = 0;								// 未使用，必須為零
+	this->SendMessage(CB_LIMITTEXT, wParam, lParam);
+}
+
 /**
  * @brief	清除所有 ComboBox 列表內容內容
  * @return	此函數沒有返回值
@@ -156,6 +171,18 @@ int CxFrameCombo::SetCursel(int nIndex)
 	return static_cast<int>(this->SendMessage(CB_SETCURSEL, wParam, lParam));
 }
 
+/**
+ * @brief	顯示或隱藏下拉框
+ * @param	bEnable	若值為 TRUE 則表示顯示下拉框，若值為 FALSE 表表示收起下拉框。
+ * @param	此函數沒有返回值 (訊息操作後始終返回 TRUE)
+ */
+void CxFrameCombo::ShowDropdown(BOOL bEnable)
+{
+	// CB_SHOWDROPDOWN
+	WPARAM wParam = static_cast<WPARAM>(bEnable);	// 顯示或隱藏
+	LPARAM lParam = 0;								// lParam = 未使用，必須為零
+	this->SendMessage(CB_SHOWDROPDOWN, wParam, lParam);
+}
 
 /**
  * @brief	建立 Combo Box

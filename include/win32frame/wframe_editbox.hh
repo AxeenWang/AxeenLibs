@@ -23,16 +23,16 @@ public:
 
 	// --- 標示為尚未實作
 
-	BOOL CanUndo();									// EM_CANUNDO
+	BOOL	CanUndo();								// EM_CANUNDO
 	// --- EM_CHARFROMPOS
 	// --- EM_EMPTYUNDOBUFFER
 	// --- EM_FMTLINES
 	// --- EM_GETCUEBANNER
 	// --- EM_GETFIRSTVISIBLELINE
-	// --- EM_GETHANDLE
+	HANDLE	GetHandle();							// EM_GETHANDLE
 	// --- EM_GETHILITE
-	// --- EM_GETIMESTATUS
-	int GetLimitText();								// EM_GETLIMITTEXT
+	DWORD	GetItemStatus();						// EM_GETIMESTATUS
+	int		GetLimitText();							// EM_GETLIMITTEXT
 	// --- EM_GETLINE
 	// --- EM_GETLINECOUNT
 	// --- EM_GETMARGINS

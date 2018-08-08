@@ -47,7 +47,7 @@ public:
 	// --- CB_GETTOPINDEX
 	// --- CB_INITSTORAGE
 	int  InsertItem(int index, LPCTSTR szPtr);					// CB_INSERTSTRING
-	// --- CB_LIMITTEXT
+	void SetLimitText(int ccLimit);								// CB_LIMITTEXT
 	void ResetContent();										// CB_RESETCONTENT
 	void RemoveAllItem();
 	// --- CB_SELECTSTRING
@@ -62,7 +62,7 @@ public:
 	// --- CB_SETLOCALE
 	// --- CB_SETMINVISIBLE
 	// --- CB_SETTOPINDEX
-	// --- CB_SHOWDROPDOWN
+	void ShowDropdown(BOOL bEnable);							// CB_SHOWDROPDOWN
 
 	BOOL CreateCombo(LPCTSTR szCaptionPtr, int x, int y, int wd, int ht, HWND hParent, int idItem, HINSTANCE hInst, WNDPROC fnWndProc = NULL);
 	BOOL CreateCombo(HINSTANCE hInst, HWND hCombo, int idItem, WNDPROC fnWndProc = NULL);

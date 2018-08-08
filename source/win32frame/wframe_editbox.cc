@@ -30,6 +30,42 @@ BOOL CxFrameEditbox::CanUndo()
 }
 
 
+/*
+ * @brief	取得編輯控制項內容緩衝區 Handle
+ * @return	@c 型別: HANDLE \n
+ *			The return value is a memory handle identifying the buffer that holds the content of the edit control. \n
+ *			If an error occurs, such as sending the message to a single-line edit control, the return value is zero.
+ * @remark	If the function succeeds, \n
+ *			the application can access the contents of the edit control by casting the return value \n
+ *			to HLOCAL and passing it to LocalLock. \n
+ *			LocalLock returns a pointer to a buffer that is a null-terminated array \n
+ *			of CHARs or WCHARs, depending on whether an ANSI or Unicode function created the control
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/controls/em-gethandle
+ */
+HANDLE CxFrameEditbox::GetHandle()
+{
+	// EM_GETHANDLE
+	// wParam = 未使用，必須為零
+	// lParam = 未使用，必須為零
+	return reinterpret_cast<HANDLE>(this->SendMessage(EM_GETHANDLE, 0, 0));
+}
+
+
+/**
+ * @brief	取得一個狀態旗標，表示 Edit 控制項如何與輸入法(IME)關聯。
+ * @return	Data specific to the type of status to retrieve. \n
+ *			With the EMSIS_COMPOSITIONSTRING value for status, \n
+ *			this return value is one or more of the following values.
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/controls/em-getimestatus
+ */
+DWORD CxFrameEditbox::GetItemStatus()
+{
+	// EM_GETIMESTATUS 
+	WPARAM wParam = EMSIS_COMPOSITIONSTRING;	// The type of status to retrieve. This parameter can be the following value.
+	LPARAM lParam = 0;							// 未使用，最好為零
+	return static_cast<DWORD>(this->SendMessage(EM_GETIMESTATUS, wParam, lParam));
+}
+
 /**
  * @brief	取得輸入框字數限制
  * @return	@c int 型別 \n
