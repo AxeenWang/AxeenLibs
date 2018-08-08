@@ -174,7 +174,7 @@ int CxFrameCombo::SetCursel(int nIndex)
 /**
  * @brief	顯示或隱藏下拉框
  * @param	bEnable	若值為 TRUE 則表示顯示下拉框，若值為 FALSE 表表示收起下拉框。
- * @param	此函數沒有返回值 (訊息操作後始終返回 TRUE)
+ * @return	此函數沒有返回值 (訊息操作後始終返回 TRUE)
  */
 void CxFrameCombo::ShowDropdown(BOOL bEnable)
 {

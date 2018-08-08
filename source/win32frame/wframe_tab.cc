@@ -271,6 +271,7 @@ INT CxFrameTab::SetMinTabWidth(int wd)
  * @param	[in] hParent		父視窗操作 handle
  * @param	[in] idItem			ID
  * @param	[in] hInst			Handle of module, 若此值為 NULL, 將視為使用現行的程序模組
+ * @param	[in] fnWndProc		使用者用 callback function
  * @return	@c BOOL \n
  *			函數操作成功返回非零值(non-zero), 若操作失敗返回零(zero)
  */

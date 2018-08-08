@@ -75,35 +75,35 @@
 // Set using windows platform sdk
 // ---------------------------------------
 // _WIN32_WINNT version constants (see windows sdk sdkddkver.h)
-#define M_WIN32_SYMBOL_WINNT4		0x0400  // Windows NT 4.0
-#define M_WIN32_SYMBOL_WIN2K		0x0500  // Windows 2000
-#define M_WIN32_SYMBOL_WINXP		0x0501  // Windows XP
-#define M_WIN32_SYMBOL_WIN2K3		0x0502  // Windows Server 2003
-#define M_WIN32_SYMBOL_WINVISTA		0x0600  // Windows Vista
-#define M_WIN32_SYMBOL_WIN2K8		0x0600  // Windows Server 2008
-#define M_WIN32_SYMBOL_WIN7			0x0601  // Windows 7
-#define M_WIN32_SYMBOL_WIN8			0x0602  // Windows 8
-#define M_WIN32_SYMBOL_WIN8BLUE		0x0603  // Windows 8.1
-#define M_WIN32_WINNT_WINTHRESHOLD	0x0A00	// ABRACADABRA_THRESHOLD
-#define M_WIN32_WINNT_WIN10			0x0A00	// Windows 10	ABRACADABRA_THRESHOLD
+#define M_WIN32_SYMBOL_WINNT4		0x0400  //!< Windows NT 4.0
+#define M_WIN32_SYMBOL_WIN2K		0x0500  //!< Windows 2000
+#define M_WIN32_SYMBOL_WINXP		0x0501  //!< Windows XP
+#define M_WIN32_SYMBOL_WIN2K3		0x0502  //!< Windows Server 2003
+#define M_WIN32_SYMBOL_WINVISTA		0x0600  //!< Windows Vista
+#define M_WIN32_SYMBOL_WIN2K8		0x0600  //!< Windows Server 2008
+#define M_WIN32_SYMBOL_WIN7			0x0601  //!< Windows 7
+#define M_WIN32_SYMBOL_WIN8			0x0602  //!< Windows 8
+#define M_WIN32_SYMBOL_WIN8BLUE		0x0603  //!< Windows 8.1
+#define M_WIN32_WINNT_WINTHRESHOLD	0x0A00	//!< ABRACADABRA_THRESHOLD
+#define M_WIN32_WINNT_WIN10			0x0A00	//!< Windows 10	ABRACADABRA_THRESHOLD
 
 // _WIN32_IE_ version constants (see windows sdk sdkddkver.h)
-#define M_WIN32_IE_IE20				0x0200
-#define M_WIN32_IE_IE30				0x0300
-#define M_WIN32_IE_IE302			0x0302
-#define M_WIN32_IE_IE40				0x0400
-#define M_WIN32_IE_IE401			0x0401
-#define M_WIN32_IE_IE50				0x0500
-#define M_WIN32_IE_IE501			0x0501
-#define M_WIN32_IE_IE55				0x0550
-#define M_WIN32_IE_IE60				0x0600
-#define M_WIN32_IE_IE60SP1			0x0601
-#define M_WIN32_IE_IE60SP2			0x0603
-#define M_WIN32_IE_IE70				0x0700
-#define M_WIN32_IE_IE80				0x0800
-#define M_WIN32_IE_IE90				0x0900
-#define M_WIN32_IE_IE100			0x0A00
-#define M_WIN32_IE_IE110			0x0A00	// ABRACADABRA_THRESHOLD
+#define M_WIN32_IE_IE20				0x0200	//!< IE 2.0
+#define M_WIN32_IE_IE30				0x0300	//!< IE 3.0
+#define M_WIN32_IE_IE302			0x0302	//!< IE 3.2
+#define M_WIN32_IE_IE40				0x0400	//!< IE 4.0
+#define M_WIN32_IE_IE401			0x0401	//!< IE 4.1
+#define M_WIN32_IE_IE50				0x0500	//!< IE 5.0
+#define M_WIN32_IE_IE501			0x0501	//!< IE 5.1
+#define M_WIN32_IE_IE55				0x0550	//!< IE 5.5
+#define M_WIN32_IE_IE60				0x0600	//!< IE 6.0
+#define M_WIN32_IE_IE60SP1			0x0601	//!< IE 6.0 SP1
+#define M_WIN32_IE_IE60SP2			0x0603	//!< IE 6.0 SP2
+#define M_WIN32_IE_IE70				0x0700	//!< IE 7.0
+#define M_WIN32_IE_IE80				0x0800	//!< IE 8.0
+#define M_WIN32_IE_IE90				0x0900	//!< IE 9.0
+#define M_WIN32_IE_IE100			0x0A00	//!< IE 10.0
+#define M_WIN32_IE_IE110			0x0A00	//!< IE 11.0 ABRACADABRA_THRESHOLD
 
 // ---------------------------------------
 // Set _WIN32_WINNT minimum requirements
@@ -180,9 +180,7 @@
 #define _SCL_SECURE_NO_WARNINGS
 #endif
 
-// ---------------------------------------
-// DLL Export or Import with out *.def define
-// ---------------------------------------
+/*! 使用 DLLAPI 前綴字巨集 */
 #if		(__DLL_EXPORT__ == 1)
 #	define DLLAPI __declspec(dllexport)	//!< 動態程式庫 Export 類別或函數給外界使用宣告
 #elif	(__DLL_EXPORT__ == 2)
@@ -331,6 +329,7 @@ typedef UINT32	QUINT;		//!< 有號數，對應CPU編譯架構最大型別 64bit 
 // ---------------------------------------
 // used xp-style GUI
 // ---------------------------------------
+/*! 使用 XP-STYLE 編譯 */
 #if (__XPP_STYLE__)
 #	if defined(__WINDOWS__) && !defined(_LIB) || defined(_CONSOLE)
 #		if defined _M_IX86

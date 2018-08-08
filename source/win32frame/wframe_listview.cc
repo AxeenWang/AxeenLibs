@@ -371,8 +371,8 @@ BOOL CxFrameListview::SetBkColor(COLORREF dwColor)
 
 /**
  * @brief	設定指定欄位 (Column) 文字內容
- * @param	[in] nIndex	欄位項目索引 (zero-base)
- * @param	[in] psz	欲設定文字緩衝區
+ * @param	[in] nIndex		欄位項目索引 (zero-base)
+ * @param	[in] szTextPtr	欲設定文字緩衝區
  * @return	@c 型別: BOOL \n
  *			函數操作成功返回非零值(non-zero), 若失敗返回零(zero)
  */
