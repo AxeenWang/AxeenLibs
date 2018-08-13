@@ -86,12 +86,23 @@ struct SSVEHICLEINFO {
 };
 typedef SSVEHICLEINFO*	LPSSVEHICLEINFO;	// !< SSCARINFO 結構指標型別
 
+// MRStream 資料型別
+typedef void*		HMRSTREAM;				// handle of mrstream
+typedef LONG_PTR	MRSRESULT;				// mrstream error code
 
-typedef void*	HMRSTREAM;					// handle of mrstream
-typedef int		MRSRESULT;					// mrstream error code
+enum EEMRS {
+	MRS_ERROR_OK = 0
+	, MRS_ERROR_SUCCESS = 0			//!< 沒有錯誤 (成功)
+	, MRS_ERROR_FAIL				//!< 錯誤
+	, MRS_ERROR_INVALID_HANDLE		//!< 無效的 Handle
+	, MRS_ERROR_INVALID_POINTER		//!< 無效的 Pointer
+	, MRS_ERROR_INVALID_DATAPTR		//!< 無效的 Data pointer
+	, MRS_ERROR_INVALID_INDEX		//!< 無效的索引
+	, MRS_ERROR_NEW_OBJECT			//!< 建立物件失敗
+	, MRS_ERROR_NEW_MEMORY			//!< 配置記憶體失敗
+	, MRS_ERROR_NEW_ARRAY			//!< 配置陣列記憶體失敗
+	, MRS_ERROR_THEEND				//!< 枚舉盡頭
+};
 
-
-#define ERR_MRS_SUCCESS		 0
-#define	ERR_MRS_FAILED		-1
 
 #endif // !__AXEEN_MRSTREAM_STRUCT_HH__

@@ -172,11 +172,10 @@
     <ClCompile Include="..\..\..\source\mrstream\mrstream_mrstream.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\source\mrstream\include\mrstream.hh" />
+    <ClInclude Include="..\..\..\include\mrstream\mrstream.hh" />
+    <ClInclude Include="..\..\..\include\mrstream\mrstream_struct.hh" />
     <ClInclude Include="..\..\..\source\mrstream\include\mrstream_carlist.hh" />
     <ClInclude Include="..\..\..\source\mrstream\include\mrstream_define.hh" />
-    <ClInclude Include="..\..\..\source\mrstream\include\mrstream_mrstream.hh" />
-    <ClInclude Include="..\..\..\source\mrstream\include\mrstream_struct.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

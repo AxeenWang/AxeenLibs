@@ -8,9 +8,11 @@
 #ifndef __AXEEN_CONSOLE_HEADER_HH__
 #define __AXEEN_CONSOLE_HEADER_HH__
 #include "win32frame/wframe.hh"
+#include "mrstream/mrstream.hh"
 
 int swap(int* a, int *b);
 int create_a_window();
+int test_mrstream();
 
 #endif // !__AXEEN_CONSOLE_HEADER_HH__
 

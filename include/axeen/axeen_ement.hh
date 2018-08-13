@@ -71,6 +71,12 @@
 #	endif
 #endif
 
+#if defined(_WINDLL) || (_USRDLL)
+#	ifndef __WINDLL__
+#	define __WINDLL__
+#	endif
+#endif
+
 // ---------------------------------------
 // Set using windows platform sdk
 // ---------------------------------------
@@ -182,11 +188,11 @@
 
 /*! 使用 DLLAPI 前綴字巨集 */
 #if		(__DLL_EXPORT__ == 1)
-#	define DLLAPI __declspec(dllexport)	//!< 動態程式庫 Export 類別或函數給外界使用宣告
+#	define DLLEXPORT __declspec(dllexport)	//!< 動態程式庫 Export 類別或函數給外界使用宣告
 #elif	(__DLL_EXPORT__ == 2)
-#	define DLLAPI __declspec(dllimport)	//!< 動態程式庫 Export 類別或函數給外界使用宣告
+#	define DLLEXPORT __declspec(dllimport)	//!< 動態程式庫 Export 類別或函數給外界使用宣告
 #else
-#	define DLLAPI
+#	define DLLEXPORT
 #endif
 
 // ---------------------------------------

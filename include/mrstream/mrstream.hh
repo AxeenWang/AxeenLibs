@@ -31,15 +31,32 @@
 extern "C" {
 #endif
 
-	DLLAPI MRSRESULT STDCALL GetMRStreamVersionText(LPTSTR szTextPtr);
+	DLLEXPORT MRSRESULT	STDCALL MRStream_GetLastError();
+	DLLEXPORT MRSRESULT	STDCALL MRStream_GetVersionText(LPTSTR szTextPtr, size_t cchMax);
+	DLLEXPORT HMRSTREAM STDCALL MRStream_Carlist_Create (LPCTSTR szHostPtr, int nHostPort);
+	DLLEXPORT MRSRESULT	STDCALL MRStream_Carlist_Release(HMRSTREAM* hMrsCarlistPtr);
 
 #if defined(__cplusplus)
 }
 #endif
 
-
-
-
-
+// 導入 MRStream Library
+// #if defined(__WINDOWS__) && !defined(_LIB) || defined(_CONSOLE)
+#if defined(__WINDOWS__) && !defined(_LIB) && !defined(__WINDLL__)
+// win32frame library
+#ifdef __WIN64__
+#	if defined(_DEBUG)
+#		pragma comment(lib, "mrstream64d.lib")
+#	else
+#		pragma comment(lib, "mrstream64.lib")
+#	endif
+#else
+#	if defined(_DEBUG)
+#		pragma comment(lib, "mrstream32d.lib")
+#	else
+#		pragma comment(lib, "mrstream32.lib")
+#	endif
+#endif
+#endif
 
 #endif // !__AXEEN_MRSTREAM_MRSTREAM_HH__

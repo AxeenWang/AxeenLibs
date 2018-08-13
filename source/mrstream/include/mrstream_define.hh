@@ -25,8 +25,6 @@
 #endif
 
 #include "axeen/axeen_ement.hh"
-#include "mrstream_struct.hh"
-
+#include "mrstream/mrstream_struct.hh"
 
 #endif // !__AXEEN_MRSTREAM_DEFINE_HH__
-

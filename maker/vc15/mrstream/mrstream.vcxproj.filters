@@ -32,13 +32,10 @@
     <ClInclude Include="..\..\..\source\mrstream\include\mrstream_define.hh">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\source\mrstream\include\mrstream_mrstream.hh">
+    <ClInclude Include="..\..\..\include\mrstream\mrstream.hh">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\source\mrstream\include\mrstream_struct.hh">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\mrstream\include\mrstream.hh">
+    <ClInclude Include="..\..\..\include\mrstream\mrstream_struct.hh">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

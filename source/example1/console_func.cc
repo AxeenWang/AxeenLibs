@@ -86,3 +86,40 @@ int create_a_window()
 	SAFE_DELETE(pmain);
 	return err;
 }
+
+
+int test_mrstream()
+{
+	MRSRESULT err;
+	HMRSTREAM hmrs = NULL;
+	TCHAR szVersion[BUFF_SIZE_128];
+
+	for (;;) {
+
+		err = GetMRStreamVersionText(szVersion, size_t(szVersion));
+		if (err == 0) {
+			std::wcout << TEXT("The MRStream dynamic library version = ") << szVersion << std::endl;
+		}
+
+		hmrs = MRStream_Carlist_Create(NULL, 0);
+		if (hmrs == NULL) {
+			std::wcout << TEXT("Create Catlist object fail") << std::endl;
+		}
+		else {
+			std::wcout << TEXT("Carlist Object pointer value = 0x") << hmrs << std::endl;
+		}
+
+		if (MRStream_Carlist_GetText(hmrs, szVersion) != ERR_MRS_SUCCESS) {
+			std::wcout << TEXT("Get MRStream Carlest Text fail") << std::endl;
+		}
+		else {
+			std::wcout << TEXT("Get MRStream Carlest Text = ") << szVersion << std::endl;
+		}
+
+		MRStream_Carlist_Release(&hmrs);
+		std::wcout << TEXT("Release Carlist Object pointer value = 0x") << hmrs << std::endl;
+		break;
+	}
+
+	return err == 0;
+}
