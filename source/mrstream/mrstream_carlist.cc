@@ -26,9 +26,44 @@ void CxCarlist::SetError(EEMRS eErr, LPTSTR szErrPtr)
 	// TBD
 }
 
+/**
+ * 取得 CxCarlist 錯誤碼
+ */
 EEMRS CxCarlist::GetError()
 {
 	return m_eErrCode;
+}
+
+
+/**
+ * @brief	設定Host位址與通訊序列埠
+ * @param	[in] szHostPtr	Host IP 字串存放位址
+ * @param	[in] nHostPort	Host 通訊序列埠
+ * @return	@c 型別: EEMRS \n
+ *			若設定目標 Host 位址資訊成功，則返回值為零(zero)
+ *			若設定失敗，則返回非零值(non-zero)的錯誤碼
+ * @see		EEMRS
+ */
+EEMRS CxCarlist::SetHost(LPCTSTR szHostPtr, int nHostPort)
+{
+	EEMRS err = MRS_ERROR_SUCCESS;
+
+	for (;;) {
+		if (szHostPtr == NULL || szHostPtr[0] == 0) {
+			this->SetError(MRS_ERROR_INVALID_POINTER);
+			break;
+		}
+
+		if (nHostPort <= 0) {
+			this->SetError(MRS_ERROR_INVALID_INDEX);
+			break;
+		}
+
+		m_nHostPort = nHostPort;
+		wsprintf(m_szHostIP, TEXT("%s"), szHostPtr);
+		break;
+	}
+	return err;
 }
 
 

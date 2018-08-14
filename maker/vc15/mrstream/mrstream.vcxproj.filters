@@ -32,11 +32,19 @@
     <ClInclude Include="..\..\..\source\mrstream\include\mrstream_define.hh">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\mrstream\mrstream.hh">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\mrstream\mrstream_struct.hh">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\mrstream\mrstream.hh">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\resource.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource\mrstream.rc">
+      <Filter>資源檔</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

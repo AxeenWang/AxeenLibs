@@ -8,28 +8,6 @@
 #include "mrstream/mrstream.hh"
 #include "include/mrstream_carlist.hh"
 
-EEMRS STDCALL InOutLastError(EEMRS eErrCode = MRS_ERROR_THEEND);
-
-/**
- * @brief 取得最後錯誤碼
- * @param [in] eErrCode	錯誤碼
- * @return 最後錯誤碼
- */
-EEMRS STDCALL InOutLastError(EEMRS eErrCode)
-{
-	static EEMRS eeLastErrorCode;
-
-	if (eErrCode != MRS_ERROR_THEEND)
-		eeLastErrorCode = eErrCode;
-	return eeLastErrorCode;
-}
-
-
-MRSRESULT STDCALL MRStream_GetLastError()
-{
-	return static_cast<MRSRESULT>(InOutLastError());
-}
-
 /**
  * @brief	取得 MRStream 版本資訊
  * @param	[out]	szTextPtr	字串緩衝區位址
@@ -41,6 +19,54 @@ MRSRESULT STDCALL MRStream_GetLastError()
  */
 MRSRESULT STDCALL MRStream_GetVersionText(LPTSTR szTextPtr, size_t cchMax)
 {
+#if 0
+	TCHAR*	verPtr = NULL;
+	TCHAR	szName[MAX_PATH + 1] = { 0 };
+	DWORD	dwSize;
+	DWORD	dummy;
+	MRSRESULT err = static_cast<MRSRESULT>(MRS_ERROR_SUCCESS);
+
+	for (;;) {
+		if ((dwSize = ::GetModuleFileName(NULL, szName, MAX_PATH)) == 0) {
+			err = static_cast<MRSRESULT>(::GetLastError()) + static_cast<MRSRESULT>(MRS_ERROR_THEEND);
+			break;
+		}
+
+		if ((dwSize = ::GetFileVersionInfoSize(szName, &dummy)) == 0) {
+			err = static_cast<MRSRESULT>(::GetLastError()) + static_cast<MRSRESULT>(MRS_ERROR_THEEND);
+			break;
+		}
+
+		if ((verPtr = new (std::nothrow) TCHAR[dwSize + 1]) == NULL) {
+			err = static_cast<MRSRESULT>(MRS_ERROR_NEW_ARRAY);
+			break;
+		}
+
+		if (!::GetFileVersionInfo(szName, NULL, dwSize, verPtr)) {
+			err = static_cast<MRSRESULT>(::GetLastError()) + static_cast<MRSRESULT>(MRS_ERROR_THEEND);
+			break;
+		}
+
+		// get the name and version strings
+		LPVOID		vProductNamePtr = NULL;
+		UINT		uProductNameLen = 0;
+		LPVOID		vProductVersionPtr = NULL;
+		UINT		uProductVersionLen = 0;
+
+		// replace "040404b0" with the language ID of your resources
+		if (!VerQueryValue(verPtr, TEXT("\\StringFileInfo\\040404b0\\ProductName"), &vProductNamePtr, &uProductNameLen) ||
+			!VerQueryValue(verPtr, TEXT("\\StringFileInfo\\040404b0\\ProductVersion"), &vProductVersionPtr, &uProductVersionLen)) {
+			err = static_cast<MRSRESULT>(MRS_ERROR_FAIL);
+			break;
+		}
+
+		::wsprintf(szTextPtr, TEXT("%s : %s"), vProductNamePtr, vProductVersionPtr);
+		break;
+	}
+
+	SAFE_DELETE_ARRAY(verPtr);
+	return static_cast<MRSRESULT>(err);
+#else
 	const UINT uMajor = 3;
 	const UINT uMinor = 2;
 	const UINT uRelease = 1;
@@ -76,7 +102,8 @@ MRSRESULT STDCALL MRStream_GetVersionText(LPTSTR szTextPtr, size_t cchMax)
 
 		break;
 	}
-	return err;
+	return static_cast<MRSRESULT>(err);
+#endif
 }
 
 
@@ -92,9 +119,28 @@ MRSRESULT STDCALL MRStream_GetVersionText(LPTSTR szTextPtr, size_t cchMax)
  */
 HMRSTREAM STDCALL MRStream_Carlist_Create(LPCTSTR szHostPtr, int nHostPort)
 {
-	auto clist = new (std::nothrow) CxCarlist();
+	CxCarlist* clist = NULL;
 
-	// TBD ...
+	for (;;) {
+		if (szHostPtr == NULL || szHostPtr[0] == 0) {
+			break;
+		}
+
+		if (nHostPort <= 0) {
+			break;
+		}
+
+		clist = new (std::nothrow) CxCarlist();
+		if (clist == NULL) {
+			break;
+		}
+
+		if (clist->SetHost(szHostPtr, nHostPort) != MRS_ERROR_SUCCESS) {
+			SAFE_DELETE(clist);
+			break;
+		}
+		break;
+	}
 
 	return static_cast<HMRSTREAM>(clist);
 }

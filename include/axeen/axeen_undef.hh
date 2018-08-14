@@ -231,5 +231,20 @@ inline HICON LoadIcon(HINSTANCE hInstance, LPCTSTR lpIconName)
 }
 #endif
 
+#ifdef GetModuleFileName
+#undef GetModuleFileName
+inline DWORD GetModuleFileName(HMODULE hModule, LPTSTR lpFilename, DWORD nSize)
+{
+	#ifdef __UNICODE__
+	return ::GetModuleFileNameW(hModule, lpFilename, nSize);
+	#else
+	return ::GetModuleFileNameA(hModule, lpFilename, nSize);
+	#endif
+}
+#endif
+
+
+
+
 #endif	// !WINDOWS
 #endif	// !__AXEEN_AXEENUNDEF_HH__

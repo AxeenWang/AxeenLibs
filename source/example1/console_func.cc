@@ -96,7 +96,7 @@ int test_mrstream()
 
 	for (;;) {
 
-		err = GetMRStreamVersionText(szVersion, size_t(szVersion));
+		err = MRStream_GetVersionText(szVersion, size_t(szVersion));
 		if (err == 0) {
 			std::wcout << TEXT("The MRStream dynamic library version = ") << szVersion << std::endl;
 		}
@@ -107,13 +107,6 @@ int test_mrstream()
 		}
 		else {
 			std::wcout << TEXT("Carlist Object pointer value = 0x") << hmrs << std::endl;
-		}
-
-		if (MRStream_Carlist_GetText(hmrs, szVersion) != ERR_MRS_SUCCESS) {
-			std::wcout << TEXT("Get MRStream Carlest Text fail") << std::endl;
-		}
-		else {
-			std::wcout << TEXT("Get MRStream Carlest Text = ") << szVersion << std::endl;
 		}
 
 		MRStream_Carlist_Release(&hmrs);

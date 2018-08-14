@@ -22,10 +22,11 @@ public:
 	virtual ~CxCarlist();
 	void	SetError(EEMRS eErr, LPTSTR szErrPtr = NULL);
 	EEMRS	GetError();
+	EEMRS	SetHost(LPCTSTR szHostPtr, int nHostPort);
 
 protected:
 	void	Initialize();
-	void	ClassInTheEnd();
+	virtual void ClassInTheEnd();
 	
 protected:
 	int		m_nIndex;					//!< 當前車輛索引

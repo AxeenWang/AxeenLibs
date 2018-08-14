@@ -31,7 +31,6 @@
 extern "C" {
 #endif
 
-	DLLEXPORT MRSRESULT	STDCALL MRStream_GetLastError();
 	DLLEXPORT MRSRESULT	STDCALL MRStream_GetVersionText(LPTSTR szTextPtr, size_t cchMax);
 	DLLEXPORT HMRSTREAM STDCALL MRStream_Carlist_Create (LPCTSTR szHostPtr, int nHostPort);
 	DLLEXPORT MRSRESULT	STDCALL MRStream_Carlist_Release(HMRSTREAM* hMrsCarlistPtr);
@@ -39,6 +38,7 @@ extern "C" {
 #if defined(__cplusplus)
 }
 #endif
+
 
 // 導入 MRStream Library
 // #if defined(__WINDOWS__) && !defined(_LIB) || defined(_CONSOLE)
