@@ -101,7 +101,7 @@ int test_mrstream()
 			std::wcout << TEXT("The MRStream dynamic library version = ") << szVersion << std::endl;
 		}
 
-		hmrs = MRStream_Carlist_Create(NULL, 0);
+		hmrs = MRStream_Carlist_Create(TEXT("10.10.10.10"), 100);
 		if (hmrs == NULL) {
 			std::wcout << TEXT("Create Catlist object fail") << std::endl;
 		}

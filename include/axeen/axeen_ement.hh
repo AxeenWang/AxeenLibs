@@ -224,7 +224,6 @@
 #include <tchar.h>
 #include <commctrl.h>
 #include "axeen_undef.hh"
-#include "axeen_inline.hh"
 
 // ---------------------------------------
 // User type define

@@ -115,7 +115,7 @@ void CxExamaleDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 	auto edt = m_cEdit;
 
 	if (btn != NULL && edt != NULL) {
-		int nCmd = static_cast<int>(LoWord(wParam));
+		int nCmd = static_cast<int>(LOWORD(wParam));
 
 		if (nCmd == btn->GetControlID()) {
 			edt->SetText(aam[i]);
