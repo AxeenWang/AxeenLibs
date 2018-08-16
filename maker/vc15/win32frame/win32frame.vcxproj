@@ -170,6 +170,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\win32frame\wframe_process.hh" />
     <ClInclude Include="..\..\..\include\win32frame\wframe.hh" />
     <ClInclude Include="..\..\..\include\win32frame\wframe_button.hh" />
     <ClInclude Include="..\..\..\include\win32frame\wframe_combo.hh" />
@@ -193,6 +194,7 @@
     <ClCompile Include="..\..\..\source\win32frame\wframe_listbox.cc" />
     <ClCompile Include="..\..\..\source\win32frame\wframe_listview.cc" />
     <ClCompile Include="..\..\..\source\win32frame\wframe_object.cc" />
+    <ClCompile Include="..\..\..\source\win32frame\wframe_process.cc" />
     <ClCompile Include="..\..\..\source\win32frame\wframe_tab.cc" />
     <ClCompile Include="..\..\..\source\win32frame\wframe_window.cc" />
   </ItemGroup>

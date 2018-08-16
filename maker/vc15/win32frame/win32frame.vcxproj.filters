@@ -54,6 +54,9 @@
     <ClInclude Include="..\..\..\include\win32frame\wframe_tab.hh">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\win32frame\wframe_process.hh">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\win32frame\wframe_object.cc">
@@ -84,6 +87,9 @@
       <Filter>來源檔案</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\win32frame\wframe_tab.cc">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\win32frame\wframe_process.cc">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>

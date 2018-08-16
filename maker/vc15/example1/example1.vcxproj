@@ -74,25 +74,25 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\..\release\$(ProjectName)\</OutDir>
     <IntDir>..\..\..\relay\x64\debug\$(ProjectName)\</IntDir>
-    <TargetName>$(ProjectName)64d</TargetName>
+    <TargetName>$(ProjectName)_64d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\..\release\$(ProjectName)\</OutDir>
     <IntDir>..\..\..\relay\x86\debug\$(ProjectName)\</IntDir>
-    <TargetName>$(ProjectName)32d</TargetName>
+    <TargetName>$(ProjectName)_32d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\..\release\$(ProjectName)\</OutDir>
     <IntDir>..\..\..\relay\x86\release\$(ProjectName)\</IntDir>
-    <TargetName>$(ProjectName)32</TargetName>
+    <TargetName>$(ProjectName)_32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\..\release\$(ProjectName)\</OutDir>
     <IntDir>..\..\..\relay\x64\release\$(ProjectName)\</IntDir>
-    <TargetName>$(ProjectName)64</TargetName>
+    <TargetName>$(ProjectName)_64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
