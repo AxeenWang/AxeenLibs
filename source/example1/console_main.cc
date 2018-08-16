@@ -13,27 +13,10 @@ int _tmain(int argc, TCHAR* argv[])
 {
 	auto res = int(-1);
 
-	int a = 10;
-	int b = 5;
-	int c;
-
-	std::wcout << TEXT("a = ") << a << TEXT(", b = ") << b << std::endl;
-	system("pause");
-
-	c = swap(&a, &b);
-	std::wcout << TEXT("a = ") << a << TEXT(", b = ") << b << std::endl;
-	std::wcout << TEXT("a + b = ") << c << std::endl;
-	system("pause");
-
 	res = create_a_window();
 	std::wcout << TEXT("Exit Code = ") << res << std::endl;
 	system("pause");
-
-	res = test_mrstream();
-	std::wcout << TEXT("Return Code = ") << res << std::endl;
-
-	system("pause");
-	return 0;
+	return res;
 }
 
 

@@ -7,6 +7,7 @@
  *****************************************************************************/
 #include "include/console_func.hh"
 
+
 /**
  * @brief	兩數交換
  * @param	a	變數存放位址
@@ -85,34 +86,4 @@ int create_a_window()
 	}
 	SAFE_DELETE(pmain);
 	return err;
-}
-
-
-int test_mrstream()
-{
-	MRSRESULT err;
-	HMRSTREAM hmrs = NULL;
-	TCHAR szVersion[BUFF_SIZE_128];
-
-	for (;;) {
-
-		err = MRStream_GetVersionText(szVersion, size_t(szVersion));
-		if (err == 0) {
-			std::wcout << TEXT("The MRStream dynamic library version = ") << szVersion << std::endl;
-		}
-
-		hmrs = MRStream_Carlist_Create(TEXT("10.10.10.10"), 100);
-		if (hmrs == NULL) {
-			std::wcout << TEXT("Create Catlist object fail") << std::endl;
-		}
-		else {
-			std::wcout << TEXT("Carlist Object pointer value = 0x") << hmrs << std::endl;
-		}
-
-		MRStream_Carlist_Release(&hmrs);
-		std::wcout << TEXT("Release Carlist Object pointer value = 0x") << hmrs << std::endl;
-		break;
-	}
-
-	return err == 0;
 }
