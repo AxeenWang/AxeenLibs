@@ -166,10 +166,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\source\example1\console_computer_info.cc" />
     <ClCompile Include="..\..\..\source\example1\console_func.cc" />
     <ClCompile Include="..\..\..\source\example1\console_main.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\source\example1\include\console_define.hh" />
     <ClInclude Include="..\..\..\source\example1\include\console_func.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

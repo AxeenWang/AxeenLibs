@@ -10,8 +10,8 @@
 //! CxFrameListview 建構式
 CxFrameListview::CxFrameListview()
 	: CxFrameControl(ECtrlSysListView32)
-	, m_iSelectItemCount(0)
-	, m_iSelectItemIndex(0) { }
+	, m_nSelectItemCount(0)
+	, m_nSelectItemIndex(0) { }
 
 //! CxFrameListview 解構式
 CxFrameListview::~CxFrameListview() { }
@@ -70,6 +70,19 @@ BOOL CxFrameListview::DeleteItem(int nIndex)
 	WPARAM wParam = static_cast<WPARAM>(nIndex);	// 項目索引
 	LPARAM lParam = 0;								// 未使用，必須為零
 	return this->SendMessage(LVM_DELETEITEM, wParam, lParam) != 0;
+}
+
+/**
+ * @brief	直接於項目欄位直接編輯(like editbox)
+ * @param	[in] nIndex 項目索引(zero-base), 若要取消編輯輸入 -1
+ * @return	此函數沒有返回值
+ */
+void CxFrameListview::EditLabel(int nIndex)
+{
+	// LVM_EDITLABEL
+	WPARAM wParam = static_cast<WPARAM>(nIndex);	// 項目索引
+	LPARAM lParam = 0;								// 未使用，必須為零
+	this->SendMessage(LVM_EDITLABEL, wParam, lParam);
 }
 
 /**
@@ -146,6 +159,21 @@ int CxFrameListview::GetCountPerPage()
 }
 
 /**
+ * @brief	取得 EditBox Handle
+ * @return	@c 型別: HWND \n
+ *			若函數操作成功返回值為 editbox handle, 若失敗將返回 NULL
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/controls/lvm-geteditcontrol
+ */
+HWND CxFrameListview::GetEditControl()
+{
+	// LVM_GETEDITCONTROL
+	// wParam = 未使用，必須為零
+	// lParam = 未使用，必須為零
+	// 都說 reinterpret_cast 暴力轉型要少用，但在呼叫 Win32API 好像很難不用，呵呵~
+	return reinterpret_cast<HWND>(this->SendMessage(LVM_GETEDITCONTROL, 0, 0));
+}
+
+/**
  * @brief   取得 ListView 擴展樣式
  * @return	@c 型別: DWORD \n
  *			That represents the styles currently in use for a given list-view control.
@@ -176,7 +204,7 @@ int CxFrameListview::GetItemCount()
 
 /**
  * @brief	取得指定項目位置
- * @param	[in]  nIndex	項目索引
+ * @param	[in]  nIndex	項目索引 (zero-base)
  * @param	[out] stPtr		POINT 結構資料位址
  * @return	@c 型別: BOOL \n
  *			函數操作成功返回非零值(non-zero), 若失敗返回零(zero)
@@ -187,6 +215,76 @@ BOOL CxFrameListview::GetItemPosition(int nIndex, LPPOINT stPtr)
 	WPARAM wParam = static_cast<WPARAM>(nIndex);		// 項目索引
 	LPARAM lParam = reinterpret_cast<LPARAM>(stPtr);	// POINT 結構資料位址
 	return this->SendMessage(LVM_GETITEMPOSITION, wParam, lParam) != 0;
+}
+
+/**
+ * @brief	取得項目全部或部分矩形邊界範圍
+ * @param	[in]		nIndex	項目索引 (zero-base)
+ * @param	[in,out]	rcPtr	RECT 結構資料存放位址，必須在結構成員 left 填入要求返回參數
+ *							- LVIR_BOUNDS		返回整個項目的範圍值
+ *							- LVIR_ICON			返回 ICON (BIG or SMALL) 圖示範圍
+ *							- LVIR_LABEL		返回 Text 區域範圍
+ *							- LVIR_SELECTBOUNDS	返回 LVIR_ICON + LVIR_LABEL 範圍 
+ * @return	@c 型別: BOOL \n
+ *			若函數操作成功返回非零值(non-zero), 若操作失敗將返回零(zero)
+ */
+BOOL CxFrameListview::GetItemRect(int nIndex, LPRECT rcPtr)
+{
+	// LVM_GETITEMRECT
+	WPARAM wParam = static_cast<WPARAM>(nIndex);
+	LPARAM lParam = reinterpret_cast<LPARAM>(rcPtr);
+	return this->SendMessage(LVM_GETITEMRECT, wParam, lParam) != 0;
+}
+
+/**
+ * @brief	取得項目全部或部分矩形邊界範圍
+ * @param	[in]		nIndex	項目索引 (zero-base)
+ * @param	[in]		nMode	欲取得返回的模式
+ *							- LVIR_BOUNDS		返回整個項目的範圍值
+ *							- LVIR_ICON			返回 ICON (BIG or SMALL) 圖示範圍
+ *							- LVIR_LABEL		返回 Text 區域範圍
+ *							- LVIR_SELECTBOUNDS	返回 LVIR_ICON + LVIR_LABEL 範圍
+ * @param	[in,out]	rcPtr	RECT 結構資料存放位址
+
+ * @return	@c 型別: BOOL \n
+ *			若函數操作成功返回非零值(non-zero), 若操作失敗將返回零(zero) \n
+ *			操作成功 RECT 結構內容為指定要求取得內容
+ */
+BOOL CxFrameListview::GetItemRect(int nIndex, int nMode, LPRECT rcPtr)
+{
+	auto err = BOOL(FALSE);
+
+	for (;;) {
+		if (rcPtr == NULL) {
+			break;
+		}
+		rcPtr->left = nMode;
+		err = this->GetItemRect(nIndex, rcPtr);
+		break;
+	}
+	return err;
+}
+
+/**
+ * @brief	取得項目狀態
+ * @param	[in] nIndex	項目索引(zero-base)
+ * @param	[in] nMode	指定取得模式 (預設 LVIS_STATEIMAGEMASK)
+ *					- LVIS_CUT
+ *					- LVIS_DROPHILITED
+ *					- LVIS_FOCUSED
+ *					- LVIS_SELECTED
+ *					- LVIS_OVERLAYMASK
+ *					- LVIS_STATEIMAGEMASK
+ * @return	@c 型別: int \n
+ *			返回指定項的當前狀態，返回值與 lParam 的設定相對應。
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/controls/lvm-getitemstate
+ */
+int CxFrameListview::GetItemState(int nIndex, int nMode)
+{
+	// LVM_GETITEMSTATE
+	WPARAM wParam = nIndex;
+	LPARAM lParam = nMode;
+	return static_cast<int>(LVM_GETITEMSTATE, wParam, lParam);
 }
 
 /**
@@ -228,14 +326,14 @@ BOOL CxFrameListview::GetItemText(int nIndex, int nSub, LPTSTR szTextPtr, int cc
  */
 int CxFrameListview::GetNextSelectItem()
 {
-	auto nNext = m_iSelectItemIndex;
+	auto nNext = m_nSelectItemIndex;
 
 	// LVM_GETNEXTITEM
 	WPARAM wParam = static_cast<WPARAM>(nNext);	// 用於開始搜索項目的索引，-1 以查找與指定標誌匹配的第一個項目，指定的項目本身將被排除在搜索之外。
 	LPARAM lParam = LVNI_ALL;					// 指定項目搜尋方式
 	nNext = static_cast<int>(this->SendMessage(LVM_GETNEXTITEM, wParam, lParam));
 
-	m_iSelectItemIndex = nNext == -1 ? 0 : nNext;
+	m_nSelectItemIndex = nNext == -1 ? 0 : nNext;
 	return nNext;
 }
 
@@ -250,9 +348,9 @@ int CxFrameListview::GetFirstSelectItem()
 	// LVM_GETNEXTITEM
 	// wParam = 用於開始搜索項目的索引，-1 以查找與指定標誌匹配的第一個項目，指定的項目本身將被排除在搜索之外。
 	// lParam = 指定項目搜尋方式
-	m_iSelectItemCount = this->GetSelectCount();
-	m_iSelectItemIndex = static_cast<int>(this->SendMessage(LVM_GETNEXTITEM, -1, LVNI_ALL));
-	return m_iSelectItemIndex;
+	m_nSelectItemCount = this->GetSelectCount();
+	m_nSelectItemIndex = static_cast<int>(this->SendMessage(LVM_GETNEXTITEM, -1, LVNI_ALL));
+	return m_nSelectItemIndex;
 }
 
 /**
@@ -512,6 +610,58 @@ BOOL CxFrameListview::SetTextColor(COLORREF dwColor)
 	return (BOOL)this->SendMessage(LVM_SETTEXTCOLOR, wParam, lParam);
 }
 
+/**
+ * @brief	建立 List view controller
+ * @param	[in] szCaptionPtr	ListView 名稱字串位址 (ListView 用不著，填入 NULL 即可)
+ * @param	[in] x				起始座標 (對應父視窗左上座標 X)
+ * @param	[in] y				起始座標 (對應父視窗左上座標 Y)
+ * @param	[in] wd				寬度
+ * @param	[in] ht				高度
+ * @param	[in] hParent		父視窗 Handle
+ * @param	[in] idItem			控制項 ID
+ * @param	[in] hInst			Handle of module, 若此值為 NULL, 將視為使用現行的程序模組
+ * @param	[in] fnWndProc		pointer of callback function
+ * @return	@c BOOL \n
+ *			函數操作成功返回非零值(non-zero), 操作失敗返回零(zero)\n
+ *			操作失敗可調用 CxFrameObject::GetError() 或衍生類別取得失敗錯誤碼.
+ */
+BOOL CxFrameListview::CreateListview(LPCTSTR szCaptionPtr, int x, int y, int wd, int ht, HWND hParent, int idItem, HINSTANCE hInst, WNDPROC fnWndProc)
+{
+	auto	err = BOOL(FALSE);
+	SSCTRL	ctrl;
+
+	for (;;) {
+		if ((hInst = ::GetModuleHandle(NULL)) == NULL) {
+			this->SetError(::GetLastError());
+			break;
+		}
+
+		if (hParent == NULL) {
+			this->SetError(ERROR_INVALID_WINDOW_HANDLE);
+			break;
+		}
+
+		if (idItem <= SSCTRL_ITEMID_NIL || idItem > SSCTRL_ITEMID_MAX) {
+			this->SetError(ERROR_INVALID_INDEX);
+			break;
+		}
+
+		ctrl.hParent = hParent;
+		ctrl.eType = ECtrlSysListView32;
+		ctrl.szNamePtr = NULL;
+		ctrl.dwStyle = LVS_REPORT | LVS_SHOWSELALWAYS; // LVS_EDITLABELS;
+		ctrl.dwExStyle = 0;
+		ctrl.iPosx = x;
+		ctrl.iPosy = y;
+		ctrl.iWidth = wd;
+		ctrl.iHeight = ht;
+		ctrl.idItem = idItem;	// conctrller item id
+		ctrl.fnWndProc = fnWndProc;
+		err = this->CreateController(&ctrl);
+		break;
+	}
+	return err;
+}
 
 /**
  * @brief	建立 ListView (資源檔建立或其他已建立的 ListView)
@@ -543,10 +693,10 @@ BOOL CxFrameListview::CreateListviewEx(HINSTANCE hInst, HWND hParent, int idItem
 
 
 /**
- * @brief	使用自訂 ListView 預設樣式
+ * @brief	使用自訂 ListView Report 預設樣式
  * @return	此函數沒有返回值
  */
-void CxFrameListview::DefaultStyle()
+void CxFrameListview::DefaultReportStyle()
 {
     // LVS_REPORT           : 設定成 Report 樣式
     // LVS_SHOWSELALWAYS    : 非當前使用視窗時，被選定 Item 仍以高亮反白顯示
@@ -565,7 +715,6 @@ void CxFrameListview::DefaultStyle()
     dwStyle   |= this->GetStyle();
     dwExStyle |= this->GetExStyle();
     this->SetStyle(dwStyle);
-	// this->SetExListViewStyle(dwExStyle);
     this->SetExStyle(dwExStyle);
 }
 

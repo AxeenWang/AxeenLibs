@@ -102,7 +102,7 @@ SIZE_T CxFrameProcess::ReadMemory(LPCVOID aBasePtr, LPVOID aBuffPtr, SIZE_T uSiz
 	return cbReads;
 }
 
-/******************************************************//**
+/**
  * @brief	寫入指定記憶體區資料
  * @param	[out] aBasePtr	欲寫入目標位址
  * @param	[in]  aBuffPtr	欲寫入資料存放位址
@@ -111,7 +111,7 @@ SIZE_T CxFrameProcess::ReadMemory(LPCVOID aBasePtr, LPVOID aBuffPtr, SIZE_T uSiz
  *			讀取成功返回非零值(non-zero)為實際寫入資料長度 (in byte) \n
  *			讀取失敗返回零(zero) \n
  *			實際資料寫入長度與指定長度不同，使用 GetLastError() 去了解狀況
- *********************************************************/
+ */
 inline SIZE_T CxFrameProcess::WriteMemory(LPVOID aBasePtr, LPCVOID aBuffPtr, SIZE_T uSize)
 {
 	HANDLE hProcess = m_hProcess;

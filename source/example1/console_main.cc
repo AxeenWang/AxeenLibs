@@ -13,10 +13,15 @@ int _tmain(int argc, TCHAR* argv[])
 {
 	auto res = int(-1);
 
+	// nothing! just do not see conpile warning.
+	if (argc > 1) {
+		std::wcout << argv[1] << std::endl;
+	}
+
+	// create a sample window
 	res = create_a_window();
 	std::wcout << TEXT("Exit Code = ") << res << std::endl;
+
 	system("pause");
 	return res;
 }
-
-
