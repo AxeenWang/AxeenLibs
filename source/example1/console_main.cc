@@ -13,6 +13,9 @@ int _tmain(int argc, TCHAR* argv[])
 {
 	auto res = int(-1);
 
+	assert(IsTrue(1));
+	assert(!IsTrue(1));
+
 	// nothing! just do not see conpile warning.
 	if (argc > 1) {
 		std::wcout << argv[1] << std::endl;

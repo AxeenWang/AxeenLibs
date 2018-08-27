@@ -16,7 +16,7 @@ public:
 	virtual ~DmThread();
 
 protected:
-	// Overridables
+	// These virtual functions can be overridden
 	virtual int MessageLoopNormal();
 	virtual int MessageLoopPeek();
 	virtual void ClassInTheEnd() override;

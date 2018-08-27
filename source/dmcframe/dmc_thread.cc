@@ -13,8 +13,6 @@ DmThread::DmThread() : DmObject() { }
 //! DmObject deconstruct
 DmThread::~DmThread() { }
 
-
-
 /**
  * @brief	視窗訊息迴圈
  * @remark	標準訊息迴圈，等待訊息及進行對應處理
@@ -57,4 +55,9 @@ int DmThread::MessageLoopPeek()
 }
 
 //! 類別結束處理
-void DmThread::ClassInTheEnd() { }
+void DmThread::ClassInTheEnd()
+{
+
+	// Pass to base class
+	DmObject::ClassInTheEnd();
+}

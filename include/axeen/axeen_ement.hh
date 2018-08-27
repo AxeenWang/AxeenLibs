@@ -207,6 +207,7 @@
 #include <malloc.h>
 #include <math.h>
 #include <time.h>
+#include <assert.h>
 
 // ---------------------------------------
 // Include C++ CRT header
@@ -322,6 +323,10 @@ typedef UINT32	QUINT;		//!< 有號數，對應CPU編譯架構最大型別 64bit 
 #define SAFE_DELETE_ARRAY(p)    { if (NULL!=(p))  { delete [] (p); (p)=NULL; } }		//!< 釋放記憶體配置 (陣列型)
 #define SAFE_CLOSE_FILE(p)      { if (NULL!=(p))  { ::fclose(p); (p)=NULL; } }			//!< 關閉檔案
 #define SAFE_CLOSE_HANDLE(p)    { if (NULL!=(p) && INVALID_HANDLE_VALUE!=(p))  { ::CloseHandle(p); (p)=NULL; } }	//!< 關閉 Window Handle
+
+#define DISABLE_COPY(Class) \
+	Class(const Class &); \
+	Class &operator=(const Class &);
 
 // ---------------------------------------
 // buffer size macro

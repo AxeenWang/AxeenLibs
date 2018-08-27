@@ -7,6 +7,10 @@
  *****************************************************************************/
 #include "include/console_func.hh"
 
+BOOL IsTrue(int a)
+{
+	return a != 0;
+}
 
 /**
  * @brief	兩數交換

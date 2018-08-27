@@ -9,6 +9,8 @@
 #define __AXEEN_CONSOLE_HEADER_HH__
 #include "console_define.hh"
 
+BOOL IsTrue(int a);
+
 int test_swap(int* a, int *b);
 int test_window();
 int test_integer();

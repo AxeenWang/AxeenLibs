@@ -171,11 +171,13 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\dmcframe\dmc_define.hh" />
     <ClInclude Include="..\..\..\include\dmcframe\dmc_object.hh" />
+    <ClInclude Include="..\..\..\include\dmcframe\dmc_struct.hh" />
     <ClInclude Include="..\..\..\include\dmcframe\dmc_thread.hh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\dmcframe\dmc_object.cc" />
     <ClCompile Include="..\..\..\source\dmcframe\dmc_thread.cc" />
+    <ClCompile Include="..\..\..\source\dmcframe\dmc_window.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
