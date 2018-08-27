@@ -174,16 +174,18 @@
 // ---------------------------------------
 // Disable Compiler Warning(level 3) C4996 -- disable unsafe deprecation.
 // ---------------------------------------
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define	_CRT_SECURE_NO_WARNINGS
-#endif
+#if defined(__VISUALC__)
+#	ifndef _CRT_SECURE_NO_WARNINGS
+#	define	_CRT_SECURE_NO_WARNINGS
+#	endif
 
-#ifndef _CRT_NON_CONFORMING_SWPRINTFS
-#define _CRT_NON_CONFORMING_SWPRINTFS
-#endif
+#	ifndef _CRT_NON_CONFORMING_SWPRINTFS
+#	define _CRT_NON_CONFORMING_SWPRINTFS
+#	endif
 
-#ifndef _SCL_SECURE_NO_WARNINGS
-#define _SCL_SECURE_NO_WARNINGS
+#	ifndef _SCL_SECURE_NO_WARNINGS
+#	define _SCL_SECURE_NO_WARNINGS
+#	endif
 #endif
 
 /*! 使用 DLLAPI 前綴字巨集 */

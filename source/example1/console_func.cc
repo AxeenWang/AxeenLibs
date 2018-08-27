@@ -19,7 +19,7 @@
  *	當時會想到這個題目，是因為在組合語言對這類處理是家常便飯，想看看 c 會如何辦到。\n
  *	還真沒想到當時放到網路上之後，居然在網路上得到熱烈的迴響，所以自己將此列為個人程式的經典。
  */
-int swap(int* a, int* b)
+int test_swap(int* a, int* b)
 {
 	*a = *a + *b;
 	*b = *a - *b;
@@ -69,7 +69,7 @@ int swap(int* a, int* b)
  *		}
  * @endcode
  */
-int create_a_window()
+int test_window()
 {
 	auto pmain = new (std::nothrow) CxFrameWindow();
 	auto err = int(-1);
@@ -86,4 +86,68 @@ int create_a_window()
 	}
 	SAFE_DELETE(pmain);
 	return err;
+}
+
+
+/**
+ * @brief	浮點轉整數
+ * @return	@c int \n
+ *			此函數返回值無意義
+ * @remark	@c 引用 math \n
+ *			floor(), ceil(), round()
+ *
+ *	各種浮點數轉整數方式，無條件去尾、四捨五入、向上取整、向下取整
+ */
+int test_integer()
+{
+	const float fnum1 = 2.5f;
+	const float fnum2 = 2.4f;
+	const float fnum3 = -2.5f;
+	const float fnum4 = -2.4f;
+
+	std::wcout << TEXT("The original float number") << std::endl;
+	std::wcout << TEXT("fnum1 = ") << std::setw(8) << fnum1 << std::endl;
+	std::wcout << TEXT("fnum2 = ") << std::setw(8) << fnum2 << std::endl;
+	std::wcout << TEXT("fnum3 = ") << std::setw(8) << fnum3 << std::endl;
+	std::wcout << TEXT("fnum4 = ") << std::setw(8) << fnum4 << std::endl;
+	system("pause");
+
+	std::wcout << TEXT("The original hinden cast") << std::endl;
+	std::wcout << TEXT("fnum1 = ") << std::setw(8) << fnum1 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << (int)fnum1 << std::endl;
+	std::wcout << TEXT("fnum2 = ") << std::setw(8) << fnum2 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << (int)fnum2 << std::endl;
+	std::wcout << TEXT("fnum3 = ") << std::setw(8) << fnum3 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << (int)fnum3 << std::endl;
+	std::wcout << TEXT("fnum4 = ") << std::setw(8) << fnum4 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << (int)fnum4 << std::endl;
+	system("pause");
+
+	std::wcout << TEXT("The original static cast") << std::endl;
+	std::wcout << TEXT("fnum1 = ") << std::setw(8) << fnum1 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << static_cast<int>(fnum1) << std::endl;
+	std::wcout << TEXT("fnum2 = ") << std::setw(8) << fnum2 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << static_cast<int>(fnum2) << std::endl;
+	std::wcout << TEXT("fnum3 = ") << std::setw(8) << fnum3 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << static_cast<int>(fnum3) << std::endl;
+	std::wcout << TEXT("fnum4 = ") << std::setw(8) << fnum4 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << static_cast<int>(fnum4) << std::endl;
+	system("pause");
+
+	std::wcout << std::endl;
+	std::wcout << TEXT("The math floor function") << std::endl;
+	std::wcout << TEXT("floor(fnum1) = ") << std::setw(8) << fnum1 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << floor(fnum1) << std::endl;
+	std::wcout << TEXT("floor(fnum2) = ") << std::setw(8) << fnum2 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << floor(fnum2) << std::endl;
+	std::wcout << TEXT("floor(fnum3) = ") << std::setw(8) << fnum3 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << floor(fnum3) << std::endl;
+	std::wcout << TEXT("floor(fnum4) = ") << std::setw(8) << fnum4 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << floor(fnum4) << std::endl;
+	system("pause");
+
+	std::wcout << std::endl;
+	std::wcout << TEXT("The math ceil function") << std::endl;
+	std::wcout << TEXT("ceil(fnum1) = ") << std::setw(8) << fnum1 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << ceil(fnum1) << std::endl;
+	std::wcout << TEXT("ceil(fnum2) = ") << std::setw(8) << fnum2 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << ceil(fnum2) << std::endl;
+	std::wcout << TEXT("ceil(fnum3) = ") << std::setw(8) << fnum3 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << ceil(fnum3) << std::endl;
+	std::wcout << TEXT("ceil(fnum4) = ") << std::setw(8) << fnum4 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << ceil(fnum4) << std::endl;
+	system("pause");
+
+	std::wcout << std::endl;
+	std::wcout << TEXT("The math round function") << std::endl;
+	std::wcout << TEXT("round(fnum1) = ") << std::setw(8) << fnum1 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << round(fnum1) << std::endl;
+	std::wcout << TEXT("round(fnum2) = ") << std::setw(8) << fnum2 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << round(fnum2) << std::endl;
+	std::wcout << TEXT("round(fnum3) = ") << std::setw(8) << fnum3 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << round(fnum3) << std::endl;
+	std::wcout << TEXT("round(fnum4) = ") << std::setw(8) << fnum4 << std::setw(4) << TEXT(" ---> ") << std::setw(4) << round(fnum4) << std::endl;
+
+	return 0;
 }

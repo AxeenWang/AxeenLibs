@@ -19,8 +19,10 @@ int _tmain(int argc, TCHAR* argv[])
 	}
 
 	// create a sample window
-	res = create_a_window();
-	std::wcout << TEXT("Exit Code = ") << res << std::endl;
+	//res = test_window();
+	//std::wcout << TEXT("Exit Code = ") << res << std::endl;
+
+	test_integer();
 
 	system("pause");
 	return res;

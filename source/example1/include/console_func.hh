@@ -9,7 +9,8 @@
 #define __AXEEN_CONSOLE_HEADER_HH__
 #include "console_define.hh"
 
-int swap(int* a, int *b);
-int create_a_window();
+int test_swap(int* a, int *b);
+int test_window();
+int test_integer();
 
 #endif // !__AXEEN_CONSOLE_HEADER_HH__
