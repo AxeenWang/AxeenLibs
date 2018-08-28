@@ -12,7 +12,7 @@
  * @enum	DMCERR
  * @brief	DmcFrame Library error code
  * @remark	系統錯誤可透過 Win32api 的 GetLastError() 取得錯誤資訊 \n
- *			DMCERR dmError = ERR_THEEND + static_cast<DMCERR>(::GetLastError());
+ *			DMCERR dmError = ERR_ENDVALUE + static_cast<DMCERR>(::GetLastError());
  */
 enum class DMCERR : DWORD
 {
@@ -25,7 +25,7 @@ enum class DMCERR : DWORD
 	, ERR_EXIST_HANDLE			//!< 操作碼已存在
 	, ERR_EXIST_HWND			//!< 視窗(控制項)操作碼已存在
 	, ERR_NOTEXIST_TARGET		//!< 指定目標不存在
-	, ERR_THEEND				//!< 不是錯誤!!! 錯誤碼結尾識別碼
+	, ERR_ENDVALUE				//!< 不是錯誤!!! 錯誤碼結尾識別碼
 };
 
 

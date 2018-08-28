@@ -35,7 +35,7 @@ void DmObject::SetError(DMCERR dmErr, const TCHAR* szTextPtr)
 
 	m_dmError = dmErr;
 	if (szPtr != NULL) {
-		_tcscpy(m_szErrorTextPtr, szTextPtr);
+		_tcscpy(szPtr, szTextPtr);
 	}
 }
 

@@ -13,12 +13,12 @@
 // **********************************************
 #ifdef SendMessage
 #undef SendMessage
-inline LRESULT WINAPI SendMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+inline LRESULT WINAPI SendMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	#ifdef __UNICODE__
-	return ::SendMessageW(hWnd, Msg, wParam, lParam);
+	return ::SendMessageW(hWnd, uMsg, wParam, lParam);
 	#else
-	return ::SendMessageA(hWnd, Msg, wParam, lParam);
+	return ::SendMessageA(hWnd, uMsg, wParam, lParam);
 	#endif
 }
 #endif
@@ -32,6 +32,32 @@ inline BOOL WINAPI PostMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
 	return ::PostMessageW(hWnd, Msg, wParam, lParam);
 	#else
 	return ::PostMessageA(hWnd, Msg, wParam, lParam);
+	#endif
+}
+#endif
+
+// **********************************************
+#ifdef CallWindowProc
+#undef CallWindowProc
+inline LRESULT CallWindowProc(WNDPROC lpPrevWndFunc, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	#ifdef __UNICODE__
+	return ::CallWindowProcW(lpPrevWndFunc, hWnd, uMsg, wParam, lParam);
+	#else
+	return ::CallWindowProcA(lpPrevWndFunc, hWnd, uMsg, wParam, lParam);
+	#endif
+}
+#endif
+
+// **********************************************
+#ifdef DefWindowProc
+#undef DefWindowProc
+inline LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	#ifdef __UNICODE__
+	return ::DefWindowProcW(hWnd, uMsg, wParam, lParam);
+	#else
+	return ::DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	#endif
 }
 #endif
@@ -52,7 +78,7 @@ inline int MessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 // **********************************************
 #ifdef RegisterClass
 #undef RegisterClass
-inline ATOM WINAPI RegisterClass(const WNDCLASS *pwc)
+inline ATOM WINAPI RegisterClass(const WNDCLASS* pwc)
 {
 	#ifdef __UNICODE__
 	return ::RegisterClassW(pwc);
@@ -104,12 +130,25 @@ inline HWND WINAPI CreateWindowEx(DWORD dwExStyle, LPCTSTR lpClassName, LPCTSTR 
 // **********************************************
 #ifdef CreateDialog
 #undef CreateDialog
-inline HWND CreateDialog(HINSTANCE hInstance, LPCWSTR lpTemplateName, HWND hWndParent, DLGPROC lpDialogFunc, LPARAM dwInitParam)
+inline HWND CreateDialog(HINSTANCE hInstance, LPCTSTR lpTemplateName, HWND hWndParent, DLGPROC lpDialogFunc, LPARAM dwInitParam)
 {
 	#ifdef __UNICODE__
 	return ::CreateDialogParamW(hInstance, lpTemplateName, hWndParent, lpDialogFunc, dwInitParam);
 	#else
 	return ::CreateDialogParamA(hInstance, lpTemplateName, hWndParent, lpDialogFunc, dwInitParam);
+	#endif
+}
+#endif
+
+// **********************************************
+#ifdef GetDlgItemText
+#undef GetDlgItemText
+inline UINT GetDlgItemText(HWND hDlg, int nIDDlgItem, LPTSTR lpString, int cchMax)
+{
+	#ifdef __UNICODE__
+	return ::GetDlgItemTextW(hDlg, nIDDlgItem, lpString,cchMax);
+	#else
+	return ::GetDlgItemTextA(hDlg, nIDDlgItem, lpString, cchMax);
 	#endif
 }
 #endif
