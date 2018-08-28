@@ -57,6 +57,11 @@ LRESULT CxFrameWindow::MessageDispose(UINT uMessage, WPARAM wParam, LPARAM lPara
 	case WM_CREATE:
 		break;
 	case WM_DESTROY:
+		::SetLastError(0);
+		::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+		std::wcout << TEXT("Error = ") << ::GetLastError() << std::endl;
+		std::wcout << TEXT("Error = ") << ::GetWindowLongPtr(m_hWnd, GWLP_WNDPROC) << std::endl;
+		std::wcout << TEXT("Error = ") << ::GetLastError() << std::endl;
 		this->SysDestroyWindow();
 		break;
 	case WM_CLOSE:

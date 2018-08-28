@@ -19,9 +19,10 @@ public:
 	DmObject();
 	virtual ~DmObject();
 
-	void	SetLastError(DMCERR dmErr, const TCHAR* szTextPtr = NULL);
-	void	SetLastError(DWORD dwErr, const TCHAR* szTextPtr = NULL);
-	DMCERR	GetLastError();
+	void	SetError(DMCERR dmErr, const TCHAR* szTextPtr = NULL);
+	DMCERR	GetError();
+	int		GetErrorText(TCHAR* szTextPtr, size_t cchMax);
+	const TCHAR* GetErrorText();
 
 protected:
 	// These virtual functions can be overridden

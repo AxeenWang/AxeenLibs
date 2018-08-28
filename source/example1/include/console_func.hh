@@ -14,5 +14,6 @@ BOOL IsTrue(int a);
 int test_swap(int* a, int *b);
 int test_window();
 int test_integer();
+void test_timer();
 
 #endif // !__AXEEN_CONSOLE_HEADER_HH__

@@ -13,19 +13,16 @@ int _tmain(int argc, TCHAR* argv[])
 {
 	auto res = int(-1);
 
-	assert(IsTrue(1));
-	assert(!IsTrue(1));
-
 	// nothing! just do not see conpile warning.
 	if (argc > 1) {
 		std::wcout << argv[1] << std::endl;
 	}
 
 	// create a sample window
-	//res = test_window();
+	res = test_window();
 	//std::wcout << TEXT("Exit Code = ") << res << std::endl;
-
-	test_integer();
+	//test_integer();
+	//test_timer();
 
 	system("pause");
 	return res;

@@ -88,6 +88,8 @@ int test_window()
 		err = pmain->Run();
 		break;
 	}
+
+	std::wcout << TEXT("Window is Life = ") << ::IsWindow(pmain->GetHandle()) << std::endl;
 	SAFE_DELETE(pmain);
 	return err;
 }
@@ -155,3 +157,43 @@ int test_integer()
 
 	return 0;
 }
+
+
+int testAddFunc(int a, int b)
+{
+	return a + b;
+}
+
+inline int testAddInline(int a, int b)
+{
+	return a + b;
+}
+
+
+void test_timer()
+{
+	const int min = 50000;
+	const int max = 50000;
+	DWORD dwStart = 0;
+	DWORD dwEnd = 0;
+	int sum = 0;
+
+	dwStart = ::timeGetTime();
+	for (int k = 0; k < min; k++) {
+		for (int i = 0; i < max; i++) {
+			sum = testAddInline(i, k);
+		}
+	}
+	dwEnd = ::timeGetTime();
+	std::wcout << TEXT("testAddFunc() function = ") << dwEnd - dwStart << std::setw(8) << sum << std::endl;
+
+	dwStart = ::timeGetTime();
+	for (int k = 0; k < min; k++) {
+		for (int i = 0; i < max; i++) {
+			sum = testAddFunc(i, k);
+		}
+	}
+	dwEnd = ::timeGetTime();
+	std::wcout << TEXT("testAddFunc() function = ") << dwEnd - dwStart << std::setw(8) << sum << std::endl;
+}
+

@@ -227,6 +227,7 @@
 #include <tchar.h>
 #include <commctrl.h>
 #include <tlhelp32.h>
+#include <timeapi.h>
 #include "axeen_undef.hh"
 
 // ---------------------------------------

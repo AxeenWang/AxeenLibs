@@ -16,35 +16,40 @@ public:
 	DmWindow();
 	virtual ~DmWindow();
 
-	BOOL Attach(HWND hWnd);
-	HWND Detach();
-	BOOL IsWindow();
+	virtual BOOL Attach(HWND hWnd);
+	virtual BOOL AttachDlgItem(UINT uID, HWND hWndParent);
+	virtual HWND Detach();
+	virtual HWND Create();
+	virtual HWND CreateEx();
+	virtual void Destroy();
+
+	HWND	GetSafeHwnd() const;
+	HWND	GetParent() const;
+	WNDPROC	GetPrevWndProc() const;
 
 
-	// inline function
-	HWND GetSafeHandle() const { return m_hWnd; }
-	operator HWND() const { return GetSafeHandle(); }
+	BOOL IsWindow() const;
+	operator HWND() const;
 
 protected:
+	// These virtual functions can be overridden
+	virtual LRESULT	DefaultWindowProc(UINT uMessage, WPARAM wParam, LPARAM lParam);
+	virtual void	OnClose();
+	virtual void	OnDestroy();
 	virtual LRESULT WndProc(UINT uMessage, WPARAM wParam, LPARAM lParam);
-
+	virtual void	DeathOfWindow();
 
 private:
 	DmWindow(const DmWindow&);					// Disable copy construction
 	DmWindow& operator=(const DmWindow&);		// Disable assignment operator
 	DmWindow(HWND hWnd);						// Private constructor used internally
+
 	static LRESULT CALLBACK StaticWindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
-
 	void MatchToClass(HWND hWnd);
-
 
 protected:
 	HWND	m_hWnd;
 	WNDPROC	m_fnPrevWndProc;
 };
-
-
-
-
 
 #endif // !__AXEEN_DMCFRAME_WINDOW_HH__
