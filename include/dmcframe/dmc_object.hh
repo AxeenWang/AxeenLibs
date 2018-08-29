@@ -19,22 +19,9 @@ public:
 	DmObject();
 	virtual ~DmObject();
 
-	void	SetError(DMCERR dmErr, const TCHAR* szTextPtr = NULL);
-	DMCERR	GetError();
-	int		GetErrorText(TCHAR* szTextPtr, size_t cchMax);
-	const TCHAR* GetErrorText();
-
-protected:
-	// These virtual functions can be overridden
-	virtual void ClassInTheEnd();
-
 private:
 	DmObject(const DmObject&);					// Disable copy construction
 	DmObject& operator=(const DmObject&);		// Disable assignment operator
-
-protected:
-	DMCERR	m_dmError;
-	TCHAR*	m_szErrorTextPtr;
 };
 
 #endif // !__AXEEN_DMCFRAME_OBJECT_HH__

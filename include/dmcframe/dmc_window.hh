@@ -40,19 +40,46 @@ public:
 
 	BOOL	GetWindowRect(RECT* rcPtr) const;
 	BOOL	GetClientRect(RECT* rcPtr) const;
-	int		GetBorderSize();
+	int		GetBorderSize() const;
+	BOOL	ClientToScreen(POINT* ptPtr) const;
+	BOOL	ClientToScreen(RECT* rcPtr) const;
 
 	BOOL	SetWindowPos(HWND hWndInsertAfter, int x, int y, int cx, int cy, UINT uFlags) const;
+	BOOL	SetWindowPosition(int x, int y) const;
+	BOOL	SetWindowSize(int w, int h) const;
+	BOOL	SetClientSize(int w, int h) const;
+	BOOL	SetCenterPosition() const;
+	HDWP	DeferWindowPos(HDWP hWinPosInfo, HWND hWndInsertAfter, int  x, int  y, int  cx, int  cy, UINT uFlags) const;
 
 	HDC		BeginPaint(PAINTSTRUCT* stPtr) const;
 	BOOL	EndPaint(const PAINTSTRUCT* stPtr) const;
+	HDC		GetDC() const;
+	HDC		GetDCEx(HRGN hrgnClip, DWORD flags) const;
+	BOOL	DrawMenuBar() const;
 
-	LONG_PTR GetWindowLongPtr(int nIndex) const;
-	LONG_PTR SetWindowLongPtr(int nIndex, LONG_PTR dwNewLong) const;
+	BOOL	BringWindowToTop() const;
+
+	int		GetWindowTextLength() const;
+	int		GetWindowText(TCHAR* szTextPtr, size_t cchMax) const;
+
+	HWND	GetParent() const;
+	HWND	GetAncestor(UINT uFlags = GA_ROOTOWNER) const;
+	HWND	GetActiveWindow() const;
+	HWND	GetDesktopWindow() const;
+	HWND	GetDlgItem(int nIDDlgItem) const;
+	int		GetDlgCtrlID() const;
+
+	HWND	SetCapture() const;
+	HWND	GetCapture() const;
+	BOOL	ReleaseCapture() const;
+
+	LONG_PTR	GetWindowLongPtr(int nIndex) const;
+	LONG_PTR	SetWindowLongPtr(int nIndex, LONG_PTR dwNewLong) const;
+	ULONG_PTR	GetClassLongPtr(int nIndex) const;
+	ULONG_PTR	SetClassLongPtr(int nIndex, LONG_PTR dwNewLong) const;
 
 	// 取得連接視窗操作 Handle 及 callback function
 	HWND	GetSafeHwnd() const;
-	HWND	GetParent() const;
 	WNDPROC	GetPrevWndProc() const;
 	BOOL	IsWindow() const;
 	operator HWND() const;

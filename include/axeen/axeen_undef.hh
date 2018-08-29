@@ -141,6 +141,32 @@ inline HWND CreateDialog(HINSTANCE hInstance, LPCTSTR lpTemplateName, HWND hWndP
 #endif
 
 // **********************************************
+#ifdef GetWindowTextLength
+#undef GetWindowTextLength
+inline int GetWindowTextLength(HWND hWnd)
+{
+	#ifdef __UNICODE__
+	return ::GetWindowTextLengthW(hWnd);
+	#else
+	return ::GetWindowTextLengthA(hWnd);
+	#endif
+}
+#endif
+
+// **********************************************
+#ifdef GetWindowText
+#undef GetWindowText
+inline int GetWindowText(HWND hWnd, LPTSTR lpString, int nMaxCount)
+{
+	#ifdef __UNICODE__
+	return ::GetWindowTextW(hWnd, lpString, nMaxCount);
+	#else
+	return ::GetWindowTextA(hWnd, lpString, nMaxCount);
+	#endif
+}
+#endif
+
+// **********************************************
 #ifdef GetDlgItemText
 #undef GetDlgItemText
 inline UINT GetDlgItemText(HWND hDlg, int nIDDlgItem, LPTSTR lpString, int cchMax)
@@ -149,6 +175,19 @@ inline UINT GetDlgItemText(HWND hDlg, int nIDDlgItem, LPTSTR lpString, int cchMa
 	return ::GetDlgItemTextW(hDlg, nIDDlgItem, lpString,cchMax);
 	#else
 	return ::GetDlgItemTextA(hDlg, nIDDlgItem, lpString, cchMax);
+	#endif
+}
+#endif
+
+// **********************************************
+#ifdef SetDlgItemText
+#undef SetDlgItemText
+inline BOOL SetDlgItemText(HWND hDlg, int nIDDlgItem, LPCTSTR lpString)
+{
+	#ifdef __UNICODE__
+	return ::SetDlgItemTextW(hDlg, nIDDlgItem, lpString);
+	#else
+	return ::SetDlgItemTextA(hDlg, nIDDlgItem, lpString);
 	#endif
 }
 #endif
@@ -201,6 +240,32 @@ inline ULONG_PTR WINAPI GetClassLongPtr(HWND hWnd, int nIndex)
 	return ::GetClassLongPtrW(hWnd, nIndex);
 	#else
 	return ::GetClassLongPtrA(hWnd, nIndex);
+	#endif
+}
+#endif
+
+// **********************************************
+#ifdef SetClassLong
+#undef SetClassLong
+inline DWORD SetClassLong(HWND hWnd, int nIndex, LONG dwNewLong)
+{
+	#ifdef __UNICODE__
+	return ::SetClassLongW(hWnd, nIndex, dwNewLong);
+	#else
+	return ::SetClassLongA(hWnd, nIndex, dwNewLong);
+	#endif
+}
+#endif
+
+// **********************************************
+#ifdef SetClassLongPtr
+#undef SetClassLongPtr
+inline ULONG_PTR SetClassLongPtr(HWND hWnd, int nIndex, LONG_PTR dwNewLong)
+{
+	#ifdef __UNICODE__
+	return ::SetClassLongPtrW(hWnd, nIndex, dwNewLong);
+	#else
+	return ::SetClassLongPtrA(hWnd, nIndex, dwNewLong);
 	#endif
 }
 #endif
@@ -281,8 +346,6 @@ inline DWORD GetModuleFileName(HMODULE hModule, LPTSTR lpFilename, DWORD nSize)
 	#endif
 }
 #endif
-
-
 
 
 #endif	// !WINDOWS

@@ -33,12 +33,12 @@ BOOL DmWindow::Attach(HWND hWnd)
 
 	for (;;) {
 		if (hWnd == NULL) {
-			this->SetError(DMCERR::ERR_INVALID_HANDLE);
+			// error handling at here
 			break;
 		}
 
 		if (this->IsWindow()) {
-			this->SetError(DMCERR::ERR_EXIST_HWND);
+			// error handling at here
 			break;
 		}
 
@@ -75,14 +75,16 @@ HWND DmWindow::Detach()
 	auto hWnd = HWND(NULL);
 
 	assert(fncc);
+	assert(!this->IsWindow());
+
 	for (;;) {
 		if (fncc == NULL) {
-			this->SetError(DMCERR::ERR_INVALID_FUNCTION);
+			// error handling at here
 			break;
 		}
 
 		if (!this->IsWindow()) {
-			this->SetError(DMCERR::ERR_INVALID_HWND);
+			// error handling at here
 			break;
 		}
 
@@ -90,6 +92,7 @@ HWND DmWindow::Detach()
 		::SetWindowLongPtr(hWnd, GWLP_USERDATA, 0);
 		::SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(fncc));
 		m_hWnd = NULL;
+		m_bAttach = FALSE;
 		m_fnPrevWndProc = NULL;
 		break;
 	}
@@ -246,7 +249,7 @@ BOOL DmWindow::EnableWindow(BOOL bEnable) const
 BOOL DmWindow::DisableWindow() const
 {
 	assert(this->IsWindow());
-	return ::EnableWindow(m_hWnd, FALSE);
+	return ::EnableWindow(*this, FALSE);
 }
 
 /**
@@ -280,7 +283,7 @@ BOOL DmWindow::ShowWindow(int nCmdShow) const
  * @brief	隱藏視窗或控制項
  * @return	@c 型別: BOOL \n
  *			若視窗先前為顯示中返回值為 TRUE, 若視窗先前為隱藏中返回值為 FALSE.
- * @see		CxFrameObject::Show()
+ * @see		DmWindow::ShowWindow
  */
 BOOL DmWindow::HideWindow() const 
 {
@@ -296,8 +299,8 @@ BOOL DmWindow::HideWindow() const
  */
 BOOL DmWindow::GetWindowRect(RECT* rcPtr) const
 {
-	assert(this->IsWindow());
 	assert(rcPtr);
+	assert(this->IsWindow());
 	return ::GetWindowRect(*this, rcPtr);
 }
 
@@ -309,8 +312,8 @@ BOOL DmWindow::GetWindowRect(RECT* rcPtr) const
  */
 BOOL DmWindow::GetClientRect(RECT* rcPtr) const
 {
-	assert(this->IsWindow());
 	assert(rcPtr);
+	assert(this->IsWindow());
 	return ::GetClientRect(*this, rcPtr);
 }
 
@@ -322,24 +325,27 @@ BOOL DmWindow::GetClientRect(RECT* rcPtr) const
  * @see		DmWindow::GetWindowRect
  * @see		DmWindow::GetClientRect
  */
-int DmWindow::GetBorderSize()
+int DmWindow::GetBorderSize() const
 {
-	assert(this->IsWindow());
-
 	auto hWnd = this->GetSafeHwnd();
 	auto result = int(-1);
 	RECT rcw, rcc;
 
+	assert(this->IsWindow());
+
 	for (;;) {
 		if (hWnd == NULL) {
+			// error handling at here
 			break;
 		}
 
 		if (!::GetClientRect(hWnd, &rcc)) {
+			// error handling at here
 			break;
 		}
 
 		if (!::GetWindowRect(hWnd, &rcw)) {
+			// error handling at here
 			break;
 		}
 
@@ -351,19 +357,58 @@ int DmWindow::GetBorderSize()
 }
 
 /**
- * @brief	改變視窗位置 Z 順序及視窗尺寸
- * @param	[in] hWndInsertAfter	視窗 Handle，用於標示 Z 順序中定位視窗之前。\n
- *									若 uFlags 參數中設置了 SWP_NOZORDER 標記則本參數將被忽略。參數必須是視窗 Handle 或 參數值
- * @param	[in] x		以 client 座標指定視窗新位置 (左邊界)
- * @param	[in] y		以 client 座標指定視窗新位置 (上邊界)
+ * @brief	將 client-area 座標轉化成桌面座標
+ * @param	[in,out] ptPtr	POINT 結構資料存放位址
+ * @return	@c 型別: BOOL \n
+ *			若函數操作成功返回非零值(non-zero) \n
+ *			若含數操作失敗返回零值(zero)
+ * @remark	@c ptPtr 參數
+ *			- 輸入 client-area 座標
+ *			- 輸出 若函數操作成功則會保存轉化後結果
+ */
+BOOL DmWindow::ClientToScreen(POINT* ptPtr) const
+{
+	assert(ptPtr);
+	assert(this->IsWindow());
+	return ::ClientToScreen(*this, ptPtr);
+}
+
+/**
+ * @brief	將 client-area 座標轉化成桌面座標
+ * @param	[in,out] rcPtr	RECT 結構資料存放位址
+ * @return	@c 型別: BOOL \n
+ *			若函數操作成功返回非零值(non-zero) \n
+ *			若含數操作失敗返回零值(zero)
+ * @remark	使用 MapWindowPoints 方式
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-mapwindowpoints
+ */
+BOOL DmWindow::ClientToScreen(RECT* rcPtr) const
+{
+	assert(IsWindow());
+
+	// MapWindowPoints (
+	//	HWND    hWndFrom,	//!< 來源視窗，若值為 NULL 或 HWND_DESKTOP, 則以桌面作為目標
+	//	HWND    hWndTo,		//!< 目標視窗，若值為 NULL 或 HWND_DESKTOP, 則以桌面作為目標
+	//	LPPOINT lpPoints,	//!< 來源是座標
+	//	UINT    cPoints		//!< 傳入了多少組 POINT, 若傳入 RECT 結構，此值必須填寫為 2
+	// );
+	return static_cast<BOOL>(::MapWindowPoints(*this, NULL, reinterpret_cast<LPPOINT>(rcPtr), 2));
+}
+
+/**
+ * @brief	改變視窗位置、 Z軸順序、視窗尺寸
+ * @param	[in] hWndInsertAfter	視窗 Handle，用於標示 Z 順序中定位視窗之前。
+ * @param	[in] x		client-area 座標指定視窗新位置 (左邊界)
+ * @param	[in] y		client-area	座標指定視窗新位置 (上邊界)
  * @param	[in] cx		以像素 (pixel) 指定新視窗寬度
  * @param	[in] cy		以像素 (pixel) 指定新視窗高度
  * @param	[in] uFlags	視窗尺寸和定位的標誌
  * @return	@c 型別: BOOL \n
  *			如果函數成功，返回值為非零值(non-zero)。\n
- *			如果函數失敗，返回值為零, 若想獲得更多錯誤消息，請調用 GetLastError 函數函數
+ *			如果函數失敗，返回值為零, 若想獲得更多錯誤消息調用 GetLastError
  *
- * @remark	@c hWndInsertAfter 參數值
+ * @remark	@c hWndInsertAfter 參數值額外說明 \n
+ *			若 uFlags 參數中設置了 SWP_NOZORDER 標記則本參數將被忽略。參數必須是視窗 Handle 或 參數值
  *		- HWND_BOTTOM		\n
  *			將視窗置於 Z 順序的底部如果參數的 hWnd 標識了一個頂層視窗，則視窗失去頂級位置，並且被置在其他視窗的底部。
  *		- HWND_NOTOPMOST	\n
@@ -409,8 +454,150 @@ int DmWindow::GetBorderSize()
  */
 BOOL DmWindow::SetWindowPos(HWND hWndInsertAfter, int x, int y, int cx, int cy, UINT uFlags) const
 {
-	assert(IsWindow());
+	assert(this->IsWindow());
 	return ::SetWindowPos(*this, hWndInsertAfter, x, y, cx, cy, uFlags);
+}
+
+/**
+ * @brief	設定視窗顯示位置
+ * @param	[in] x 於父視窗 client-area 座標 x (左邊界)
+ * @param	[in] y 於父視窗 client-area 座標 y (上邊界)
+ * @return	@c 型別: BOOL \n
+ *			如果函數成功，返回值為非零值(non-zero)。\n
+ *			如果函數失敗，返回值為零, 若想獲得更多錯誤消息，請調用 GetLastError 函數函數
+ * @see		DmWindow::SetWindowPos
+ */
+BOOL DmWindow::SetWindowPosition(int x, int y) const
+{
+	const UINT flag = SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE;
+	assert(this->IsWindow());
+	return ::SetWindowPos(*this, NULL, x, y, 0, 0, flag);
+}
+
+/**
+ * @brief	設定視窗尺寸
+ * @param	[in] w 寬度
+ * @param	[in] h 高度
+ * @return	@c 型別: BOOL \n
+ *			如果函數成功，返回值為非零值(non-zero)。\n
+ *			如果函數失敗，返回值為零, 若想獲得更多錯誤消息，請調用 GetLastError 函數函數
+ * @see		DmWindow::SetWindowPos
+ */
+BOOL DmWindow::SetWindowSize(int w, int h) const
+{
+	const UINT flag = SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE;
+	assert(this->IsWindow());
+	return ::SetWindowPos(*this, NULL, 0, 0, w, h, flag);
+}
+
+/**
+ * @brief	設定視窗工作區矩形邊界尺寸
+ * @param	[in] wd	視窗寬度
+ * @param	[in] ht	視窗高度
+ * @return	@c 型別: BOOL \n
+ *			操作成功返回非零值, 操作失敗返回零值(zero)\n
+ *			如果函數操作失敗，調用 GetLastError 取得錯誤碼
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-setwindowposs
+ */
+BOOL DmWindow::SetClientSize(int w, int h) const
+{
+	const UINT flag = SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE;
+	auto hWnd = this->GetSafeHwnd();
+	auto res = BOOL(FALSE);
+	RECT rc;
+
+	assert(this->IsWindow());
+
+	for (;;) {
+		if (!::SetRect(&rc, 0, 0, w, h)) {
+			// error handling at here
+			break;
+		}
+
+		// 具有 menu ?
+		if (!::AdjustWindowRectEx(&rc, ::GetWindowLong(hWnd, GWL_STYLE), ::GetMenu(hWnd) != NULL, 0)) {
+			// error handling at here
+			break;
+		}
+
+		w = static_cast<int>(rc.right - rc.left);
+		h = static_cast<int>(rc.bottom - rc.top);
+		res = ::SetWindowPos(hWnd, NULL, 0, 0, w, h, flag);
+		break;
+	}
+
+	return res;
+}
+
+/**
+ * @brief	設定視窗、控制項居中顯示
+ * @return	此函數沒有返回值
+ * @remark	若發現有父視窗存在, 將會以父視窗為基準. \n
+ *			若無父視窗存在, 將以桌面左為基準.
+ * @see		DmWindow::SetWindowPosition
+ * @see		DmWindow::SetWindowSize
+ */
+BOOL DmWindow::SetCenterPosition() const
+{
+	HWND hWnd = *this;
+	HWND hParent;
+	BOOL res = FALSE;
+	int  x, y, w, h;
+	RECT rc;
+
+	assert(this->IsWindow());
+
+	for (;;) {
+		if (hWnd == NULL) {
+			// error handling at here
+			break;
+		}
+
+		if ((hParent = ::GetParent(hWnd)) == NULL) {
+			// 沒有父視窗，就取得桌面邊界尺寸
+			x = ::GetSystemMetrics(SM_CXSCREEN);
+			y = ::GetSystemMetrics(SM_CYSCREEN);
+		}
+		else {
+			// 取得父視窗工作區邊界
+			::GetClientRect(hParent, &rc);
+			x = static_cast<int>(rc.right - rc.left);
+			y = static_cast<int>(rc.bottom - rc.top);
+		}
+
+		if (this->GetWindowRect(&rc)) {
+			// 計算居中值
+			w = static_cast<int>(rc.right - rc.left);
+			h = static_cast<int>(rc.bottom - rc.top);
+
+			if (x > w) x = (x - w) >> 1;
+			if (y > h) y = (y - h) >> 1;
+			res = this->SetWindowPosition(x, y);
+		}
+		break;
+	}
+	return res;
+}
+
+/**
+ * @brief	改變視窗位置、 Z軸順序、視窗尺寸
+ * @param	[in] HDWP hWinPosInfo	多視窗定位結構 handle
+ * @param	[in] hWndInsertAfter	視窗 Handle，用於標示 Z 順序中定位視窗之前。
+ * @param	[in] x		client-area 座標指定視窗新位置 (左邊界)
+ * @param	[in] y		client-area 座標指定視窗新位置 (上邊界)
+ * @param	[in] cx		以像素 (pixel) 指定新視窗寬度
+ * @param	[in] cy		以像素 (pixel) 指定新視窗高度
+ * @param	[in] uFlags	視窗尺寸和定位的標誌
+ * @remark	@c hWinPosInfo 參數說明 \n
+ *			多視窗定位結構的 Handle，該結構包含著一個或多個視窗的尺寸和定位訊息 \n
+ *			可以由函數 BeginDeferWindowPos 返回該結構或是返回最近一次 由 DeferWindowPos 調用的多結構 handle。
+ * @see		DmWindow::SetWindowPos
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-deferwindowpos
+ */
+HDWP DmWindow::DeferWindowPos(HDWP hWinPosInfo, HWND hWndInsertAfter, int x, int y, int cx, int cy, UINT uFlags) const
+{
+	assert(IsWindow());
+	return ::DeferWindowPos(hWinPosInfo, *this, hWndInsertAfter, x, y, cx, cy, uFlags);
 }
 
 /**
@@ -422,8 +609,8 @@ BOOL DmWindow::SetWindowPos(HWND hWndInsertAfter, int x, int y, int cx, int cy, 
  */
 HDC DmWindow::BeginPaint(PAINTSTRUCT* stPtr) const
 {
-	assert(this->IsWindow());
 	assert(stPtr);
+	assert(this->IsWindow());
 	return ::BeginPaint(*this, stPtr);
 }
 
@@ -440,47 +627,232 @@ BOOL DmWindow::EndPaint(const PAINTSTRUCT * stPtr) const
 }
 
 /**
+ * @brief	取得視窗 client-area device context handle
+ * @return	@c 型別: HDC \n
+ *			若函數操作成功返回視窗 client-area device context handle \n
+ *			若函數操作失敗返回 NULL
+ *@remark	dc is device context
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-getdc
+ *
+ *	取得 client-area device context handle \n
+ *	之後即可利用 GDI 各函數中可以使用該 handle 在 dc 進行繪製
+ */
+HDC DmWindow::GetDC() const
+{
+	assert(this->IsWindow());
+	return ::GetDC(*this);
+}
+
+/**
+ * @brief	取得整視窗或螢幕 dc handle
+ * @param	[in] hrgnClip	指定一剪切區域，它可以與 dc 環境的可見區域相結合。
+ * @param	[in] flags		指定如何建立 dc 環境
+ * @return	@c 型別: HDC \n
+ *			若函數操作成功返回視窗或整個螢幕的 dc handle \n
+ *			若函數操作失敗返回 NULL
+ * @remark	dc is device context
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-getdcex
+ *
+ *	取得 client-area, 整個視窗或整個螢幕的顯示 device context handle \n
+ *	之後即可利用 GDI 各函數中可以使用該 handle 在 dc 進行繪製
+ */
+HDC DmWindow::GetDCEx(HRGN hrgnClip, DWORD flags) const
+{
+	assert(this->IsWindow());
+	return ::GetDCEx(*this, hrgnClip, flags);
+}
+
+/**
+ * @brief	重繪選單欄位，若有發生修改選單項目就必須使用此函數進行重繪
+ * @return	@c 型別: BOOL \n
+ *			若函數操作成功返回非零值(non-zero) \n
+ *			若函數操作失敗返回零(zero)，調用 GetLastError 取得錯誤碼
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-drawmenubar
+ */
+BOOL DmWindow::DrawMenuBar() const
+{
+	assert(IsWindow());
+	return ::DrawMenuBar(*this);
+}
+
+/**
+ * @brief	指定視窗於 Z 順序中移至最上層, 若指定視窗為子視窗，則連最基底父視窗一併移至最上層
+ * @return	@c 型別: BOOL \n
+ *			若函數操作成功返回非零值 (non-zero)
+ *			若含數操作失敗則返回零(zero), 使用 GetLastError 取得錯誤碼
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-bringwindowtotop
+ */
+BOOL DmWindow::BringWindowToTop() const
+{
+	assert(this->IsWindow());
+	return ::BringWindowToTop(*this);
+}
+
+/**
+ * @brief	取得視窗或控制項文字長度 (若該視窗或控制項有 Title bar 或 控制項名稱)
+ * @return	@c 型別: int \n
+ *			若函數操作成功返回不為負數的非零值, 返回值該視窗或控制項文字內容字數數量 (不含 NULL 結尾) \n
+ *			若操作失敗或沒有文字項目則返回零(zero)
+ */
+int DmWindow::GetWindowTextLength() const
+{
+	assert(this->IsWindow());
+	return ::GetWindowTextLength(*this);
+}
+
+/**
+ * @brief	取得視窗或控制項的文字內容
+ * @param	szTextPtr	要接收存放文字字串的緩衝區位址 (TCHAR)
+ * @param	cchMax		要接收多少文字 (in TCHAR)
+ * @return	@c 型別: int \n
+ *			返回值為實際取得文字數量 (in TCHAR)
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/winmsg/wm-gettext
+ */
+int DmWindow::GetWindowText(TCHAR* szTextPtr, size_t cchMax) const
+{
+	assert(this->IsWindow());
+	return ::GetWindowText(*this, static_cast<LPTSTR>(szTextPtr), static_cast<int>(cchMax));
+}
+
+/**
+ * @brief	取得父視窗代碼(Handle)
+ * @return	@c 型別: HWND \n
+ *			若有父視窗將返回非零值(non-zero)為父視窗操作 Handle \n
+ *			若沒有父視窗則返回零 (zero) NULL
+ */
+HWND DmWindow::GetParent() const
+{
+	assert(this->IsWindow());
+	return ::GetParent(this->GetSafeHwnd());
+}
+
+/**
+ * @brief	取得鼻祖視窗代碼(Handle)
+ * @param	[in] uFlags	取得目標方式, 預設使用 GA_ROOTOWNER
+ *				- GA_PARENT:	取得父視窗(同 GetParent)
+ *				- GA_ROOT:		追根到底, 遍歷父視窗鏈, 取得鼻祖視窗
+ *				- GA_ROOTOWNER:	追根到底, 遍歷父視窗鏈與擁有者視窗, 取得鼻祖視窗
+ * @return	@c 型別: HWND, 鼻祖視窗代碼(Handle)
+ */
+HWND DmWindow::GetAncestor(UINT uFlags) const
+{
+	assert(this->IsWindow());
+	return ::GetAncestor(*this, uFlags);
+}
+
+/**
+ * @brief	取得活動中的視窗代碼(Handle)
+ * @return	@c 型別: HWND \n
+ *			若函數操作成功返回當前活動中的視窗代碼(Handle) \n
+ *			若含數操作失敗返回零(zero) NULL
+ */
+HWND DmWindow::GetActiveWindow() const { return ::GetActiveWindow(); }
+
+/**
+ * @brief	取得桌面視窗代碼(Handle)
+ * @return	@c 型別: HWND, 桌面視窗代碼(Handle)
+ */
+HWND DmWindow::GetDesktopWindow() const
+{
+	return ::GetDesktopWindow();
+}
+
+/**
+ * @brief	取得控制項視窗代碼(Handle)
+ * @param	[in] nIDDlgItem	控制項 ID
+ * @return	@c 型別: HWND \n
+ *			若函數操作成功返回非零值(non-zero)為指定控制項的視窗代碼(Handle) \n
+ *			若函數操作失敗返回零(zero), 使用 GetLastError 取得錯誤碼
+ */
+HWND DmWindow::GetDlgItem(int nIDDlgItem) const
+{
+	assert(this->IsWindow());
+	return ::GetDlgItem(*this, nIDDlgItem);
+}
+
+/**
+ * @brief	取得控制項 ID (標示識別碼)
+ * @return	@c 型別: int \n
+ *			若函數操作成功返回非零值(non-zero)為控制項的 ID \n
+ *			若函數操作失敗返回零(zero), 調用 GetLastError 取得錯誤碼
+ */
+int DmWindow::GetDlgCtrlID() const
+{
+	assert(this->IsWindow());
+	return ::GetDlgCtrlID(*this);
+}
+
+/**
+ * @brief	設定要持續取得滑鼠遊標訊息接收
+ * @return	@c 型別: HWND \n
+ *			先前捕獲滑鼠游標的的視窗代碼(Handle), 若先前沒有這樣的視窗則返回 NULL
+ * @remark	設定指定視窗即使不再活動中, 不再滑鼠游標當前所在視窗依然可以持續取得滑鼠游標訊息 \n
+ *			直到 ReleaseCapture 或點擊其他視窗成為活動中視窗
+ */
+HWND DmWindow::SetCapture() const
+{
+	assert(this->IsWindow());
+	return ::SetCapture(*this);
+}
+
+/**
+ * @brief	取得當前滑鼠游標停留位置的視窗代碼(Handle)
+ * @return	@c 型別: HWND \n
+ *			返回當前線程中捕獲滑鼠游標位置的視窗代碼(Handle) \n
+ *			若當前線程沒有捕獲到滑鼠游標位置則返回 NULL \n
+ *			返回 NULL 不代表失敗, 只是代表當前的(發出 GetCapture)的線程沒有捕獲到滑鼠游標
+ * @remark	同時間只有一個線程可以取得全域滑鼠游標訊息, 若要改變此一狀態，只要調用 SetCapture \n
+ *			則享有全域滑鼠遊標訊息。
+ */
+HWND DmWindow::GetCapture() const
+{
+	return ::GetCapture();
+}
+
+/**
+ * @brief	重當前線程釋放滑鼠或取方式, 回到正常的獲取滑鼠游標資訊。
+ * @return	@c 型別: BOOL \n
+ *			若函數操作成功返回非零值(non-zero) \n
+ *			若函數操作失敗返回零(zero), 調用 GetLasterror 取得錯誤碼
+ */
+BOOL DmWindow::ReleaseCapture() const
+{
+	return ::ReleaseCapture();
+}
+
+/**
  * @brief	變更視窗屬性
- * @param	[in] nIndex		指定變更項目
- *				- GWL_EXSTYLE
- *				- GWL_STYLE
- *				- GWLP_WNDPROC
- *				- GWLP_HINSTANCE
- *				- GWLP_HWNDPARENT
- *				- GWLP_ID
- *				- GWLP_USERDATA
- *				- DWLP_DLGPROC
- *				- DWLP_MSGRESULT
- *				- DWLP_USER
+ * @param	[in] nIndex 要檢索的項目
+ *				- GWL_EXSTYLE		擴展式視窗樣式
+ *				- GWL_STYLE			視窗樣式
+ *				- GWLP_WNDPROC		視窗 Callback function
+ *				- GWLP_HINSTANCE	視窗 Module of Handle
+ *				- GWLP_HWNDPARENT	父視窗代碼(Handle)
+ *				- GWLP_ID			視窗的 ID
+ *				- GWLP_USERDATA		給是用者用的變數 (初始內容為 0)
+ *				- DWLP_DLGPROC		對話框 Dialog 的 callback function
+ *				- DWLP_MSGRESULT	對話框訊息返回值
+ *				- DWLP_USER			對話框額外訊息
  * @return	@c 型別: LONG_PTR \n
- *			若函數操作成功返回值為提出需求的資訊 \n
+ *			若函數操作成功返回值檢索項目資訊 \n
  *			若操作失敗返回零，使用 GetLastError() 取得錯誤碼
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-getwindowlongptrw
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-getwindowlongptra
  */
 LONG_PTR DmWindow::GetWindowLongPtr(int nIndex) const
 {
-	assert(IsWindow());
+	assert(this->IsWindow());
 	return ::GetWindowLongPtr(*this, nIndex);
 }
 
 /**
  * @brief	變更視窗屬性
- * @param	[in] nIndex		指定變更項目
- *				- GWL_EXSTYLE
- *				- GWL_STYLE
- *				- GWLP_WNDPROC
- *				- GWLP_HINSTANCE
- *				- GWLP_HWNDPARENT
- *				- GWLP_ID
- *				- GWLP_USERDATA
- *				- DWLP_DLGPROC
- *				- DWLP_MSGRESULT
- *				- DWLP_USER
+ * @param	[in] nIndex		檢索項目
  * @param	[in] dwNewLong	變更內容
  * @return	@c 型別: LONG_PTR \n
- *			若函數操作成功返回值為變更前的資訊 \n
+ *			若函數操作成功返回值為變更前檢索項目資訊 \n
  *			若操作失敗返回零，使用 GetLastError() 取得錯誤碼
+ * @see		DmWindow::GetWindowLongPtr
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-setwindowlongptrw
  * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-setwindowlongptra
  */
@@ -491,24 +863,67 @@ LONG_PTR DmWindow::SetWindowLongPtr(int nIndex, LONG_PTR dwNewLong) const
 }
 
 /**
+ * @brief	取得視窗關聯的 WNDCLASSEX 結構中要檢索內容
+ * @param	[in] nIndex	檢索項目
+ *				- GCW_ATOM (-32) \n
+ *				檢索唯一標識視窗類的 ATOM值。這與 RegisterClassEx 函數返回的值相同。
+ *				- GCL_CBCLSEXTRA (-20)		\n
+ *				檢索與類關聯的額外記憶體的大小（以 WORD 為單位）。
+ *				- GCL_CBWNDEXTRA (-18)		\n
+ *				檢索與類中每個視窗關聯的額外視窗記憶體的大小（以字節為單位）。有關如何訪問此記憶體的訊息，請參閱GetWindowLongPtr。
+ *				- GCLP_HBRBACKGROUND (-10)	\n
+ *				檢索與類關聯的背景畫筆的句柄。
+ *				- GCLP_HCURSOR (-12)		\n
+ *				檢索與類關聯的游標的句柄。
+ *				- GCLP_HICON (-14)			\n
+ *				檢索與類關聯的圖標的句柄。
+ *				- GCLP_HICONSM (-34)		\n
+ *				檢索與該類關聯的小圖標的句柄。
+ *				- GCLP_HMODULE (-16)		\n
+ *				檢索註冊該類的模塊的句柄。
+ *				- GCLP_MENUNAME (-8)		\n
+ *				檢索指向菜單名稱字符串的指針。該字符串標識與該類關聯的菜單資源。
+ *				- GCL_STYLE (-26)			\n
+ *				檢索視窗類樣式位。
+ *				- GCLP_WNDPROC (-24)		\n
+ *				檢索視窗過程的地址，或表示視窗過程地址的句柄。您必須使用CallWindowProc函數來調用視窗過程。
+ * @return	@c 型別: ULONG_PTR \n
+ *			若函數操作成功返回值檢索項目資訊 \n
+ *			若操作失敗返回零，使用 GetLastError() 取得錯誤碼
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-getwindowlongptrw
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-getwindowlongptra
+ *
+ *	視窗向系統註冊的資訊 WNDCLASSEX, 利用此函數能夠調閱當前於系統中的視窗class內容.
+ */
+ULONG_PTR DmWindow::GetClassLongPtr(int nIndex) const
+{
+	assert(this->IsWindow());
+	return ::GetClassLongPtr(*this, nIndex);
+}
+
+
+/**
+ * @brief	取得視窗關聯的 WNDCLASSEX 結構中要檢索內容
+ * @param	[in] nIndex		檢索項目
+ * @param	[in] dwNewLong	變更內容
+ * @return	@c 型別: UNLONG_PTR \n
+ *			若函數操作成功返回值為變更前檢索項目資訊 \n
+ *			若操作失敗返回零，使用 GetLastError() 取得錯誤碼
+ * @see		DmWindow::GetClassLongPtr
+ */
+ULONG_PTR DmWindow::SetClassLongPtr(int nIndex, LONG_PTR dwNewLong) const
+{
+	assert(this->IsWindow());
+	return ::SetClassLongPtr(*this, nIndex, dwNewLong);
+}
+
+/**
  * @brief	取得視窗或控制項操作 Handle (Handle of window)
  * @return	@c 型別: HWND \n
  *			返回非零值(non-zero)為目前於類別物件內使用的視窗或控制項操作 Handle (Handle of window) \n
  *			若類別誤建尚未連結則傳回零(zero) NULL
  */
 HWND DmWindow::GetSafeHwnd() const { return m_hWnd; }
-
-/**
- * @brief	取得父視窗操作碼
- * @return	@c 型別: HWND \n
- *			若有父視窗將返回非零值(non-zero)為父視窗操作 Handle \n
- *			若沒有父視窗則返回零 (zero) NULL
- */
-HWND DmWindow::GetParent() const
-{
-	assert(this->IsWindow());
-	return ::GetParent(this->GetSafeHwnd());
-}
 
 /**
  * @brief	取得改變前的視窗(控制項) Callback function
@@ -541,7 +956,7 @@ DmWindow::operator HWND() const { return this->GetSafeHwnd(); }
  */
 LRESULT DmWindow::DefaultWindowProc(UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
-	auto fncc = m_fnPrevWndProc;	
+	auto fncc = m_fnPrevWndProc;
 	if (fncc != NULL)
 		return ::CallWindowProc(fncc, *this, uMessage, wParam, lParam);
 	return ::DefWindowProc(*this, uMessage, wParam, lParam);
@@ -613,9 +1028,6 @@ void DmWindow::DeathOfWindow()
 		m_hWnd = NULL;
 		m_fnPrevWndProc = NULL;
 	}
-
-	// call base class 
-	DmObject::ClassInTheEnd();
 }
 
 /**
@@ -626,7 +1038,7 @@ void DmWindow::DeathOfWindow()
 DmWindow::DmWindow(HWND hWnd) : m_hWnd(NULL), m_fnPrevWndProc(NULL), m_bAttach(FALSE)
 {
 	if (hWnd == NULL) {
-		this->SetError(DMCERR::ERR_INVALID_HWND);
+		// error handling at here
 		return;
 	}
 	m_hWnd = hWnd;

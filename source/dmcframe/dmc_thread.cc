@@ -53,11 +53,3 @@ int DmThread::MessageLoopPeek()
 	}
 	return (int)message.wParam;
 }
-
-//! 類別結束處理
-void DmThread::ClassInTheEnd()
-{
-
-	// Pass to base class
-	DmObject::ClassInTheEnd();
-}
