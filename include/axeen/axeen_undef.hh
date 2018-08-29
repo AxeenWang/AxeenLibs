@@ -107,9 +107,9 @@ inline ATOM WINAPI RegisterClassEx(const WNDCLASSEX *pwcex)
 inline HWND WINAPI CreateWindow(LPCTSTR lpClassName, LPCTSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam)
 {
 	#ifdef __UNICODE__
-	return ::CreateWindowW(lpClassName, lpWindowName, dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
+	return ::CreateWindowExW(0L, lpClassName, lpWindowName, dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
 	#else
-	return ::CreateWindowA(lpClassName, lpWindowName, dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
+	return ::CreateWindowExA(0L, lpClassName, lpWindowName, dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
 	#endif
 }
 #endif
@@ -141,6 +141,19 @@ inline HWND CreateDialog(HINSTANCE hInstance, LPCTSTR lpTemplateName, HWND hWndP
 #endif
 
 // **********************************************
+#ifdef GetClassName
+#undef GetClassName
+inline int GetClassName(HWND hWnd, LPTSTR lpClassName, int nMaxCount)
+{
+	#ifdef __UNICODE__
+	return ::GetClassNameW(hWnd, lpClassName, nMaxCount);
+	#else
+	return ::GetClassNameA(hWnd, lpClassName, nMaxCount);
+	#endif
+}
+#endif
+
+// **********************************************
 #ifdef GetWindowTextLength
 #undef GetWindowTextLength
 inline int GetWindowTextLength(HWND hWnd)
@@ -162,6 +175,19 @@ inline int GetWindowText(HWND hWnd, LPTSTR lpString, int nMaxCount)
 	return ::GetWindowTextW(hWnd, lpString, nMaxCount);
 	#else
 	return ::GetWindowTextA(hWnd, lpString, nMaxCount);
+	#endif
+}
+#endif
+
+// **********************************************
+#ifdef SetWindowText
+#undef SetWindowText
+inline BOOL SetWindowText(HWND hWnd, LPCTSTR lpString)
+{
+	#ifdef __UNICODE__
+	return ::SetWindowTextW(hWnd, lpString);
+	#else
+	return ::SetWindowTextA(hWnd, lpString);
 	#endif
 }
 #endif

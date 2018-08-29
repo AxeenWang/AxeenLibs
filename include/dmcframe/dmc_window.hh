@@ -59,8 +59,20 @@ public:
 
 	BOOL	BringWindowToTop() const;
 
+
+	int		GetClassName(TCHAR* szClassNamePtr, int cchMax) const;
 	int		GetWindowTextLength() const;
 	int		GetWindowText(TCHAR* szTextPtr, size_t cchMax) const;
+	BOOL	SetWindowText(const TCHAR* szTextPtr) const;
+	UINT	GetDlgItemInt(int nIDDlgItem, BOOL bSigned) const;
+	UINT	GetDlgItemInt(int nIDDlgItem, BOOL* bTranslatedPtr, BOOL bSigned) const;
+	UINT	GetDlgItemText(int nIDDlgItem, TCHAR* szTextPtr, int cchMax) const;
+	BOOL	SetDlgItemText(int nIDDlgItem, const TCHAR* szTextPtr) const;
+
+	DWORD	GetStyle() const;
+	DWORD	GetExStyle() const;
+	DWORD	SetStyle(DWORD dwStyle) const;
+	DWORD	SetExStyle(DWORD dwStyle) const;
 
 	HWND	GetParent() const;
 	HWND	GetAncestor(UINT uFlags = GA_ROOTOWNER) const;
@@ -69,9 +81,20 @@ public:
 	HWND	GetDlgItem(int nIDDlgItem) const;
 	int		GetDlgCtrlID() const;
 
+	HWND	GetFocus() const;
+	HWND	SetFocus() const;
 	HWND	SetCapture() const;
 	HWND	GetCapture() const;
 	BOOL	ReleaseCapture() const;
+
+	HFONT	GetFont() const;
+	void	SetFont(HFONT hFont, BOOL bRedraw = TRUE);
+
+	HICON	GetIcon(int nType) const;
+	HICON	SetIcon(HICON hIcon, int nType) const;
+
+	UINT_PTR	SetTimer(UINT_PTR nIDEvent, UINT uElapse, TIMERPROC lpTimerFunc) const;
+	BOOL		KillTimer(UINT_PTR uIDEvent) const;
 
 	LONG_PTR	GetWindowLongPtr(int nIndex) const;
 	LONG_PTR	SetWindowLongPtr(int nIndex, LONG_PTR dwNewLong) const;
@@ -82,6 +105,9 @@ public:
 	HWND	GetSafeHwnd() const;
 	WNDPROC	GetPrevWndProc() const;
 	BOOL	IsWindow() const;
+	BOOL	IsChild(HWND hWndChild) const;
+	BOOL	IsWindowEnable() const;
+	BOOL	IsWindowVisible() const;
 	operator HWND() const;
 
 protected:
