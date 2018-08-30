@@ -16,10 +16,7 @@ public:
 	virtual ~DmThread();
 
 	// Overridables
-	virtual BOOL	InitInstance();
-	virtual int		MessageLoop(int bPreek);
-	virtual BOOL	OnIdle(LONG lCount);
-	virtual BOOL	PreTranslateMessage(MSG& Msg);
+	virtual int	MessageLoop(int bPreek);
 
 protected:
 	// These virtual functions can be overridden

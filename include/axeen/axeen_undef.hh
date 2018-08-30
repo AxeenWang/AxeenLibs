@@ -11,6 +11,19 @@
 #if defined(__WINDOWS__)
 
 // **********************************************
+#ifdef PeekMessage
+#undef PeekMessage
+inline BOOL PeekMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg)
+{
+	#ifdef __UNICODE__
+	return ::PeekMessageW(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
+	#else
+	return ::PeekMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
+	#endif
+}
+#endif
+
+// **********************************************
 #ifdef SendMessage
 #undef SendMessage
 inline LRESULT WINAPI SendMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)

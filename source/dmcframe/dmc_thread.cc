@@ -14,6 +14,18 @@ DmThread::DmThread() : DmObject() { }
 DmThread::~DmThread() { }
 
 /**
+ * @brief	This function manages the way window message are dispatched to a window procedure.
+ * @param	bPreek	Is using PeekMessage for message loop? TRUE=yes, FALSE=no
+ * @return	@c 型別: int, quit the window process code
+ */
+int DmThread::MessageLoop(int bPreek)
+{
+	if (bPreek) 
+		return this->MessageLoopPeek();
+	return this->MessageLoopNormal();
+}
+
+/**
  * @brief	視窗訊息迴圈
  * @remark	標準訊息迴圈，等待訊息及進行對應處理
  * @return	@c 型別: int, 返回值為視窗結束碼
@@ -27,7 +39,7 @@ int DmThread::MessageLoopNormal()
 		::TranslateMessage(&message);
 		::DispatchMessage(&message);
 	}
-	return (int)message.wParam;
+	return static_cast<int>(message.wParam);
 }
 
 /**
@@ -37,12 +49,12 @@ int DmThread::MessageLoopNormal()
  */
 int DmThread::MessageLoopPeek()
 {
-	MSG message = { 0 };
+	MSG message;
 
-	while (TRUE)
-	{
+	::memset(&message, 0, sizeof(message));
+	for (;;) {
 		while (::PeekMessage(&message, NULL, 0, 0, PM_REMOVE)) {
-			//::TranslateMessage(&message);
+			::TranslateMessage(&message);
 			::DispatchMessage(&message);
 		}
 
@@ -50,6 +62,7 @@ int DmThread::MessageLoopPeek()
 			break;
 
 		// TODO: 要處理動作項目 (如動態 UI，計時或遊戲)
+		// Background Processing
 	}
-	return (int)message.wParam;
+	return static_cast<int>(message.wParam);
 }

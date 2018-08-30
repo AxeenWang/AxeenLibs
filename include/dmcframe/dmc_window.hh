@@ -15,6 +15,8 @@
  */
 class DmWindow : public DmObject
 {
+	friend class DmApplication;
+
 public:
 	DmWindow();
 	virtual ~DmWindow();

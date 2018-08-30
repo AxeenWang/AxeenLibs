@@ -11,6 +11,9 @@
 #include "axeen/axeen_ement.hh"
 #include "dmc_struct.hh"
 
+class DmApplication;
+class Dmthread;
+class DmWindow;
 
 #if defined(__WINDOWS__) && !defined(_LIB)
  // Windows 作業系統 引用 library
