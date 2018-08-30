@@ -803,7 +803,48 @@ UINT DmWindow::GetDlgItemText(int nIDDlgItem, TCHAR* szTextPtr, int cchMax) cons
  */
 BOOL DmWindow::SetDlgItemText(int nIDDlgItem, const TCHAR* szTextPtr) const
 {
-	return 0;
+	assert(this->IsWindow());
+	return ::SetDlgItemText(*this, nIDDlgItem, static_cast<LPCTSTR>(szTextPtr));
+}
+
+/**
+ * @brief	Changes the check state of a button control.
+ * @param	[in] nIDButton	The identifier of the button to modify.
+ * @param	[in] uCheck		The check state of the button.
+ *				- BST_CHECKED		\n
+ *					Sets the button state to checked.
+ *				- BST_INDETERMINATE	\n
+ *					Sets the button state to grayed, indicating an indeterminate state. \n
+ *					Use this value only if the button has the BS_3STATE or BS_AUTO3STATE style.
+ *				- BST_UNCHECKED		\n
+ *					Sets the button state to cleared
+ * @return	@c 型別: BOOL \n
+ *			If the function succeeds, the return value is nonzero. \n
+ *			If the function fails, the return value is zero. To get extended error information, call GetLastError.
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-checkdlgbutton
+ */
+BOOL DmWindow::CheckDlgButton(int nIDButton, UINT uCheck) const
+{
+	assert(this->IsWindow());
+	return ::CheckDlgButton(*this, nIDButton, uCheck);
+}
+
+/**
+ * @brief	取得捲動軸資訊
+ * @param	[in] nBar	指定要取得的捲動軸的類型
+ *				- SB_CTL
+ *				- SB_HORZ
+ *				- SB_VERT
+ * @return	@c 型別: BOOL \n
+ *			If the function retrieved any values, the return value is nonzero. \n
+ *			If the function does not retrieve any values, the return value is zero. To get extended error information, call GetLastError.
+ * @see		https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-getscrollinfo
+ * @see		https://docs.microsoft.com/zh-tw/windows/desktop/api/winuser/ns-winuser-tagscrollinfo
+ */
+BOOL DmWindow::GetScrollInfo(int nBar, SCROLLINFO* siPtr) const
+{
+	assert(this->IsWindow());
+	return ::GetScrollInfo(*this, nBar, static_cast<LPSCROLLINFO>(siPtr));
 }
 
 /**

@@ -12,3 +12,11 @@ DmObject::DmObject() { }
 
 //! DmObject deconstruct
 DmObject::~DmObject() { }
+
+/**
+ * @brief	取得本程序模組代碼(Handle)
+ * @return	@c 型別: HINSTANCE \n
+ *			If the function succeeds, the return value is a handle to the specified module. \n
+ *			If the function fails, the return value is NULL. To get extended error information, call GetLastError.
+ */
+HINSTANCE DmObject::GetSaeModule() const { return ::GetModuleHandle(NULL); }

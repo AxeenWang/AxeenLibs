@@ -9,7 +9,10 @@
 #define __AXEEN_DMCFRAME_WINDOW_HH__
 #include "dmc_object.hh"
 
-
+/**
+ * @class DmWindow
+ * @brief Provides the base functionality of all window classes in the Axeen Class Library.
+ */
 class DmWindow : public DmObject
 {
 public:
@@ -59,7 +62,6 @@ public:
 
 	BOOL	BringWindowToTop() const;
 
-
 	int		GetClassName(TCHAR* szClassNamePtr, int cchMax) const;
 	int		GetWindowTextLength() const;
 	int		GetWindowText(TCHAR* szTextPtr, size_t cchMax) const;
@@ -68,6 +70,9 @@ public:
 	UINT	GetDlgItemInt(int nIDDlgItem, BOOL* bTranslatedPtr, BOOL bSigned) const;
 	UINT	GetDlgItemText(int nIDDlgItem, TCHAR* szTextPtr, int cchMax) const;
 	BOOL	SetDlgItemText(int nIDDlgItem, const TCHAR* szTextPtr) const;
+
+	BOOL	CheckDlgButton(int nIDButton, UINT uCheck) const;
+	BOOL	GetScrollInfo(int nBar, SCROLLINFO* siPtr) const;
 
 	DWORD	GetStyle() const;
 	DWORD	GetExStyle() const;

@@ -57,6 +57,9 @@ INT_PTR CxFrameDialog::DialogProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARA
  */
 INT_PTR CxFrameDialog::MessageDispose(UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
+	UNREFERENCED_PARAMETER(wParam);
+	UNREFERENCED_PARAMETER(lParam);
+
 	switch (uMessage)
 	{
 	case WM_INITDIALOG:
@@ -87,7 +90,6 @@ INT_PTR CxFrameDialog::MessageDispose(UINT uMessage, WPARAM wParam, LPARAM lPara
 BOOL CxFrameDialog::CreateDialog(HWND hParent, int idItem, BOOL bModule)
 {
 	HINSTANCE hInst	= ::GetModuleHandle(NULL);	// 取得程序模組 Handle
-	HWND hWnd = m_hWnd;
 	LPTSTR szTemplatePtr;
 	BOOL err = FALSE;
 

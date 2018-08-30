@@ -138,7 +138,7 @@ BOOL CxFrameEditbox::SetReadonly(BOOL bEnable)
 	// EM_SETREADONLY 
 	WPARAM wParam = static_cast<WPARAM>(bEnable);	// 啟用 or 停用
 	LPARAM lParam = 0;								// lParam = 未使用
-	return this->SendMessage(EM_SETREADONLY, bEnable, 0) != 0;
+	return this->SendMessage(EM_SETREADONLY, wParam, lParam) != 0;
 }
 
 
@@ -149,6 +149,8 @@ BOOL CxFrameEditbox::SetReadonly(BOOL bEnable)
  */
 void CxFrameEditbox::SetRect(LPRECT rcPtr)
 {
+	// TBD
+	UNREFERENCED_PARAMETER(rcPtr);
 }
 
 
@@ -200,6 +202,8 @@ BOOL CxFrameEditbox::CreateEditBox(LPCTSTR szCaptionPtr, int x, int y, int wd, i
 {
 	auto	err = BOOL(FALSE);
 	SSCTRL	ctrl;
+
+	UNREFERENCED_PARAMETER(szCaptionPtr);
 
 	for (;;) {
 		if (hInst == NULL) {

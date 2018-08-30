@@ -281,6 +281,8 @@ BOOL CxFrameTab::CreateTab(LPCTSTR szCaptionPtr, int x, int y, int wd, int ht, H
 	RECT	rc;
 	BOOL	err = FALSE;
 
+	UNREFERENCED_PARAMETER(szCaptionPtr);
+
 	for (;;) {
 		if ((hInst = ::GetModuleHandle(NULL)) == NULL) {
 			this->SetError(::GetLastError());
@@ -321,7 +323,7 @@ BOOL CxFrameTab::CreateTab(LPCTSTR szCaptionPtr, int x, int y, int wd, int ht, H
 		ctrl.iWidth = wd;
 		ctrl.iHeight = ht;
 		ctrl.idItem = idItem; // conctrller item id
-		ctrl.fnWndProc = NULL;
+		ctrl.fnWndProc = fnWndProc;
 		err = this->CreateController(&ctrl);
 		break;
 	}

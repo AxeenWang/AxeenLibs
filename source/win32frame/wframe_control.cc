@@ -170,6 +170,7 @@ BOOL CxFrameControl::CreateController(HINSTANCE hInst, HWND hCtrl, int idItem, W
 		m_hModule = hInst;
 		m_hWnd = hCtrl;
 		m_hWndParent = ::GetParent(hCtrl);
+		m_idItem = idItem;
 
 		// Is using user WndProc Callback ?
 		if (fnWndProc != NULL) {

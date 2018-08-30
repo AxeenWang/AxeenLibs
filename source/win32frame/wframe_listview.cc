@@ -349,7 +349,7 @@ int CxFrameListview::GetFirstSelectItem()
 	// wParam = 用於開始搜索項目的索引，-1 以查找與指定標誌匹配的第一個項目，指定的項目本身將被排除在搜索之外。
 	// lParam = 指定項目搜尋方式
 	m_nSelectItemCount = this->GetSelectCount();
-	m_nSelectItemIndex = static_cast<int>(this->SendMessage(LVM_GETNEXTITEM, -1, LVNI_ALL));
+	m_nSelectItemIndex = static_cast<int>(this->SendMessage(LVM_GETNEXTITEM, static_cast<WPARAM>(-1), LVNI_ALL));
 	return m_nSelectItemIndex;
 }
 
@@ -364,7 +364,7 @@ int CxFrameListview::GetSelectItem()
 	// LVM_GETNEXTITEM
 	// wParam = 用於開始搜索項目的索引，-1 以查找與指定標誌匹配的第一個項目，指定的項目本身將被排除在搜索之外。
 	// lParam = 指定項目搜尋方式
-	return static_cast<int>(this->SendMessage(LVM_GETNEXTITEM, -1, LVNI_SELECTED));
+	return static_cast<int>(this->SendMessage(LVM_GETNEXTITEM, static_cast<WPARAM>(-1), LVNI_SELECTED));
 }
 
 /**
@@ -630,6 +630,8 @@ BOOL CxFrameListview::CreateListview(LPCTSTR szCaptionPtr, int x, int y, int wd,
 	auto	err = BOOL(FALSE);
 	SSCTRL	ctrl;
 
+	UNREFERENCED_PARAMETER(szCaptionPtr);
+
 	for (;;) {
 		if ((hInst = ::GetModuleHandle(NULL)) == NULL) {
 			this->SetError(::GetLastError());
@@ -763,4 +765,8 @@ void CxFrameListview::WindowInTheEnd()
  *	}
  * @endcode
  *****************************************************/
-void CxFrameListview::Example1(WPARAM wParam, LPARAM lParam) { }
+void CxFrameListview::Example1(WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(wParam);
+	UNREFERENCED_PARAMETER(lParam);
+}

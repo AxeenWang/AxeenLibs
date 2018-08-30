@@ -19,6 +19,8 @@ public:
 	DmObject();
 	virtual ~DmObject();
 
+	HINSTANCE	GetSaeModule() const;
+
 private:
 	DmObject(const DmObject&);					// Disable copy construction
 	DmObject& operator=(const DmObject&);		// Disable assignment operator

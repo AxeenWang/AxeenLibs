@@ -66,6 +66,7 @@ void CxFrameObject::SetError(DWORD dwErrCode, LPCTSTR szPtr)
 {
 	m_dwError = dwErrCode;
 	// TODO: error message handling
+	UNREFERENCED_PARAMETER(szPtr);
 }
 
 
@@ -566,7 +567,7 @@ HFONT CxFrameObject::CreateFont(LPCTSTR fontFace, int nSize, BOOL bBlod, int nCh
 	lf.lfItalic = FALSE;                        // 設定字型為斜體
 	lf.lfUnderline = FALSE;                     // 設定字型底線
 	lf.lfStrikeOut = FALSE;                     // 設定刪線
-	lf.lfCharSet = nCharset;                    // 設定字元集
+	lf.lfCharSet = static_cast<BYTE>(nCharset);	// 設定字元集
 	lf.lfOutPrecision = OUT_DEFAULT_PRECIS;     // 字型輸出解析度
 	lf.lfClipPrecision = CLIP_DEFAULT_PRECIS;   // 字型擷取解析度
 	lf.lfQuality = DEFAULT_QUALITY;             // 字型輪廓質素
@@ -684,7 +685,7 @@ void CxFrameObject::SetFont(LPCTSTR fontFace, int nSize, BOOL bBlod, int nCharse
 	font = this->CreateFont(fontFace, nSize, bBlod, nCharset);
 
 	if (font != NULL) {
-		this->SetFont(font);
+		this->SetFont(font, bRedraw);
 		m_hFontUser = font;
 	}
 }

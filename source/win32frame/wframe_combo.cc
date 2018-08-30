@@ -204,6 +204,8 @@ BOOL CxFrameCombo::CreateCombo(LPCTSTR szCaptionPtr, int x, int y, int wd, int h
 	auto	err = BOOL(FALSE);
 	SSCTRL	ctrl;
 
+	UNREFERENCED_PARAMETER(szCaptionPtr);
+
 	for (;;) {
 		if ((hInst = ::GetModuleHandle(NULL)) == NULL) {
 			this->SetError(::GetLastError());
