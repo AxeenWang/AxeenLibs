@@ -8,7 +8,7 @@
 #include "include/fortest_define.hh"
 
 #define CONSOLE_ENTER	std::wcout << std::endl
-#define CONSOLE_PAUSE		::system("pause")
+#define CONSOLE_PAUSE	::system("pause")
 
 class foo
 {

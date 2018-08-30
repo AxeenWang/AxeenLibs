@@ -22,6 +22,10 @@ protected:
 	// These virtual functions can be overridden
 	virtual int MessageLoopNormal();
 	virtual int MessageLoopPeek();
+
+private:
+	DmThread(const DmThread&) = delete;				// Disable copy construction
+	DmThread& operator=(const DmThread&) = delete;	// Disable assignment operator
 };
 
 #endif // !__AXEEN_DMCFRAME_THREAD_HH__

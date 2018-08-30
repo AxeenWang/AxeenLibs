@@ -15,7 +15,7 @@
  */
 class DmWindow : public DmObject
 {
-	friend class DmApplication;
+	friend class DmWinApp;
 
 public:
 	DmWindow();
@@ -126,12 +126,13 @@ protected:
 	virtual void	DeathOfWindow();
 
 private:
-	DmWindow(const DmWindow&);					// Disable copy construction
-	DmWindow& operator=(const DmWindow&);		// Disable assignment operator
-	DmWindow(HWND hWnd);						// Private constructor used internally
+	DmWindow(const DmWindow&) = delete;				// Disable copy construction
+	DmWindow& operator=(const DmWindow&) = delete;	// Disable assignment operator
+	DmWindow(HWND hWnd);							// Private constructor used internally
 
-	static LRESULT CALLBACK StaticWindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 	void AttachToClass(HWND hWnd);
+	static LRESULT CALLBACK StaticWindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
+	
 
 protected:
 	HWND	m_hWnd;				//!< 視窗(控制項)操作碼

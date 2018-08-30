@@ -9,6 +9,13 @@
 #define __AXEEN_DMCFRAME_OBJECT_HH__
 #include "dmc_define.hh"
 
+// Forward declarations.
+class DmObject;
+class DmThread;
+class DmWinApp;
+class DmWindow;
+DmWinApp& GetAPP();
+
 /**
  * @class DmObject
  * @brief DMC-Frame base class
@@ -19,11 +26,11 @@ public:
 	DmObject();
 	virtual ~DmObject();
 
-	HINSTANCE	GetSaeModule() const;
+	HINSTANCE GetSaeModule() const;
 
 private:
-	DmObject(const DmObject&);					// Disable copy construction
-	DmObject& operator=(const DmObject&);		// Disable assignment operator
+	DmObject(const DmObject&) = delete;				// Disable copy construction
+	DmObject& operator=(const DmObject&) = delete;	// Disable assignment operator
 };
 
 #endif // !__AXEEN_DMCFRAME_OBJECT_HH__

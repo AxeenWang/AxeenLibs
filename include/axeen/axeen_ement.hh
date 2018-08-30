@@ -56,7 +56,7 @@
 // ---------------------------------------
 // set x64 symbol
 // ---------------------------------------
-#if defined(_WIN64) || (__x86_64__) || (__ppc64__) || (_M_X64) || (_M_AMD64)
+#if defined(_WIN64) || defined(__x86_64__) || defined(__ppc64__) || defined(_M_X64) || defined(_M_AMD64)
 #	ifndef __WIN64__
 #	define __WIN64__
 #	endif
@@ -65,15 +65,36 @@
 // ---------------------------------------
 // unicode symbol
 // ---------------------------------------
-#if defined(_UNICODE) || (UNICODE)
+#if defined(_UNICODE) || defined(UNICODE)
 #	ifndef __UINCODE__
 #	define __UNICODE__
 #	endif
 #endif
 
-#if defined(_WINDLL) || (_USRDLL)
+// ---------------------------------------
+// dynamic library symbol
+// ---------------------------------------
+#if defined(_WINDLL) || defined(_USRDLL)
 #	ifndef __WINDLL__
 #	define __WINDLL__
+#	endif
+#endif
+
+// ---------------------------------------
+// library symbol
+// ---------------------------------------
+#if defined(_LIB)
+#	ifndef __LIB__
+#	define __LIB__
+#	endif
+#endif
+
+// ---------------------------------------
+// debug symbol
+// ---------------------------------------
+#if defined(_DEBUG)
+#	ifndef __DEBUG__
+#	define __DEBUG__
 #	endif
 #endif
 
@@ -112,16 +133,19 @@
 #define M_WIN32_IE_IE110			0x0A00	//!< IE 11.0 ABRACADABRA_THRESHOLD
 
 // ---------------------------------------
-// Set _WIN32_WINNT minimum requirements
+// Set _WIN32_WINNT
 // ---------------------------------------
-#ifdef __WINVER__
+#if defined(__WINVER__)
 #	ifndef _WIN32_WINNT
 #	define _WIN32_WINNT	__WINVER__
 #	endif
 #endif
 
-#ifndef _WIN32_WINNT
-	#define _WIN32_WINNT M_WIN32_SYMBOL_WIN7
+// ---------------------------------------
+// Check _WIN32_WINNT minimum requirements
+// ---------------------------------------
+#if !defined(_WIN32_WINNT)
+#	define _WIN32_WINNT M_WIN32_SYMBOL_WIN7
 #else
 #	if (_WIN32_WINNT < M_WIN32_SYMBOL_WIN7)
 #		undef  _WIN32_WINNT
@@ -132,24 +156,24 @@
 // ---------------------------------------
 // Set WINVER based on _WIN32_WINNT
 // ---------------------------------------
-#ifndef WINVER
-#define WINVER _WIN32_WINNT
+#if !defined(WINVER)
+#	define WINVER _WIN32_WINNT
 #else
-#undef  WINVER
-#define WINVER _WIN32_WINNT
+#	undef  WINVER
+#	define WINVER _WIN32_WINNT
 #endif
 
 // ---------------------------------------
 // Set _WINN32_IE minimum requirements
 // ---------------------------------------
-#ifdef __IEEVER__
+#if defined(__IEEVER__)
 #	ifndef _WIN32_IE
 #	define _WIN32_IE	__IEEVER__
 #	endif
 #endif
 
-#ifndef _WIN32_IE
-#define _WIN32_IE	M_WIN32_IE_IE90
+#if !defined(_WIN32_IE)
+#	define _WIN32_IE	M_WIN32_IE_IE90
 #else
 #	if (_WIN32_IE < M_WIN32_IE_IE90)
 #		undef  _WIN32_IE
@@ -172,7 +196,7 @@
 #endif
 
 // ---------------------------------------
-// Disable Compiler Warning(level 3) C4996 -- disable unsafe deprecation.
+// Disable Compiler Warning(level 3 or high) C4996 -- disable unsafe deprecation.
 // ---------------------------------------
 #if defined(__VISUALC__)
 #	ifndef _CRT_SECURE_NO_WARNINGS
@@ -188,7 +212,7 @@
 #	endif
 #endif
 
-/*! 使用 DLLAPI 前綴字巨集 */
+/*! 使用 DLLEXPORT 前綴字巨集 */
 #if		(__DLL_EXPORT__ == 1)
 #	define DLLEXPORT __declspec(dllexport)	//!< 動態程式庫 Export 類別或函數給外界使用宣告
 #elif	(__DLL_EXPORT__ == 2)
@@ -300,8 +324,8 @@ typedef UINT32	QUINT;		//!< 有號數，對應CPU編譯架構最大型別 64bit 
 // ---------------------------------------
 // string macro
 // ---------------------------------------
-#ifndef __WINDOWS__
-#	ifdef  __UNICODE__
+#if !defined(__WINDOWS__)
+#	ifdef __UNICODE__
 #		ifndef __TEXT
 #		define __TEXT(quote) L ## quote		//!< 字串定義巨集
 #		endif
@@ -325,9 +349,9 @@ typedef UINT32	QUINT;		//!< 有號數，對應CPU編譯架構最大型別 64bit 
 #define SAFE_CLOSE_FILE(p)      { if (NULL!=(p))  { ::fclose(p); (p)=NULL; } }			//!< 關閉檔案
 #define SAFE_CLOSE_HANDLE(p)    { if (NULL!=(p) && INVALID_HANDLE_VALUE!=(p))  { ::CloseHandle(p); (p)=NULL; } }	//!< 關閉 Window Handle
 
-#define DISABLE_COPY(Class) \
-	Class(const Class &); \
-	Class &operator=(const Class &);
+#define DISABLE_COPY_AND_ASSIGN(Class) \
+	Class(const Class&) = delete; \
+	Class& operator=(const Class&) = delete
 
 // ---------------------------------------
 // buffer size macro

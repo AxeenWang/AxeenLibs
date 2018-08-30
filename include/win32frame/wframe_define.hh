@@ -7,20 +7,13 @@
  *****************************************************************************/
 #ifndef __AXEEN_WIN32FRAME_DEFINE_HH__
 #define __AXEEN_WIN32FRAME_DEFINE_HH__
+#include "axeen/axeen_setup.hh"
 #include "axeen/axeen_ement.hh"
 #include "wframe_struct.hh"
 
-#ifndef __WINVER__
-#define	__WINVER__	0x0601	//!< 預設 Windows 7
-#endif
-
-#ifndef __IEEVER__
-#define __IEEVER__	0x0900	//!< 預設 IE 9.0
-#endif
-
 // 導入 Windows Library
 // #if defined(__WINDOWS__) && !defined(_LIB) || defined(_CONSOLE)
-#if defined(__WINDOWS__) && !defined(_LIB)
+#if defined(__WINDOWS__) && !defined(__LIB__)
 	// Windows 作業系統 引用 library
 	#pragma comment(lib, "kernel32.lib")
 	#pragma comment(lib, "user32.lib")

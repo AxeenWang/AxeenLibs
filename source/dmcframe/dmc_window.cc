@@ -1409,6 +1409,22 @@ DmWindow::DmWindow(HWND hWnd) : m_hWnd(NULL), m_fnPrevWndProc(NULL), m_bAttach(F
 }
 
 /**
+ * @brief	設定新增子視窗或控制項處理
+ * @param	[in] hWnd 視窗或控制項操作 Handle
+ */
+void DmWindow::AttachToClass(HWND hWnd)
+{
+	assert(::IsWindow(hWnd));
+
+	if (::IsWindow(hWnd)) {
+		m_hWnd = hWnd;
+		m_bAttach = TRUE;
+		::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)this);
+		m_fnPrevWndProc = reinterpret_cast<WNDPROC>(::SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(DmWindow::StaticWindowProc)));
+	}
+}
+
+/**
  * @brief	視窗訊息處理 Callback function
  * @param	[in] hWnd		視窗 Handle
  * @param	[in] uMessage	視窗訊息
@@ -1440,18 +1456,3 @@ LRESULT DmWindow::StaticWindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPAR
 	return fmObj->WndProc(uMessage, wParam, lParam);
 }
 
-/**
- * @brief	設定新增子視窗或控制項處理
- * @param	[in] hWnd 視窗或控制項操作 Handle
- */
-void DmWindow::AttachToClass(HWND hWnd)
-{
-	assert(::IsWindow(hWnd));
-
-	if (::IsWindow(hWnd)) {
-		m_hWnd = hWnd;
-		m_bAttach = TRUE;
-		::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)this);
-		m_fnPrevWndProc = reinterpret_cast<WNDPROC>(::SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(DmWindow::StaticWindowProc)));
-	}
-}
